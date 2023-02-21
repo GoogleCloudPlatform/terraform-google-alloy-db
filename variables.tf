@@ -22,7 +22,7 @@ variable "automated_backup_policy"{
         nanos   = number
       })
 }
-variable "instance" {
+variable "prim_instance" {
   type = list(object({
     instance_id   = string,
     instance_type = string,
