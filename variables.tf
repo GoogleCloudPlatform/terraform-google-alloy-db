@@ -3,15 +3,7 @@ variable "cluster" {
     cluster_id    = string,
     location      = string,
     backup_window = string,
-    enabled       = bool,
-    weekly_schedule = object({
-      days_of_week = list(string),
-      start_times = object({
-        hours   = number,
-        minutes = number,
-        seconds = number,
-        nanos   = number
-      })
+    enabled       = bool
     }),
     quantity_based_retention = object({
       count = number
@@ -19,6 +11,17 @@ variable "cluster" {
   })
 }
 
+
+variable "automated_backup_policy"{
+  type = object({
+      days_of_week = list(string),
+      start_times = object({
+        hours   = number,
+        minutes = number,
+        seconds = number,
+        nanos   = number
+      })
+}
 variable "instance" {
   type = list(object({
     instance_id   = string,
