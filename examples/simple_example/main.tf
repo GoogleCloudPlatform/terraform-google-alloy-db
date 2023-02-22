@@ -16,6 +16,7 @@ module "alloy-db"{
         quantity_based_retention ={
             count = 1
         }
+        time_based_retention =null
     }
     
     primary_instance = {
