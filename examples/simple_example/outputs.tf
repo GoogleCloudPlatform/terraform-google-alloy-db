@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "bucket_name" {
-  description = "The name of the bucket."
-  value       = module.alloy_db.bucket_name
+output "network_name" {
+  description = "The name of the Network."
+  value       = module.alloy_db.network_self_link
 }
