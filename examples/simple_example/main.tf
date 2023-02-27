@@ -1,39 +1,50 @@
-provider "google-beta" {
-}
-
 module "alloy-db"{
     source = "../.."
-    cluster = {
-        cluster_id = "alloydb-v-4-cluster", 
-        location = "us-central1"
+    cluster_id = "alloydb-v6-cluster"
+    cluster_location = "us-central1"
+    cluster_labels = {}
+    cluster_display_name = ""
+    cluster_initial_user = {
+        user = "alloydb-cluster-full",
+        password = "alloydb-cluster-full"
     }
     network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
+
     automated_backup_policy = {
+        location = "us-central1"
         backup_window ="1800s", 
         enabled =true, 
-        days_of_week =["FRIDAY"], 
-        start_times ={"hours"=2,"minutes"=0,"seconds"=0,"nanos"=0}, 
-        quantity_based_retention ={
-            count = 1
+        weekly_schedule = {
+            days_of_week =["FRIDAY"], 
+            start_times =["2:00:00:00", ]
         }
-        time_based_retention =null
-    }
-    
-    primary_instance = {
-        instance_id = "prim-instance-1", 
-        instance_type = "PRIMARY", 
-        machine_config = {
-            cpu_count=2
-        }
+        quantity_based_retention_count = null,
+        time_based_retention_count = "1.5s",
+        labels = {
+            test = "alloydb-cluster"
+        },
     }
 
-    read_pool_instance = {
-        instance_id = "read-instance-1", 
-        instance_type = "READ_POOL", 
-        read_pool_config = {
-            node_count = 2
-        }
+    primary_instance = {
+        instance_id = "primary-instance-1", 
+        instance_type = "PRIMARY", 
+        machine_cpu_count = 2,
+        database_flags = {},
+        display_name = "alloydb-primary-instance"
     }
+
+
+    read_pool_instance = [{
+        instance_id = "read-instance-1", 
+        display_name = "read-pool-instances",
+        instance_type = "READ_POOL", 
+        node_count = 2,
+        database_flags = {},
+        availability_type = "Zonal",
+        ZONE = "us-central1-a",
+        machine_cpu_count = 2
+    }]
+
 
     depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
 }
@@ -44,7 +55,7 @@ resource "google_compute_network" "default" {
 
 
 resource "google_compute_global_address" "private_ip_alloc" {
-  name          = "adb-v2"
+  name          = "adb-v6"
   address_type  = "INTERNAL"
   purpose       = "VPC_PEERING"
   prefix_length = 16
