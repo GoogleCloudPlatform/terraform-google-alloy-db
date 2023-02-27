@@ -1,77 +1,89 @@
 locals {
-        alloydb_cluster = {
-            "${var.cluster.cluster_id}" = var.cluster
+        time_map = { for i, time in var.automated_backup_policy.weekly_schedule.start_times : i => {
+            hours   = tonumber(split(":", time)[0])
+            minutes = tonumber(split(":", time)[1])
+            seconds = tonumber(split(":", time)[2])
+            nanos   = tonumber(split(":", time)[3])
+            } 
         }
-        primary_instance = {
-            "${var.primary_instance.instance_id}" = var.primary_instance
-        }
-        read_pool_instance = {
-            "${var.read_pool_instance.instance_id}" = var.read_pool_instance
-        }
+
+        read_pool_instance = {for read_pool_instances in var.read_pool_instance : read_pool_instances["instance_id"] => read_pool_instances}
 }
-
-resource "google_alloydb_instance" "default" {
-        provider      = google-beta
-        for_each      = local.primary_instance
-        cluster       = google_alloydb_cluster.default["${var.cluster.cluster_id}"].name
-        instance_id   = each.key
-        instance_type = each.value.instance_type
-
-        machine_config {
-                cpu_count = var.primary_instance.machine_config.cpu_count
-        }
-}
-
-resource "google_alloydb_instance" "default1" {
-        provider      = google-beta
-        for_each      = local.read_pool_instance
-        cluster       = google_alloydb_cluster.default["${var.cluster.cluster_id}"].name
-        instance_id   = each.key
-        instance_type = each.value.instance_type
-
-        read_pool_config {
-            node_count = var.read_pool_instance.read_pool_config.node_count
-        }
-        depends_on = [google_alloydb_instance.default]
-}
-
 
 resource "google_alloydb_cluster" "default" {
-        for_each   = local.alloydb_cluster
-        cluster_id = each.value["cluster_id"]
-        location   = each.value.location
+        cluster_id = var.cluster_id
+        location   = var.cluster_location
         network    = var.network_self_link
-
-        initial_user {
-            password = "alloydb-cluster"
-        }
+        display_name = var.cluster_display_name
 
         automated_backup_policy {
-            location      = each.value.location
+            location      = var.automated_backup_policy.location
             backup_window = var.automated_backup_policy.backup_window
             enabled       = var.automated_backup_policy.enabled
 
 
             weekly_schedule {
-                days_of_week = var.automated_backup_policy.days_of_week
-                start_times {
-                    hours   = var.automated_backup_policy.start_times.hours
-                    minutes = var.automated_backup_policy.start_times.minutes
-                    seconds = var.automated_backup_policy.start_times.seconds
-                    nanos   = var.automated_backup_policy.start_times.nanos
+                days_of_week = var.automated_backup_policy.weekly_schedule.days_of_week
+                dynamic "start_times" {
+                    for_each = local.time_map
+                    content {
+                        hours   = start_times.value.hours
+                        minutes = start_times.value.minutes
+                        seconds = start_times.value.seconds
+                        nanos   = start_times.value.nanos
+                    }
                 }
             }
 
-
-            quantity_based_retention {
-                count = var.automated_backup_policy.quantity_based_retention.count
+            dynamic "quantity_based_retention" {
+                for_each = var.automated_backup_policy.quantity_based_retention_count != null ? [var.automated_backup_policy.quantity_based_retention_count] : []
+                content{
+                    count = var.automated_backup_policy.quantity_based_retention_count
+                }
             }
+
+            dynamic "time_based_retention" {
+                for_each = var.automated_backup_policy.time_based_retention_count != null ? [var.automated_backup_policy.time_based_retention_count] : []
+                content{
+                    retention_period = var.automated_backup_policy.time_based_retention_count
+                }
+            }
+            labels = var.automated_backup_policy.labels
+        }
+
+        labels = var.cluster_labels
+
+        initial_user {
+            user = var.cluster_initial_user.user
+            password = var.cluster_initial_user.password
         }
 
 }
 
-data "google_project" "project" {
-        provider = google-beta
+resource "google_alloydb_instance" "primary" {
+    cluster = google_alloydb_cluster.default.name
+    instance_id   = var.primary_instance.instance_id
+    instance_type = var.primary_instance.instance_type
+
+    machine_config {
+            cpu_count = var.primary_instance.machine_cpu_count
+    }
+
+    database_flags = var.primary_instance.database_flags
 }
 
+resource "google_alloydb_instance" "read_pool" {
+        for_each      = local.read_pool_instance
+        cluster       = google_alloydb_cluster.default.name
+        instance_id   = each.key
+        instance_type = each.value.instance_type
+
+        read_pool_config {
+            node_count = each.value.node_count
+        }
+
+        database_flags = each.value.database_flags
+
+        depends_on = [google_alloydb_instance.primary]
+}
 
