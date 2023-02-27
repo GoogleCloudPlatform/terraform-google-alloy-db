@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-output "network_name" {
-  description = "The name of the Network."
-  value       = module.alloy_db.network_self_link
+output "cluster_id" {
+  description = "ID of the Alloy DB Cluster created"
+  value       = module.alloy-db.cluster_id
+}
+
+output "primary_instance_id" {
+  description = "ID of the primary instance created"
+  value       = module.alloy-db.primary_instance_id
+}
+
+output "read_instance_ids" {
+  description = "IDs of the read instances created"
+  value = module.alloy-db.read_instance_ids
 }

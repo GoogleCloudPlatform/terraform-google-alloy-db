@@ -3,6 +3,11 @@ variable "network_self_link" {
     type = string
 }
 
+variable "project_id" {
+  description = "The ID of the project in which to provision resources."
+  type        = string
+}
+
 variable "cluster_id" {
   description = "Configuration of the AlloyDb cluster."
   type    = string

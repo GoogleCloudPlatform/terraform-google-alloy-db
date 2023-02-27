@@ -17,7 +17,7 @@
 variable "project_id" {
   description = "The ID of the project in which to provision resources."
   type        = string
-  default = "terraform-375010"
+  default = "sharmaujjwal-sce"
 }
 
 variable "network_name" {
