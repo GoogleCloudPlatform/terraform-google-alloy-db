@@ -17,9 +17,11 @@
 variable "project_id" {
   description = "The ID of the project in which to provision resources."
   type        = string
+  default = "sharmaujjwal-sce"
 }
 
-variable "bucket_name" {
-  description = "The name of the bucket to create."
-  type        = string
+variable "network_name" {
+    description = "The ID of the network in which to provision resources."
+    type        = string
+    default = "alloydb-network-v1"
 }
