@@ -27,6 +27,6 @@ output "primary_instance_id" {
 output "read_instance_ids" {
   description = "IDs of the read instances created"
   value = [
-    for rd, details in google_alloydb_instance.read_pool: details.id
+    for rd, details in google_alloydb_instance.read_pool : details.id
   ]
 }
