@@ -1,5 +1,5 @@
 variable "network_self_link" {
-    description = "Network ID where the AlloyDb cluster iwll be deployed."
+    description = "Network ID where the AlloyDb cluster will be deployed."
     type = string
 }
 
@@ -38,6 +38,10 @@ variable "cluster_initial_user" {
         user = optional(string),
         password = string
     })
+    default = {
+      password = "alloydb-cluster-full"
+      user = "alloydb-cluster-full"
+    }
 }
 
 variable "automated_backup_policy"{
@@ -57,6 +61,20 @@ variable "automated_backup_policy"{
     validation {
         condition = can(regex("^(true|false)$",var.automated_backup_policy.enabled))
         error_message = "Invalid input, options: \"true\", \"false\"."
+    }
+    default = {
+      backup_window = "1800s"
+      enabled = false
+      labels = {
+        "test" = "alloydb-cluster"
+      }
+      location = "us-central1"
+      quantity_based_retention_count = 1
+      time_based_retention_count = "null"
+      weekly_schedule = {
+        days_of_week =["FRIDAY"], 
+        start_times =["2:00:00:00", ]
+      }
     }
 }
 

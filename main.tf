@@ -27,6 +27,7 @@ locals {
 }
 
 resource "google_alloydb_cluster" "default" {
+        provider   = google
         cluster_id = var.cluster_id
         location   = var.cluster_location
         network    = var.network_self_link
@@ -78,6 +79,7 @@ resource "google_alloydb_cluster" "default" {
 }
 
 resource "google_alloydb_instance" "primary" {
+    provider = google
     cluster = google_alloydb_cluster.default.name
     instance_id   = var.primary_instance.instance_id
     instance_type = var.primary_instance.instance_type
@@ -91,6 +93,7 @@ resource "google_alloydb_instance" "primary" {
 
 resource "google_alloydb_instance" "read_pool" {
         for_each      = local.read_pool_instance
+        provider      = google
         cluster       = google_alloydb_cluster.default.name
         instance_id   = each.key
         instance_type = each.value.instance_type

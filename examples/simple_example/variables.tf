@@ -25,3 +25,9 @@ variable "network_name" {
     type        = string
     default = "alloydb-network-v1"
 }
+
+variable "region" {
+  default     = "us-central1"
+  description = "The region to apply resources within"
+  type        = string
+}
