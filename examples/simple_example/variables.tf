@@ -17,13 +17,13 @@
 variable "project_id" {
   description = "The ID of the project in which to provision resources."
   type        = string
-  default = "sharmaujjwal-sce"
+  default     = "sharmaujjwal-sce"
 }
 
 variable "network_name" {
-    description = "The ID of the network in which to provision resources."
-    type        = string
-    default = "alloydb-network-v1"
+  description = "The ID of the network in which to provision resources."
+  type        = string
+  default     = "alloydb-network-v1"
 }
 
 variable "region" {

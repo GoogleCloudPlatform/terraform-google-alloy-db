@@ -26,5 +26,5 @@ output "primary_instance_id" {
 
 output "read_instance_ids" {
   description = "IDs of the read instances created"
-  value = module.alloy-db.read_instance_ids
+  value       = module.alloy-db.read_instance_ids
 }
