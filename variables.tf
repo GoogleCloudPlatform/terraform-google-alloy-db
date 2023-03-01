@@ -1,8 +1,3 @@
-variable "network_self_link" {
-    description = "Network ID where the AlloyDb cluster will be deployed."
-    type = string
-}
-
 variable "project_id" {
   description = "The ID of the project in which to provision resources."
   type        = string
@@ -42,6 +37,11 @@ variable "cluster_initial_user" {
       password = "alloydb-cluster-full"
       user = "alloydb-cluster-full"
     }
+}
+
+variable "network_self_link" {
+    description = "Network ID where the AlloyDb cluster will be deployed."
+    type = string
 }
 
 variable "automated_backup_policy"{
