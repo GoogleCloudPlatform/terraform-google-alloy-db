@@ -58,10 +58,6 @@ variable "automated_backup_policy" {
     time_based_retention_count     = optional(string),
     labels                         = optional(map(string))
   })
-  validation {
-    condition     = can(regex("^(true|false)$", var.automated_backup_policy.enabled))
-    error_message = "Invalid input, options: \"true\", \"false\"."
-  }
   default = {
     backup_window = "1800s"
     enabled       = false

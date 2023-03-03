@@ -34,7 +34,7 @@ locals {
 resource "google_alloydb_cluster" "default" {
   cluster_id   = var.cluster_id
   location     = var.cluster_location
-  network      = var.network_id
+  network      = var.network_self_link
   display_name = var.cluster_display_name
   project      = var.project_id
   
