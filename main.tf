@@ -15,68 +15,71 @@
  */
 
 locals {
-  time_map = { for i, time in var.automated_backup_policy.weekly_schedule.start_times : i => {
-    hours   = tonumber(split(":", time)[0])
-    minutes = tonumber(split(":", time)[1])
-    seconds = tonumber(split(":", time)[2])
-    nanos   = tonumber(split(":", time)[3])
-    }
-  }
-
-  read_pool_instance = { for read_pool_instances in var.read_pool_instance : read_pool_instances["instance_id"] => read_pool_instances }
+  read_pool_instance = (
+    var.read_pool_instance != null ?
+    { for read_pool_instances in var.read_pool_instance : read_pool_instances["instance_id"] => read_pool_instances } : {}
+  )
 
   quantity_based_retention_count = (
-    var.automated_backup_policy.quantity_based_retention_count != null ?
+    var.automated_backup_policy != null ?
     [var.automated_backup_policy.quantity_based_retention_count] : []
   )
 
   time_based_retention_count = (
-    var.automated_backup_policy.time_based_retention_count != null ?
+    var.automated_backup_policy != null ?
     [var.automated_backup_policy.time_based_retention_count] : []
   )
 }
 
 resource "google_alloydb_cluster" "default" {
-  provider     = google
   cluster_id   = var.cluster_id
   location     = var.cluster_location
-  network      = var.network_self_link
+  network      = var.network_id
   display_name = var.cluster_display_name
   project      = var.project_id
+  
+  dynamic "automated_backup_policy" {
+    for_each = var.automated_backup_policy != null ? [var.automated_backup_policy] : []
+    content {
+      location      = automated_backup_policy.value.location
+      backup_window = automated_backup_policy.value.backup_window
+      enabled       = automated_backup_policy.value.enabled
 
-  automated_backup_policy {
-    location      = var.automated_backup_policy.location
-    backup_window = var.automated_backup_policy.backup_window
-    enabled       = var.automated_backup_policy.enabled
 
-
-    weekly_schedule {
-      days_of_week = var.automated_backup_policy.weekly_schedule.days_of_week
-      dynamic "start_times" {
-        for_each = local.time_map
-        content {
-          hours   = start_times.value.hours
-          minutes = start_times.value.minutes
-          seconds = start_times.value.seconds
-          nanos   = start_times.value.nanos
+      weekly_schedule {
+        days_of_week = automated_backup_policy.value.weekly_schedule.days_of_week
+        dynamic "start_times" {
+          for_each = { for i, time in automated_backup_policy.value.weekly_schedule.start_times : i => {
+            hours   = tonumber(split(":", time)[0])
+            minutes = tonumber(split(":", time)[1])
+            seconds = tonumber(split(":", time)[2])
+            nanos   = tonumber(split(":", time)[3])
+            }
+          }
+          content {
+            hours   = start_times.value.hours
+            minutes = start_times.value.minutes
+            seconds = start_times.value.seconds
+            nanos   = start_times.value.nanos
+          }
         }
       }
+
+      dynamic "quantity_based_retention" {
+        for_each = local.quantity_based_retention_count
+        content {
+          count = quantity_based_retention.value.quantity_based_retention_count
+        }
+      }
+      dynamic "time_based_retention" {
+        for_each = local.time_based_retention_count
+        content {
+          retention_period = time_based_retention.value.time_based_retention_count
+        }
+      }
+      labels = automated_backup_policy.value.labels
     }
 
-    dynamic "quantity_based_retention" {
-      for_each = local.quantity_based_retention_count
-      content {
-        count = var.automated_backup_policy.quantity_based_retention_count
-      }
-    }
-
-    dynamic "time_based_retention" {
-      for_each = local.time_based_retention_count
-      content {
-        retention_period = var.automated_backup_policy.time_based_retention_count
-      }
-    }
-    labels = var.automated_backup_policy.labels
   }
 
   labels = var.cluster_labels
@@ -89,7 +92,6 @@ resource "google_alloydb_cluster" "default" {
 }
 
 resource "google_alloydb_instance" "primary" {
-  provider      = google
   cluster       = google_alloydb_cluster.default.name
   instance_id   = var.primary_instance.instance_id
   instance_type = var.primary_instance.instance_type
@@ -103,7 +105,6 @@ resource "google_alloydb_instance" "primary" {
 
 resource "google_alloydb_instance" "read_pool" {
   for_each      = local.read_pool_instance
-  provider      = google
   cluster       = google_alloydb_cluster.default.name
   instance_id   = each.key
   instance_type = each.value.instance_type
@@ -116,4 +117,6 @@ resource "google_alloydb_instance" "read_pool" {
 
   depends_on = [google_alloydb_instance.primary]
 }
+
+
 
