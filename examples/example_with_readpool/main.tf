@@ -20,7 +20,7 @@ provider "google" {
 
 module "alloy-db" {
   source               = "../.."
-  project_id = var.project_id
+  project_id           = var.project_id
   cluster_id           = "alloydb-cluster-nrp"
   cluster_location     = "us-central1"
   cluster_labels       = {}

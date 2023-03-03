@@ -111,5 +111,5 @@ variable "read_pool_instance" {
     ZONE              = string,
     machine_cpu_count = number
   }))
-  default     = []
+  default = []
 }
