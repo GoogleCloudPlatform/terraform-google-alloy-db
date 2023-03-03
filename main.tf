@@ -36,7 +36,8 @@ resource "google_alloydb_cluster" "default" {
   location     = var.cluster_location
   network      = var.network_id
   display_name = var.cluster_display_name
-
+  project      = var.project_id
+  
   dynamic "automated_backup_policy" {
     for_each = var.automated_backup_policy != null ? [var.automated_backup_policy] : []
     content {
