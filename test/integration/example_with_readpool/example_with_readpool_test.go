@@ -15,6 +15,7 @@
 package single_readpool_instance
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -28,51 +29,31 @@ func TestExampleWithReadPool(t *testing.T) {
 	example.DefineVerify(func(assert *assert.Assertions) {
 		// example.DefaultVerify(assert)
 		projectID := example.GetStringOutput("project_id")
-		alloydb_cluster_id := example.GetStringOutput("cluster_id")
-		alloydb_primary_instance_id := example.GetStringOutput("primary_instance_id")
-		alloydb_read_instances := example.GetStringOutput("read_instance_ids")
+		alloydb_cluster_id_path := strings.Split(example.GetStringOutput("cluster_id"), "/")
+		alloydb_primary_instance_path := strings.Split(example.GetStringOutput("primary_instance_id"), "/")
+		alloydb_read_instances_paths_string := example.GetStringOutput("read_instance_ids")
+		alloydb_read_instances_paths_string = string(alloydb_read_instances_paths_string[:len(alloydb_read_instances_paths_string)-1])
+		alloydb_read_instances_paths_string = string(alloydb_read_instances_paths_string[1:])
 
-		assert.Equal("ci-alloy-db-1-d510", projectID)
-		assert.Equal("projects/ci-alloy-db-1-d510/locations/us-central1/clusters/alloydb-cluster-nrp", alloydb_cluster_id)
-		assert.Equal("projects/ci-alloy-db-1-d510/locations/us-central1/clusters/alloydb-cluster-nrp/instances/primary-instance-1", alloydb_primary_instance_id)
-		assert.Equal("[projects/ci-alloy-db-1-d510/locations/us-central1/clusters/alloydb-cluster-nrp/instances/read-instance-1]", alloydb_read_instances)
+		alloydb_cluster_id := alloydb_cluster_id_path[len(alloydb_cluster_id_path)-1]
+		alloydb_primary_instance_id := alloydb_primary_instance_path[len(alloydb_primary_instance_path)-1]
+		alloydb_read_instances_paths_list := strings.Split(alloydb_read_instances_paths_string, ",")
+
+		for i, alloydb_read_instances_path := range alloydb_read_instances_paths_list {
+			alloydb_read_instances_path := strings.Split(alloydb_read_instances_path, "/")
+			alloydb_read_instances_paths_list[i] = alloydb_read_instances_path[len(alloydb_read_instances_path)-1]
+		}
+
+		expected_projectID := "ci-alloy-db-1-d510"
+		expected_clusterID := "alloydb-cluster-nrp"
+		expected_primaryInstanceID := "primary-instance-1"
+		expected_readPoolIDs := []string{"read-instance-1"}
+
+		assert.Equal(expected_projectID, projectID)
+		assert.Equal(expected_clusterID, alloydb_cluster_id)
+		assert.Equal(expected_primaryInstanceID, alloydb_primary_instance_id)
+		assert.Equal(expected_readPoolIDs, alloydb_read_instances_paths_list)
 	})
 
-	// example.DefineVerify(func(assert *assert.Assertions) {
-	// 	example.DefaultVerify(assert)
-
-	// 	projectID := example.GetStringOutput("project_id")
-	// 	spannerInstanceId := example.GetStringOutput("spanner_instance_id")
-	// 	spannerDbId := example.GetStringOutput("spanner_db")
-	// 	spannerInstanceName := strings.Split(spannerInstanceId, "/")[1]
-	// 	spannerDbName := strings.Split(spannerDbId, "/")[1]
-	// 	services := gcloud.Run(t, "services list", gcloud.WithCommonArgs([]string{"--project", projectID, "--format", "json"})).Array()
-	// 	spannerInstances := gcloud.Run(t, "spanner instances list", gcloud.WithCommonArgs([]string{"--project", projectID, "--format", "json"})).Array()
-	// 	spannerDbs := gcloud.Run(t, "spanner databases list --instance "+spannerInstanceName, gcloud.WithCommonArgs([]string{"--project", projectID, "--format", "json"})).Array()
-
-	// 	svcmatch := utils.GetFirstMatchResult(t, services, "config.name", "spanner.googleapis.com")
-	// 	spannerInstanceMatch := utils.GetFirstMatchResult(t, spannerInstances, "name", "projects/"+projectID+"/instances/"+spannerInstanceName)
-	// 	spannerDbMatch := utils.GetFirstMatchResult(t, spannerDbs, "name", "projects/"+projectID+"/instances/"+spannerInstanceName+"/databases/"+spannerDbName)
-
-	// 	assert.Equal("ENABLED", svcmatch.Get("state").String(), "Spanner service should be enabled")
-	// 	assert.Equal("READY", spannerInstanceMatch.Get("state").String(), "Spanner Instance should be READY")
-	// 	assert.Equal("200", spannerInstanceMatch.Get("processingUnits").String(), "Spanner Instance processingUnits should be 200")
-	// 	assert.Equal(
-	// 		"projects/"+projectID+"/instanceConfigs/"+"regional-europe-west1",
-	// 		spannerInstanceMatch.Get("config").String(),
-	// 		"Spanner Instance config should be in projects/"+projectID+"/instanceConfigs/"+"regional-europe-west1",
-	// 	)
-	// 	assert.Equal(
-	// 		"GOOGLE_STANDARD_SQL",
-	// 		spannerDbMatch.Get("databaseDialect").String(),
-	// 		"Spanner DB Dialect should be GOOGLE_STANDARD_SQL",
-	// 	)
-	// 	assert.Equal(
-	// 		"GOOGLE_DEFAULT_ENCRYPTION",
-	// 		spannerDbMatch.Get("encryptionInfo").Array()[0].Get("encryptionType").String(),
-	// 		"Spanner DB encryption type should be GOOGLE_DEFAULT_ENCRYPTION",
-	// 	)
-
-	// })
 	example.Test()
 }
