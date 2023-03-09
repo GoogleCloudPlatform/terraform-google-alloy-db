@@ -1,7 +1,8 @@
 variable "network_name" {
-  default = "simple-example-adb-network"
+  default = "primary-example-adb-network"
 }
 
 variable "project_id" {
-  default = "terraform-375010"
+  default = "alloydb-dev"
 }
+
