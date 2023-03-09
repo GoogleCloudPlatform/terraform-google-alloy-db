@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
+provider "google" {
+  project = var.project_id
+}
+
 module "alloy-db" {
   source               = "../.."
-  cluster_id           = "alloydb-cluster-nrp"
+  project_id           = var.project_id
+  cluster_id           = "alloydb-cluster-with-prim"
   cluster_location     = "us-central1"
   cluster_labels       = {}
   cluster_display_name = ""
@@ -24,12 +29,12 @@ module "alloy-db" {
     user     = "alloydb-cluster-full",
     password = "alloydb-cluster-password"
   }
-  network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
+  network_id = "projects/${var.project_id}/global/networks/${var.network_name}"
 
   automated_backup_policy = null
 
   primary_instance = {
-    instance_id       = "primary-instance-1",
+    instance_id       = "primary-instance",
     instance_type     = "PRIMARY",
     machine_cpu_count = 2,
     database_flags    = {},
@@ -48,7 +53,7 @@ resource "google_compute_network" "default" {
 
 
 resource "google_compute_global_address" "private_ip_alloc" {
-  name          = "adb-nrp"
+  name          = "adb-private-ip"
   address_type  = "INTERNAL"
   purpose       = "VPC_PEERING"
   prefix_length = 16
