@@ -13,20 +13,31 @@ func TestExampleWithPrimary(t *testing.T) {
 	example := tft.NewTFBlueprintTest(t)
 
 	example.DefineVerify(func(assert *assert.Assertions) {
+	    // Getting the expected Project ID from the outputs
 		projectId := example.GetStringOutput("project_id")
-		alloydb_cluster_id_path := strings.Split(example.GetStringOutput("cluster_id"), "/")
-		// alloydb_primary_instance_path := strings.Split(example.GetStringOutput("primary_instance_id"), "/")
 
-		alloydb_cluster_id := alloydb_cluster_id_path[len(alloydb_cluster_id_path)-1]
-		// alloydb_primary_instance_id := alloydb_primary_instance_path[len(alloydb_primary_instance_path)-1]
+        // Cluster Information
+		alloydb_cluster_id_path := example.GetStringOutput("cluster_id")
+		alloydb_cluster_id_path_list := strings.Split(example.GetStringOutput("cluster_id"), "/")
+		alloydb_cluster_id := alloydb_cluster_id_path_list[len(alloydb_cluster_id_path_list)-1]
+
+        // Primary Instance Information
+		alloydb_primary_instance_path := example.GetStringOutput("primary_instance_id")
 
 		cluster_location := "us-central1"
-		gcOps := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
+        state := "READY"
+		gcOps_ClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
+        gcOps_PrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--cluster", alloydb_cluster_id, "--format", "json"})
 
-		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydb_cluster_id, gcOps)
-		// alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances describe --cluster "+alloydb_cluster_id+" "+alloydb_cluster_id, gcOps)
+		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydb_cluster_id, gcOps_ClusterInfo)
+		alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", gcOps_PrimaryInstanceInfo).Array()[0]
 
-		assert.Equal("projects/"+projectId+"/global/networks/primary-example-adb-network", alloyDBClusterInfo.Get("network").String(), "Has to be same network")
+		// check for Cluster
+		assert.Equal(alloydb_cluster_id_path, alloyDBClusterInfo.Get("name").String(), "Has to be same Cluster path")
+
+		// Check for Primary Instance
+		assert.Equal(alloydb_primary_instance_path, alloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path")
+        assert.Equal(state, alloyDBInstanceInfo.Get("state").String())
 	})
 
 	example.Test()

@@ -1,4 +1,4 @@
-variable "network_name" {
+variable "network_self_link" {
   default = "primary-example-adb-network"
 }
 
