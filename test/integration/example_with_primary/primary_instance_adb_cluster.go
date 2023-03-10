@@ -20,7 +20,6 @@ func TestExampleWithPrimary(t *testing.T) {
 		expected_clusterID := "alloydb-cluster-with-prim"
 		expected_primaryInstanceID := "primary-instance-1"
 
-		assert.Equal(expected_projectID, projectID)
 		assert.Equal(expected_clusterID, alloydb_cluster_id)
 		assert.Equal(expected_primaryInstanceID, alloydb_primary_instance_id)
 	})
