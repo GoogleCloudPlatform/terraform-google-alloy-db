@@ -16,6 +16,6 @@
 
 
 module "example_with_readpool" {
-  source     = "../../../examples/example_with_readpool"
+  source     = "../../../examples/example_with_readpool_instances"
   project_id = var.project_id
 }

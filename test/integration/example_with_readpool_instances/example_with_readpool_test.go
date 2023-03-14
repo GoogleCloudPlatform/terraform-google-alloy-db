@@ -18,41 +18,57 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
+	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/gcloud"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/tft"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExampleWithReadPool(t *testing.T) {
 	example := tft.NewTFBlueprintTest(t)
 
 	example.DefineVerify(func(assert *assert.Assertions) {
-		// example.DefaultVerify(assert)
-		projectID := example.GetStringOutput("project_id")
-		alloydb_cluster_id_path := strings.Split(example.GetStringOutput("cluster_id"), "/")
-		alloydb_primary_instance_path := strings.Split(example.GetStringOutput("primary_instance_id"), "/")
+		// Getting the expected Project ID from the outputs
+		projectId := example.GetStringOutput("project_id")
+
+		// Cluster Information from terraform
+		alloydb_cluster_id_path := example.GetStringOutput("cluster_id")
+		alloydb_cluster_id_path_list := strings.Split(example.GetStringOutput("cluster_id"), "/")
+		alloydb_cluster_id := alloydb_cluster_id_path_list[len(alloydb_cluster_id_path_list)-1]
+
+		// Primary Instance Information from terraform
+		alloydb_primary_instance_path := example.GetStringOutput("primary_instance_id")
+
+		// Readpool Instances Information from terraform
 		alloydb_read_instances_paths_string := example.GetStringOutput("read_instance_ids")
 		alloydb_read_instances_paths_string = string(alloydb_read_instances_paths_string[:len(alloydb_read_instances_paths_string)-1])
 		alloydb_read_instances_paths_string = string(alloydb_read_instances_paths_string[1:])
 
-		alloydb_cluster_id := alloydb_cluster_id_path[len(alloydb_cluster_id_path)-1]
-		alloydb_primary_instance_id := alloydb_primary_instance_path[len(alloydb_primary_instance_path)-1]
-		alloydb_read_instances_paths_list := strings.Split(alloydb_read_instances_paths_string, ",")
+		// State information from GCloud
 
-		for i, alloydb_read_instances_path := range alloydb_read_instances_paths_list {
-			alloydb_read_instances_path := strings.Split(alloydb_read_instances_path, "/")
-			alloydb_read_instances_paths_list[i] = alloydb_read_instances_path[len(alloydb_read_instances_path)-1]
+		cluster_location := "us-central1"
+		state := "READY"
+		gcOps_ClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
+		gcOps_PrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--cluster", alloydb_cluster_id, "--format", "json"})
+		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydb_cluster_id, gcOps_ClusterInfo)
+		alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", gcOps_PrimaryInstanceInfo).Array()[0]
+		instances_list := gcloud.Run(t, "alloydb instances list ", gcOps_PrimaryInstanceInfo).Array()
+
+		alloyDB_readinstances := instances_list[1].Get("name").String()
+		for i := 2; i < len(instances_list); i++ {
+			alloyDB_readinstances = alloyDB_readinstances + " " + instances_list[i].Get("name").String()
 		}
 
-		expected_projectID := "ci-alloy-db-1-d510"
-		expected_clusterID := "alloydb-cluster-nrp"
-		expected_primaryInstanceID := "primary-instance-1"
-		expected_readPoolIDs := []string{"read-instance-1"}
+		// Check if expected state (via terraform) is same as actual state (on Cloud)
 
-		assert.Equal(expected_projectID, projectID)
-		assert.Equal(expected_clusterID, alloydb_cluster_id)
-		assert.Equal(expected_primaryInstanceID, alloydb_primary_instance_id)
-		assert.Equal(expected_readPoolIDs, alloydb_read_instances_paths_list)
+		// Check for Cluster
+		assert.Equal(alloydb_cluster_id_path, alloyDBClusterInfo.Get("name").String(), "Cluster path must match")
+
+		// Check for Primary Instance
+		assert.Equal(alloydb_primary_instance_path, alloyDBInstanceInfo.Get("name").String(), "Primary Instance Paths must match")
+		assert.Equal(state, alloyDBInstanceInfo.Get("state").String())
+
+		// Check for Readpool Instance
+		assert.Equal(alloydb_read_instances_paths_string, alloyDB_readinstances, "Readpool instances path must match")
 	})
 
 	example.Test()
