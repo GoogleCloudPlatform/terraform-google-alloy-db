@@ -1,8 +1,8 @@
 variable "network_self_link" {
-  default = "primary-example-adb-network"
+  type = string
 }
 
 variable "project_id" {
-  default = "alloydb-dev"
+  type = string
 }
 

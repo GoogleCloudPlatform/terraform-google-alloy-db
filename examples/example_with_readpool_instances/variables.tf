@@ -1,7 +1,7 @@
 variable "network_name" {
-  default = "alloydb-network-v2"
+  type = string
 }
 
 variable "project_id" {
-  default = "sharmaujjwal-sce"
+  type = string
 }

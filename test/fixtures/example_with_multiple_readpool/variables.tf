@@ -16,6 +16,5 @@
 
 variable "project_id" {
   description = "The ID of the project in which to provision resources."
-  default = "ci-alloy-db-1-069a"
   type        = string
 }
