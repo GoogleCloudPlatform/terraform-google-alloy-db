@@ -1,5 +1,10 @@
 # terraform-google-alloy-db
 
+##
+https://console.developers.google.com/apis/api/servicenetworking.googleapis.com/overview?project=615771372926
+
+https://console.developers.google.com/apis/api/alloydb.googleapis.com/overview?project=615771372926
+
 ## Description
 ### tagline
 This is an auto-generated module.

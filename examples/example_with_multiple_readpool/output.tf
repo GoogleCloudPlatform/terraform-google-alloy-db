@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.0"
+output "cluster_id" {
+  description = "The AlloyDB Cluster id"
+  value       = module.alloy-db.cluster_id
+}
 
-  name              = "ci-alloy-db-1"
-  random_project_id = "true"
-  org_id            = var.org_id
-  folder_id         = var.folder_id
-  billing_account   = var.billing_account
+output "primary_instance_id" {
+  description = "The primary instance id"
+  value       = module.alloy-db.primary_instance_id
+}
 
-  // get the required APIs for alloydb
-  activate_apis = [
-    "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com",
-    "servicenetworking.googleapis.com",
-    "alloydb.googleapis.com"
-  ]
+output "read_instance_ids" {
+  description = "The read instance ids"
+  value       = module.alloy-db.read_instance_ids
+}
+
+output "project_id" {
+  description = "Project id"
+  value = var.project_id
 }

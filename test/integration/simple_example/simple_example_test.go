@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package multiple_buckets
+package primary_instance_adb_cluster
 
 import (
+	"strings"
 	"testing"
 
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/gcloud"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/tft"
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,13 +26,18 @@ func TestSimpleExample(t *testing.T) {
 	example := tft.NewTFBlueprintTest(t)
 
 	example.DefineVerify(func(assert *assert.Assertions) {
-		example.DefaultVerify(assert)
+		alloydb_cluster_id_path := strings.Split(example.GetStringOutput("cluster_id"), "/")
+		alloydb_primary_instance_path := strings.Split(example.GetStringOutput("primary_instance_id"), "/")
 
-		projectID := example.GetStringOutput("project_id")
-		services := gcloud.Run(t, "services list", gcloud.WithCommonArgs([]string{"--project", projectID, "--format", "json"})).Array()
+		alloydb_cluster_id := alloydb_cluster_id_path[len(alloydb_cluster_id_path)-1]
+		alloydb_primary_instance_id := alloydb_primary_instance_path[len(alloydb_primary_instance_path)-1]
 
-		match := utils.GetFirstMatchResult(t, services, "config.name", "storage.googleapis.com")
-		assert.Equal("ENABLED", match.Get("state").String(), "storage service should be enabled")
+		expected_clusterID := "alloydb-cluster-with-prim"
+		expected_primaryInstanceID := "primary-instance-1"
+
+		assert.Equal(expected_clusterID, alloydb_cluster_id)
+		assert.Equal(expected_primaryInstanceID, alloydb_primary_instance_id)
 	})
+
 	example.Test()
 }

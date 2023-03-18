@@ -14,7 +14,19 @@
  * limitations under the License.
  */
 
-output "bucket_name" {
-  description = "Name of the bucket"
-  value       = google_storage_bucket.main.name
+output "cluster_id" {
+  description = "ID of the Alloy DB Cluster created"
+  value       = google_alloydb_cluster.default.id
+}
+
+output "primary_instance_id" {
+  description = "ID of the primary instance created"
+  value       = google_alloydb_instance.primary.id
+}
+
+output "read_instance_ids" {
+  description = "IDs of the read instances created"
+  value = [
+    for rd, details in google_alloydb_instance.read_pool : details.id
+  ]
 }

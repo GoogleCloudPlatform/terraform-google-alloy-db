@@ -19,7 +19,13 @@ variable "project_id" {
   type        = string
 }
 
-variable "bucket_name" {
-  description = "The name of the bucket to create."
+variable "network_name" {
+  description = "The ID of the network in which to provision resources."
+  type        = string
+}
+
+variable "region" {
+  default     = "us-central1"
+  description = "The region to apply resources within"
   type        = string
 }
