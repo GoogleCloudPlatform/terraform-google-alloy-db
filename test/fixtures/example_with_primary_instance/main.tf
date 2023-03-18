@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- 
+
 module "example_with_primary_instance" {
   source     = "../../../examples/example_with_primary_instance"
   project_id = var.project_id

@@ -31,5 +31,5 @@ output "read_instance_ids" {
 
 output "project_id" {
   description = "Project id"
-  value = var.project_id
+  value       = var.project_id
 }

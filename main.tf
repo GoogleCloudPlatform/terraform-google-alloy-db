@@ -117,6 +117,3 @@ resource "google_alloydb_instance" "read_pool" {
 
   depends_on = [google_alloydb_instance.primary]
 }
-
-
-
