@@ -2,7 +2,7 @@
 
 ##
 This module handles Google Cloud Platform [AlloyDB](https://cloud.google.com/alloydb) cluster creation and configuration with Automated Backup Policy, Primary node instance and Read Node Pools.
-The resources that this module will create are:
+The resource/resources that this module will create are:
 
 - Creates an AlloyDB Cluster with/without automated backup policy
 - Creates a Primary Instance
