@@ -31,6 +31,5 @@ output "read_instance_ids" {
 
 output "project_id" {
   description = "project id"
-  value = module.example_with_multiple_readpool.project_id
-  
+  value       = module.example_with_multiple_readpool.project_id
 }

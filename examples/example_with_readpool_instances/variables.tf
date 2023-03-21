@@ -15,7 +15,8 @@
  */
 
 variable "network_name" {
-  type = string
+  type    = string
+  default = "single-readpool"
 }
 
 variable "project_id" {
