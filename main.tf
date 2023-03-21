@@ -21,13 +21,11 @@ locals {
   )
 
   quantity_based_retention_count = (
-    var.automated_backup_policy != null ?
-    [var.automated_backup_policy.quantity_based_retention_count] : []
+    var.automated_backup_policy != null ? (var.automated_backup_policy.quantity_based_retention_count != null ? [var.automated_backup_policy.quantity_based_retention_count] : []):[]
   )
 
   time_based_retention_count = (
-    var.automated_backup_policy != null ?
-    [var.automated_backup_policy.time_based_retention_count] : []
+    var.automated_backup_policy != null ? (var.automated_backup_policy.time_based_retention_count != null ? [var.automated_backup_policy.time_based_retention_count] : []):[]
   )
 }
 
@@ -68,13 +66,13 @@ resource "google_alloydb_cluster" "default" {
       dynamic "quantity_based_retention" {
         for_each = local.quantity_based_retention_count
         content {
-          count = quantity_based_retention.value.quantity_based_retention_count
+          count = quantity_based_retention.value
         }
       }
       dynamic "time_based_retention" {
         for_each = local.time_based_retention_count
         content {
-          retention_period = time_based_retention.value.time_based_retention_count
+          retention_period = time_based_retention.value
         }
       }
       labels = automated_backup_policy.value.labels
