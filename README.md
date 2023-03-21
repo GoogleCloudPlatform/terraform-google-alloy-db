@@ -85,26 +85,26 @@ Functional examples are included in the
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
-| Name | Description                                                            | Type | Default | Required |
-|------|------------------------------------------------------------------------|------|---------|:--------:|
-| automated\_backup\_policy | The automated backup policy for this cluster.                          | <pre>object({<br>    location      = optional(string),<br>    backup_window = optional(string),<br>    enabled       = optional(bool),<br>    weekly_schedule = object({<br>      days_of_week = optional(list(string)),<br>      start_times  = list(string),<br>    }),<br>    quantity_based_retention_count = optional(number),<br>    time_based_retention_count     = optional(string),<br>    labels                         = optional(map(string))<br>  })</pre> | <pre>{<br>  "backup_window": "1800s",<br>  "enabled": false,<br>  "labels": {<br>    "test": "alloydb-cluster"<br>  },<br>  "location": "us-central1",<br>  "quantity_based_retention_count": 1,<br>  "time_based_retention_count": "null",<br>  "weekly_schedule": {<br>    "days_of_week": [<br>      "FRIDAY"<br>    ],<br>    "start_times": [<br>      "2:00:00:00"<br>    ]<br>  }<br>}</pre> | no |
-| cluster\_display\_name | Display Name for AlloyDB Cluster                                       | `string` | `""` | no |
-| cluster\_id | ID of the AlloyDB cluster.                                             | `string` | n/a | yes |
-| cluster\_initial\_user | AlloyDB Cluster Initial User Credentials                               | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | <pre>{<br>  "password": "alloydb-cluster-full",<br>  "user": "alloydb-cluster-full"<br>}</pre> | no |
-| cluster\_labels | Labels to identify the AlloyDB Cluster                                 | `map(string)` | `{}` | no |
-| cluster\_location | Location where AlloyDB cluster will be deployed.                       | `string` | `"us-central1"` | no |
-| network\_self\_link | Network ID where the AlloyDB cluster will be deployed.                 | `string` | n/a | yes |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| automated\_backup\_policy | The automated backup policy for this cluster. | <pre>object({<br>    location      = optional(string),<br>    backup_window = optional(string),<br>    enabled       = optional(bool),<br>    weekly_schedule = object({<br>      days_of_week = optional(list(string)),<br>      start_times  = list(string),<br>    }),<br>    quantity_based_retention_count = optional(number),<br>    time_based_retention_count     = optional(string),<br>    labels                         = optional(map(string))<br>  })</pre> | <pre>{<br>  "backup_window": "1800s",<br>  "enabled": false,<br>  "labels": {<br>    "test": "alloydb-cluster"<br>  },<br>  "location": "us-central1",<br>  "quantity_based_retention_count": 1,<br>  "time_based_retention_count": "null",<br>  "weekly_schedule": {<br>    "days_of_week": [<br>      "FRIDAY"<br>    ],<br>    "start_times": [<br>      "2:00:00:00"<br>    ]<br>  }<br>}</pre> | no |
+| cluster\_display\_name | Display Name for Alloy DB Cluster | `string` | `""` | no |
+| cluster\_id | Configuration of the AlloyDb cluster. | `string` | n/a | yes |
+| cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | <pre>{<br>  "password": "alloydb-cluster-full",<br>  "user": "alloydb-cluster-full"<br>}</pre> | no |
+| cluster\_labels | Labels to identify the Alloy DB Cluster | `map(string)` | `{}` | no |
+| cluster\_location | Location where AlloyDb cluster will be deployed. | `string` | `"us-central1"` | no |
+| network\_self\_link | Network ID where the AlloyDb cluster will be deployed. | `string` | n/a | yes |
 | primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id       = string,<br>    instance_type     = string,<br>    machine_cpu_count = number,<br>    display_name      = string,<br>    database_flags    = map(string)<br>  })</pre> | n/a | yes |
-| project\_id | The project ID to deploy to.                                           | `string` | n/a | yes |
-| read\_pool\_instance | List of Read Pool Instances to be created                              | <pre>list(object({<br>    instance_id       = string,<br>    display_name      = string,<br>    instance_type     = string,<br>    node_count        = number,<br>    database_flags    = map(string),<br>    availability_type = string,<br>    ZONE              = string,<br>    machine_cpu_count = number<br>  }))</pre> | `[]` | no |
+| project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id       = string,<br>    display_name      = string,<br>    instance_type     = string,<br>    node_count        = number,<br>    database_flags    = map(string),<br>    availability_type = string,<br>    ZONE              = string,<br>    machine_cpu_count = number<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| cluster\_id | ID of the AlloyDB Cluster created |
+| cluster\_id | ID of the Alloy DB Cluster created |
 | primary\_instance\_id | ID of the primary instance created |
-| read\_instance\_ids | ID's of the read instances created |
+| read\_instance\_ids | IDs of the read instances created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
