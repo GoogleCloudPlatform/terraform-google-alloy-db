@@ -22,7 +22,9 @@ variable "project_id" {
 variable "network_name" {
   description = "The ID of the network in which to provision resources."
   type        = string
+  default     = "simple"
 }
+
 
 variable "region" {
   default     = "us-central1"

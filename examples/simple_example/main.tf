@@ -41,8 +41,8 @@ module "alloy-db" {
       days_of_week = ["FRIDAY"],
       start_times  = ["2:00:00:00", ]
     }
-    quantity_based_retention_count = null,
-    time_based_retention_count     = "1.5s",
+    quantity_based_retention_count = 1,
+    time_based_retention_count     = null,
     labels = {
       test = "alloydb-cluster"
     },

@@ -33,16 +33,19 @@ variable "cluster_location" {
 }
 
 variable "cluster_labels" {
-  type    = map(string)
-  default = {}
+  description = "Labels to identify the Alloy DB Cluster"
+  type        = map(string)
+  default     = {}
 }
 
 variable "cluster_display_name" {
-  type    = string
-  default = ""
+  description = "Display Name for Alloy DB Cluster"
+  type        = string
+  default     = ""
 }
 
 variable "cluster_initial_user" {
+  description = "Alloy DB Cluster Initial User Credentials"
   type = object({
     user     = optional(string),
     password = string
@@ -88,11 +91,11 @@ variable "automated_backup_policy" {
   }
 }
 
-variable "instance_iam" {
-  description = "The list of permissions on alloydb instance"
-  type        = list(string)
-  default     = []
-}
+# variable "instance_iam" {
+#   description = "The list of permissions on alloydb instance"
+#   type        = list(string)
+#   default     = []
+# }
 
 
 variable "primary_instance" {
@@ -115,6 +118,7 @@ variable "primary_instance" {
 }
 
 variable "read_pool_instance" {
+  description = "List of Read Pool Instances to be created"
   type = list(object({
     instance_id       = string,
     display_name      = string,
