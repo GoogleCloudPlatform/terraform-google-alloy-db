@@ -29,7 +29,7 @@ module "alloy-db" {
     user     = "alloydb-cluster-full",
     password = "alloydb-cluster-password"
   }
-  network_self_link = "projects/${var.project_id}/global/networks/${var.network_self_link}"
+  network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
 
   automated_backup_policy = null
 
@@ -48,7 +48,7 @@ module "alloy-db" {
 }
 
 resource "google_compute_network" "default" {
-  name = var.network_self_link
+  name = var.network_name
 }
 
 

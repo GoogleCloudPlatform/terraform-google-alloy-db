@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-variable "network_self_link" {
-  type = string
+variable "network_name" {
+  type    = string
+  default = "primary-instance"
 }
 
 variable "project_id" {
   type = string
 }
-
