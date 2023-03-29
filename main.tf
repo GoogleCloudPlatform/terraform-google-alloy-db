@@ -21,11 +21,11 @@ locals {
   )
 
   quantity_based_retention_count = (
-    var.automated_backup_policy != null ? (var.automated_backup_policy.quantity_based_retention_count != null ? [var.automated_backup_policy.quantity_based_retention_count] : []):[]
+    var.automated_backup_policy != null ? (var.automated_backup_policy.quantity_based_retention_count != null ? [var.automated_backup_policy.quantity_based_retention_count] : []) : []
   )
 
   time_based_retention_count = (
-    var.automated_backup_policy != null ? (var.automated_backup_policy.time_based_retention_count != null ? [var.automated_backup_policy.time_based_retention_count] : []):[]
+    var.automated_backup_policy != null ? (var.automated_backup_policy.time_based_retention_count != null ? [var.automated_backup_policy.time_based_retention_count] : []) : []
   )
 }
 
