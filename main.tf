@@ -35,6 +35,7 @@ resource "google_alloydb_cluster" "default" {
   network      = var.network_self_link
   display_name = var.cluster_display_name
   project      = var.project_id
+  labels       = var.cluster_labels
 
   dynamic "automated_backup_policy" {
     for_each = var.automated_backup_policy != null ? [var.automated_backup_policy] : []
@@ -42,6 +43,7 @@ resource "google_alloydb_cluster" "default" {
       location      = automated_backup_policy.value.location
       backup_window = automated_backup_policy.value.backup_window
       enabled       = automated_backup_policy.value.enabled
+      labels        = automated_backup_policy.value.labels
 
 
       weekly_schedule {
@@ -69,36 +71,56 @@ resource "google_alloydb_cluster" "default" {
           count = quantity_based_retention.value
         }
       }
+
       dynamic "time_based_retention" {
         for_each = local.time_based_retention_count
         content {
           retention_period = time_based_retention.value
         }
       }
-      labels = automated_backup_policy.value.labels
+
+      dynamic "encryption_config" {
+        for_each = automated_backup_policy.value.backup_encryption_key_name == null ? [] : ["encryption_config"]
+        content {
+          kms_key_name = automated_backup_policy.value.backup_encryption_key_name
+        }
+      }
+
     }
 
   }
 
-  labels = var.cluster_labels
-
-  initial_user {
-    user     = var.cluster_initial_user.user
-    password = var.cluster_initial_user.password
+  dynamic "initial_user" {
+    for_each = var.cluster_initial_user == null ? [] : ["cluster_initial_user"]
+    content {
+      user     = var.cluster_initial_user.user
+      password = var.cluster_initial_user.password
+    }
   }
 
+  dynamic "encryption_config" {
+    for_each = var.cluster_encryption_key_name == null ? [] : ["encryption_config"]
+    content {
+      kms_key_name = var.cluster_encryption_key_name
+    }
+  }
 }
 
 resource "google_alloydb_instance" "primary" {
-  cluster       = google_alloydb_cluster.default.name
-  instance_id   = var.primary_instance.instance_id
-  instance_type = var.primary_instance.instance_type
+  cluster           = google_alloydb_cluster.default.name
+  instance_id       = var.primary_instance.instance_id
+  instance_type     = var.primary_instance.instance_type
+  display_name      = var.primary_instance.display_name
+  database_flags    = var.primary_instance.database_flags
+  labels            = var.primary_instance.labels
+  annotations       = var.primary_instance.annotations
+  gce_zone          = var.primary_instance.gce_zone
+  availability_type = var.primary_instance.availability_type
 
   machine_config {
     cpu_count = var.primary_instance.machine_cpu_count
   }
 
-  database_flags = var.primary_instance.database_flags
 }
 
 resource "google_alloydb_instance" "read_pool" {

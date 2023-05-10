@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-output "project_id" {
-  description = "The cluster id"
-  value       = var.project_id
-}
-
-output "cluster_id" {
-  description = "The cluster id"
-  value       = module.example_with_readpool.cluster_id
-}
-
-output "primary_instance_id" {
-  description = "The Spanner Database details."
-  value       = module.example_with_readpool.primary_instance_id
-}
-
-output "read_instance_ids" {
-  description = "The Spanner Database details."
-  value       = module.example_with_readpool.read_instance_ids
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 4.0"
+    }
+  }
+  required_version = ">= 1.3"
 }

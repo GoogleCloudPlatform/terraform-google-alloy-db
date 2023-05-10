@@ -87,14 +87,15 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| automated\_backup\_policy | The automated backup policy for this cluster. | <pre>object({<br>    location      = optional(string),<br>    backup_window = optional(string),<br>    enabled       = optional(bool),<br>    weekly_schedule = object({<br>      days_of_week = optional(list(string)),<br>      start_times  = list(string),<br>    }),<br>    quantity_based_retention_count = optional(number),<br>    time_based_retention_count     = optional(string),<br>    labels                         = optional(map(string))<br>  })</pre> | <pre>{<br>  "backup_window": "1800s",<br>  "enabled": false,<br>  "labels": {<br>    "test": "alloydb-cluster"<br>  },<br>  "location": "us-central1",<br>  "quantity_based_retention_count": 1,<br>  "time_based_retention_count": "null",<br>  "weekly_schedule": {<br>    "days_of_week": [<br>      "FRIDAY"<br>    ],<br>    "start_times": [<br>      "2:00:00:00"<br>    ]<br>  }<br>}</pre> | no |
-| cluster\_display\_name | Display Name for Alloy DB Cluster | `string` | `""` | no |
-| cluster\_id | Configuration of the AlloyDb cluster. | `string` | n/a | yes |
-| cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | <pre>{<br>  "password": "alloydb-cluster-full",<br>  "user": "alloydb-cluster-full"<br>}</pre> | no |
-| cluster\_labels | Labels to identify the Alloy DB Cluster | `map(string)` | `{}` | no |
-| cluster\_location | Location where AlloyDb cluster will be deployed. | `string` | `"us-central1"` | no |
+| automated\_backup\_policy | The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days | <pre>object({<br>    location      = optional(string)<br>    backup_window = optional(string)<br>    enabled       = optional(bool)<br><br>    weekly_schedule = optional(object({<br>      days_of_week = optional(list(string))<br>      start_times  = list(string)<br>    })),<br><br>    quantity_based_retention_count = optional(number)<br>    time_based_retention_count     = optional(string)<br>    labels                         = optional(map(string))<br>    backup_encryption_key_name     = optional(string)<br>  })</pre> | `null` | no |
+| cluster\_display\_name | Human readable display name for the Alloy DB Cluster | `string` | `null` | no |
+| cluster\_encryption\_key\_name | The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
+| cluster\_id | The ID of the alloydb cluster | `string` | n/a | yes |
+| cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | `null` | no |
+| cluster\_labels | User-defined labels for the alloydb cluster | `map(string)` | `{}` | no |
+| cluster\_location | Location where AlloyDb cluster will be deployed. | `string` | n/a | yes |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. | `string` | n/a | yes |
-| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id       = string,<br>    instance_type     = string,<br>    machine_cpu_count = number,<br>    display_name      = string,<br>    database_flags    = map(string)<br>  })</pre> | n/a | yes |
+| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id       = string,<br>    instance_type     = string,<br>    machine_cpu_count = optional(number, 2),<br>    display_name      = optional(string),<br>    database_flags    = optional(map(string))<br>    labels            = optional(map(string))<br>    annotations       = optional(map(string))<br>    gce_zone          = optional(string)<br>    availability_type = optional(string, "REGIONAL")<br>  })</pre> | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id       = string,<br>    display_name      = string,<br>    instance_type     = string,<br>    node_count        = number,<br>    database_flags    = map(string),<br>    availability_type = string,<br>    ZONE              = string,<br>    machine_cpu_count = number<br>  }))</pre> | `[]` | no |
 
@@ -102,9 +103,12 @@ Functional examples are included in the
 
 | Name | Description |
 |------|-------------|
+| cluster | Cluster created |
 | cluster\_id | ID of the Alloy DB Cluster created |
+| primary\_instance | Primary instance created |
 | primary\_instance\_id | ID of the primary instance created |
 | read\_instance\_ids | IDs of the read instances created |
+| replica\_instances | Replica instances created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
@@ -116,15 +120,15 @@ These sections describe requirements for using this module.
 
 The following dependencies must be available:
 
-- [Terraform][terraform] v0.13
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.0
+- [Terraform][terraform] v1.3
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v4.64
 
 ### Service Account
 
 A service account with the following roles must be used to provision
 the resources of this module:
 
-- Storage Admin: `roles/alloydb.admin`
+- Cloud AlloyDB Admin: `roles/alloydb.admin`
 
 The [Project Factory module][project-factory-module] and the
 [IAM module][iam-module] may be used in combination to provision a

@@ -18,7 +18,7 @@ variable "project_id" {
 }
 
 variable "cluster_id" {
-  description = "Configuration of the AlloyDb cluster."
+  description = "The ID of the alloydb cluster"
   type        = string
   validation {
     condition     = can(regex("^[a-z0-9-]+$", var.cluster_id))
@@ -29,19 +29,19 @@ variable "cluster_id" {
 variable "cluster_location" {
   description = "Location where AlloyDb cluster will be deployed."
   type        = string
-  default     = "us-central1"
+  # default     = "us-central1"
 }
 
 variable "cluster_labels" {
-  description = "Labels to identify the Alloy DB Cluster"
+  description = "User-defined labels for the alloydb cluster"
   type        = map(string)
   default     = {}
 }
 
 variable "cluster_display_name" {
-  description = "Display Name for Alloy DB Cluster"
+  description = "Human readable display name for the Alloy DB Cluster"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "cluster_initial_user" {
@@ -50,10 +50,13 @@ variable "cluster_initial_user" {
     user     = optional(string),
     password = string
   })
-  default = {
-    password = "alloydb-cluster-full"
-    user     = "alloydb-cluster-full"
-  }
+  default = null
+}
+
+variable "cluster_encryption_key_name" {
+  description = "The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
+  type        = string
+  default     = null
 }
 
 variable "network_self_link" {
@@ -62,33 +65,23 @@ variable "network_self_link" {
 }
 
 variable "automated_backup_policy" {
-  description = "The automated backup policy for this cluster."
+  description = "The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days"
   type = object({
-    location      = optional(string),
-    backup_window = optional(string),
-    enabled       = optional(bool),
-    weekly_schedule = object({
-      days_of_week = optional(list(string)),
-      start_times  = list(string),
-    }),
-    quantity_based_retention_count = optional(number),
-    time_based_retention_count     = optional(string),
+    location      = optional(string)
+    backup_window = optional(string)
+    enabled       = optional(bool)
+
+    weekly_schedule = optional(object({
+      days_of_week = optional(list(string))
+      start_times  = list(string)
+    })),
+
+    quantity_based_retention_count = optional(number)
+    time_based_retention_count     = optional(string)
     labels                         = optional(map(string))
+    backup_encryption_key_name     = optional(string)
   })
-  default = {
-    backup_window = "1800s"
-    enabled       = false
-    labels = {
-      "test" = "alloydb-cluster"
-    }
-    location                       = "us-central1"
-    quantity_based_retention_count = 1
-    time_based_retention_count     = "null"
-    weekly_schedule = {
-      days_of_week = ["FRIDAY"],
-      start_times  = ["2:00:00:00", ]
-    }
-  }
+  default = null
 }
 
 variable "primary_instance" {
@@ -96,9 +89,13 @@ variable "primary_instance" {
   type = object({
     instance_id       = string,
     instance_type     = string,
-    machine_cpu_count = number,
-    display_name      = string,
-    database_flags    = map(string)
+    machine_cpu_count = optional(number, 2),
+    display_name      = optional(string),
+    database_flags    = optional(map(string))
+    labels            = optional(map(string))
+    annotations       = optional(map(string))
+    gce_zone          = optional(string)
+    availability_type = optional(string, "REGIONAL")
   })
   validation {
     condition     = can(regex("^(2|4|8|16|32|64)$", var.primary_instance.machine_cpu_count))

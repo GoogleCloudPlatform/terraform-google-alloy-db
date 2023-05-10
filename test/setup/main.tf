@@ -30,6 +30,7 @@ module "project" {
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "servicenetworking.googleapis.com",
-    "alloydb.googleapis.com"
+    "cloudkms.googleapis.com",
+    "alloydb.googleapis.com",
   ]
 }

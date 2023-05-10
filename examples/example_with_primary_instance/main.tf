@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,32 +19,51 @@ provider "google" {
 }
 
 module "alloy-db" {
-  source               = "../.."
-  project_id           = var.project_id
-  cluster_id           = "alloydb-cluster-with-prim"
-  cluster_location     = "us-central1"
-  cluster_labels       = {}
-  cluster_display_name = ""
+  source           = "../.."
+  project_id       = var.project_id
+  cluster_id       = "alloydb-cluster-with-prim"
+  cluster_location = "us-central1"
   cluster_initial_user = {
     user     = "alloydb-cluster-full",
-    password = "alloydb-cluster-password"
+    password = "T3st-c1ust3r-p@33w0rd"
   }
-  network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
+  network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
+  cluster_encryption_key_name = google_kms_crypto_key.key.id
 
-  automated_backup_policy = null
+  automated_backup_policy = {
+    location      = "us-central1"
+    backup_window = "1800s"
+    enabled       = true
+    weekly_schedule = {
+      days_of_week = ["FRIDAY"],
+      start_times  = ["2:00:00:00", ]
+    }
+    quantity_based_retention_count = 1
+    time_based_retention_count     = null
+    labels = {
+      test = "alloydb-cluster-with-prim"
+    }
+    backup_encryption_key_name = google_kms_crypto_key.key.id
+  }
 
   primary_instance = {
-    instance_id       = "primary-instance",
-    instance_type     = "PRIMARY",
-    machine_cpu_count = 2,
-    database_flags    = {},
-    display_name      = "alloydb-primary-instance"
+    instance_id       = "primary-instance"
+    instance_type     = "PRIMARY"
+    machine_cpu_count = 2
+    database_flags = {
+      "google_columnar_engine.scan_mode" = 2
+    }
+    display_name = "alloydb-primary-instance"
   }
-
 
   read_pool_instance = null
 
-  depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
+  depends_on = [
+    google_compute_network.default,
+    google_compute_global_address.private_ip_alloc,
+    google_service_networking_connection.vpc_connection,
+    google_kms_crypto_key_iam_member.alloydb_sa_iam
+  ]
 }
 
 resource "google_compute_network" "default" {
