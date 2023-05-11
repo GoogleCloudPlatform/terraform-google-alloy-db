@@ -50,6 +50,19 @@ module "alloy-db" {
     instance_type = "PRIMARY",
   }
 
+  read_pool_instance = [
+    {
+      instance_id       = "read-instance-1",
+      display_name      = "read-instance-1",
+      # instance_type     = "READ_POOL",
+      # node_count        = 1,
+      # database_flags    = {},
+      # availability_type = "ZONAL",
+      # ZONE              = "us-central1-a",
+      # machine_cpu_count = 1
+    }
+  ]
+
   depends_on = [
     google_compute_network.default,
     google_compute_global_address.private_ip_alloc,

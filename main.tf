@@ -109,12 +109,12 @@ resource "google_alloydb_cluster" "default" {
 resource "google_alloydb_instance" "primary" {
   cluster           = google_alloydb_cluster.default.name
   instance_id       = var.primary_instance.instance_id
-  instance_type     = var.primary_instance.instance_type
+  instance_type     = "PRIMARY"
   display_name      = var.primary_instance.display_name
   database_flags    = var.primary_instance.database_flags
   labels            = var.primary_instance.labels
   annotations       = var.primary_instance.annotations
-  gce_zone          = var.primary_instance.gce_zone
+  gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
   availability_type = var.primary_instance.availability_type
 
   machine_config {
@@ -127,13 +127,17 @@ resource "google_alloydb_instance" "read_pool" {
   for_each      = local.read_pool_instance
   cluster       = google_alloydb_cluster.default.name
   instance_id   = each.key
-  instance_type = each.value.instance_type
+  instance_type = "READ_POOL"
 
   read_pool_config {
     node_count = each.value.node_count
   }
 
   database_flags = each.value.database_flags
+  machine_config {
+    cpu_count = each.value.machine_cpu_count
+  }
+
 
   depends_on = [google_alloydb_instance.primary]
 }

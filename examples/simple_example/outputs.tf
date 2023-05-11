@@ -23,3 +23,8 @@ output "primary_instance_id" {
   description = "ID of the primary instance created"
   value       = module.alloy-db.primary_instance_id
 }
+
+output "project_id" {
+  description = "Project ID of the Alloy DB Cluster created"
+  value       = var.project_id
+}

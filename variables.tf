@@ -88,7 +88,7 @@ variable "primary_instance" {
   description = "Primary cluster configuration that supports read and write operations."
   type = object({
     instance_id       = string,
-    instance_type     = string,
+    # instance_type     = string,
     machine_cpu_count = optional(number, 2),
     display_name      = optional(string),
     database_flags    = optional(map(string))
@@ -110,14 +110,14 @@ variable "primary_instance" {
 variable "read_pool_instance" {
   description = "List of Read Pool Instances to be created"
   type = list(object({
-    instance_id       = string,
-    display_name      = string,
-    instance_type     = string,
-    node_count        = number,
-    database_flags    = map(string),
-    availability_type = string,
-    ZONE              = string,
-    machine_cpu_count = number
+    instance_id       = string
+    display_name      = string
+    # instance_type     = string
+    node_count        = optional(number,1)
+    database_flags    = optional(map(string))
+    availability_type = optional(string)
+    ZONE              = optional(string)
+    machine_cpu_count = optional(number,2)
   }))
   default = []
 }
