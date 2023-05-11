@@ -15,7 +15,8 @@ The resource/resources that this module will create are:
 
 ```hcl
 module "alloy-db" {
-  source               = "../.."
+  source               = "GoogleCloudPlatform/alloy-db/google"
+  version              = "~> 0.1"
   cluster_id           = "alloydb-cluster"
   cluster_location     = "us-central1"
   project_id           = <"PROJECT_ID">
@@ -53,7 +54,8 @@ module "alloy-db" {
 
 ```hcl
 module "alloy-db" {
-  source               = "../.."
+  source               = "GoogleCloudPlatform/alloy-db/google"
+  version              = "~> 0.1"
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
   cluster_location     = "us-central1"
@@ -95,9 +97,9 @@ Functional examples are included in the
 | cluster\_labels | User-defined labels for the alloydb cluster | `map(string)` | `{}` | no |
 | cluster\_location | Location where AlloyDb cluster will be deployed. | `string` | n/a | yes |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. | `string` | n/a | yes |
-| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id       = string,<br>    instance_type     = string,<br>    machine_cpu_count = optional(number, 2),<br>    display_name      = optional(string),<br>    database_flags    = optional(map(string))<br>    labels            = optional(map(string))<br>    annotations       = optional(map(string))<br>    gce_zone          = optional(string)<br>    availability_type = optional(string, "REGIONAL")<br>  })</pre> | n/a | yes |
+| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id       = string,<br>    display_name      = optional(string),<br>    database_flags    = optional(map(string))<br>    labels            = optional(map(string))<br>    annotations       = optional(map(string))<br>    gce_zone          = optional(string)<br>    availability_type = optional(string)<br>    machine_cpu_count = optional(number, 2),<br>  })</pre> | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id       = string,<br>    display_name      = string,<br>    instance_type     = string,<br>    node_count        = number,<br>    database_flags    = map(string),<br>    availability_type = string,<br>    ZONE              = string,<br>    machine_cpu_count = number<br>  }))</pre> | `[]` | no |
+| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id       = string<br>    display_name      = string<br>    node_count        = optional(number, 1)<br>    database_flags    = optional(map(string))<br>    availability_type = optional(string)<br>    gce_zone          = optional(string)<br>    machine_cpu_count = optional(number, 2)<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 

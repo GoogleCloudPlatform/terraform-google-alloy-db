@@ -124,10 +124,12 @@ resource "google_alloydb_instance" "primary" {
 }
 
 resource "google_alloydb_instance" "read_pool" {
-  for_each      = local.read_pool_instance
-  cluster       = google_alloydb_cluster.default.name
-  instance_id   = each.key
-  instance_type = "READ_POOL"
+  for_each          = local.read_pool_instance
+  cluster           = google_alloydb_cluster.default.name
+  instance_id       = each.key
+  instance_type     = "READ_POOL"
+  availability_type = each.value.availability_type
+  gce_zone          = each.value.availability_type == "ZONAL" ? each.value.availability_type.gce_zone : null
 
   read_pool_config {
     node_count = each.value.node_count

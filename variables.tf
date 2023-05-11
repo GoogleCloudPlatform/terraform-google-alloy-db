@@ -88,14 +88,13 @@ variable "primary_instance" {
   description = "Primary cluster configuration that supports read and write operations."
   type = object({
     instance_id       = string,
-    # instance_type     = string,
-    machine_cpu_count = optional(number, 2),
     display_name      = optional(string),
     database_flags    = optional(map(string))
     labels            = optional(map(string))
     annotations       = optional(map(string))
     gce_zone          = optional(string)
-    availability_type = optional(string, "REGIONAL")
+    availability_type = optional(string)
+    machine_cpu_count = optional(number, 2),
   })
   validation {
     condition     = can(regex("^(2|4|8|16|32|64)$", var.primary_instance.machine_cpu_count))
@@ -112,12 +111,11 @@ variable "read_pool_instance" {
   type = list(object({
     instance_id       = string
     display_name      = string
-    # instance_type     = string
-    node_count        = optional(number,1)
+    node_count        = optional(number, 1)
     database_flags    = optional(map(string))
     availability_type = optional(string)
-    ZONE              = optional(string)
-    machine_cpu_count = optional(number,2)
+    gce_zone          = optional(string)
+    machine_cpu_count = optional(number, 2)
   }))
   default = []
 }

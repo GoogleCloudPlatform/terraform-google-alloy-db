@@ -32,5 +32,6 @@ terraform destroy
 |------|-------------|
 | cluster\_id | ID of the Alloy DB Cluster created |
 | primary\_instance\_id | ID of the primary instance created |
+| project\_id | Project ID of the Alloy DB Cluster created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
