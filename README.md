@@ -8,6 +8,15 @@ The resource/resources that this module will create are:
 - Creates a Primary Instance
 - Creates a pool of Read Instances
 
+## Compatibility
+
+This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+. If you find incompatibilities using Terraform >=1.3, please open an issue.
+
+## Version
+
+Current version is 0.2. Upgrade guides:
+
+- [0.1 -> 0.2](/docs/upgrading_to_v0.2.md)
 
 ## Usage
 
