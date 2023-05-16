@@ -30,3 +30,18 @@ output "read_instance_ids" {
     for rd, details in google_alloydb_instance.read_pool : details.id
   ]
 }
+
+output "cluster" {
+  description = "Cluster created"
+  value       = resource.google_alloydb_cluster.default
+}
+
+output "primary_instance" {
+  description = "Primary instance created"
+  value       = resource.google_alloydb_instance.primary
+}
+
+output "replica_instances" {
+  description = "Replica instances created"
+  value       = resource.google_alloydb_instance.read_pool
+}

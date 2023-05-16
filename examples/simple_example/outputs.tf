@@ -24,7 +24,7 @@ output "primary_instance_id" {
   value       = module.alloy-db.primary_instance_id
 }
 
-output "read_instance_ids" {
-  description = "IDs of the read instances created"
-  value       = module.alloy-db.read_instance_ids
+output "project_id" {
+  description = "Project ID of the Alloy DB Cluster created"
+  value       = var.project_id
 }
