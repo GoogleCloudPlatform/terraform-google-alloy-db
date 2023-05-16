@@ -60,7 +60,8 @@ module "alloy-db" {
   depends_on = [
     google_compute_network.default,
     google_compute_global_address.private_ip_alloc,
-    google_service_networking_connection.vpc_connection
+    google_service_networking_connection.vpc_connection,
+    google_kms_crypto_key_iam_member.alloydb_sa_iam,
   ]
 }
 
