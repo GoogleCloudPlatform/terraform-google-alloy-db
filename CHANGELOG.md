@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v0.1.0...v0.2.0) (2023-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG >= 4.64:** added cmek support ([#13](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/13))
+
+### Features
+
+* **TPG >= 4.64:** added cmek support ([#13](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/13)) ([8972ee1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/8972ee1a75d5f0d18fe0ea35a15edcdb81238e24))
+
 ## 0.1.0 (2023-04-10)
 
 
