@@ -29,6 +29,7 @@ func TestSimpleExample(t *testing.T) {
 	example.DefineVerify(func(assert *assert.Assertions) {
 		// Getting the expected Project ID from the outputs
 		projectId := example.GetStringOutput("project_id")
+		kmsKeyName := example.GetStringOutput("kms_key_name")
 
 		// Cluster Information
 		alloydb_cluster_id_path := example.GetStringOutput("cluster_id")
@@ -48,6 +49,13 @@ func TestSimpleExample(t *testing.T) {
 
 		// check for Cluster
 		assert.Equal(alloydb_cluster_id_path, alloyDBClusterInfo.Get("name").String(), "Has to be same Cluster path")
+		assert.True(alloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to True")
+		assert.Equal("10", alloyDBClusterInfo.Get("continuousBackupConfig.recoveryWindowDays").String(), "continuousBackupConfig.recoveryWindowDays has expected value 10")
+		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("continuousBackupConfig.encryptionConfig.kmsKeyName").String(), "continuous Backup Encryption key name match")
+		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("encryptionConfig.kmsKeyName").String(), "Cluster Encryption key name match")
+		assert.Equal("us-central1", alloyDBClusterInfo.Get("automatedBackupPolicy.location").String(), "Cluster backup region match")
+		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("automatedBackupPolicy.encryptionConfig.kmsKeyName").String(), "Cluster automatic backup Encryption key name match")
+		assert.Equal("PRIMARY", alloyDBClusterInfo.Get("clusterType").String(), "Cluster type match")
 
 		// Check for Primary Instance
 		assert.Equal(alloydb_primary_instance_path, alloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path")
