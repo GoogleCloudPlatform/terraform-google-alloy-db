@@ -84,6 +84,24 @@ variable "automated_backup_policy" {
   default = null
 }
 
+variable "continuous_backup_enable" {
+  type        = bool
+  description = "Whether continuous backup recovery is enabled. If not set, defaults to true"
+  default     = true
+}
+
+variable "continuous_backup_recovery_window_days" {
+  type        = number
+  description = "The numbers of days that are eligible to restore from using PITR. Defaults to 14 days. The value must be between 1 and 35"
+  default     = 14
+}
+
+variable "continuous_backup_encryption_key_name" {
+  type        = string
+  description = "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
+  default     = null
+}
+
 variable "primary_instance" {
   description = "Primary cluster configuration that supports read and write operations."
   type = object({

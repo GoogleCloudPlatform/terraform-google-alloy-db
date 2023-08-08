@@ -90,6 +90,21 @@ resource "google_alloydb_cluster" "default" {
 
   }
 
+  dynamic "continuous_backup_config" {
+    for_each = var.continuous_backup_enable ? ["continuous_backup_config"] : []
+    content {
+      enabled              = var.continuous_backup_enable
+      recovery_window_days = var.continuous_backup_recovery_window_days
+      dynamic "encryption_config" {
+        for_each = var.continuous_backup_encryption_key_name == null ? [] : ["cont_backup_encryption_config"]
+        content {
+          kms_key_name = var.continuous_backup_encryption_key_name
+        }
+      }
+
+    }
+  }
+
   dynamic "initial_user" {
     for_each = var.cluster_initial_user == null ? [] : ["cluster_initial_user"]
     content {
