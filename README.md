@@ -17,6 +17,7 @@ This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+
 Current version is 0.2. Upgrade guides:
 
 - [0.1 -> 0.2](/docs/upgrading_to_v0.2.md)
+- [0.2 -> 1.0](/docs/upgrading_to_v1.0.md)
 
 ## Usage
 
@@ -135,7 +136,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v1.3
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v4.64
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v4.77
 
 ### Service Account
 
