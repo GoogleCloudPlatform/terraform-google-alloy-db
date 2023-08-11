@@ -31,6 +31,7 @@ terraform destroy
 | Name | Description |
 |------|-------------|
 | cluster\_id | ID of the Alloy DB Cluster created |
+| kms\_key\_name | he fully-qualified resource name of the KMS key |
 | primary\_instance\_id | ID of the primary instance created |
 | project\_id | Project ID of the Alloy DB Cluster created |
 

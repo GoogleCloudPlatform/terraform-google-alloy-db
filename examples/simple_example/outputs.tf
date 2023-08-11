@@ -28,3 +28,8 @@ output "project_id" {
   description = "Project ID of the Alloy DB Cluster created"
   value       = var.project_id
 }
+
+output "kms_key_name" {
+  description = "he fully-qualified resource name of the KMS key"
+  value       = google_kms_crypto_key.key.id
+}

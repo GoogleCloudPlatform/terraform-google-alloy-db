@@ -45,6 +45,9 @@ module "alloy-db" {
     backup_encryption_key_name = google_kms_crypto_key.key.id
   }
 
+  continuous_backup_recovery_window_days = 10
+  continuous_backup_encryption_key_name  = google_kms_crypto_key.key.id
+
   primary_instance = {
     instance_id   = "primary-instance-1",
     instance_type = "PRIMARY",
