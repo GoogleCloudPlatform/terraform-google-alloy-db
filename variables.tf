@@ -92,7 +92,7 @@ variable "continuous_backup_enable" {
 
 variable "continuous_backup_recovery_window_days" {
   type        = number
-  description = "The numbers of days that are eligible to restore from using PITR. Defaults to 14 days. The value must be between 1 and 35"
+  description = "The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35"
   default     = 14
 }
 
