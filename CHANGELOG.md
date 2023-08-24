@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v0.2.0...v1.0.0) (2023-08-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG >=4.77:** add support for continuous backup ([#23](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/23))
+
+### Features
+
+* **TPG >=4.77:** add support for continuous backup ([#23](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/23)) ([83a2dfc](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/83a2dfc1ee2aadcb0c65102beb9ff1c55cb68c28))
+
 ## [0.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v0.1.0...v0.2.0) (2023-06-13)
 
 
