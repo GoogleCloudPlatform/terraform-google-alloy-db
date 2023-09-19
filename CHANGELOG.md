@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.0.0...v1.1.0) (2023-09-19)
+
+
+### Features
+
+* increase maximum CPU count allowed in machine_cpu_count validation to 96 ([#31](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/31)) ([e2dcf60](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/e2dcf60b424345327ed1a44798b673bd3a157ea7))
+
 ## [1.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v0.2.0...v1.0.0) (2023-08-24)
 
 
