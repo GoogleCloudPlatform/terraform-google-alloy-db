@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.0...v1.1.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* **deps:** Update Terraform Google Provider to allow v5 (major) ([#34](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/34)) ([15c13f4](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/15c13f440e0c77e64758b9abe2e6c411897f0ae1))
+
 ## [1.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.0.0...v1.1.0) (2023-09-19)
 
 
