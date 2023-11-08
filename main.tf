@@ -144,7 +144,7 @@ resource "google_alloydb_instance" "read_pool" {
   instance_id       = each.key
   instance_type     = "READ_POOL"
   availability_type = each.value.availability_type
-  gce_zone          = each.value.availability_type == "ZONAL" ? each.value.availability_type.gce_zone : null
+  gce_zone          = each.value.availability_type == "ZONAL" ? each.value.gce_zone : null
 
   read_pool_config {
     node_count = each.value.node_count
