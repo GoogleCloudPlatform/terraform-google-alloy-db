@@ -137,3 +137,25 @@ variable "read_pool_instance" {
   }))
   default = []
 }
+
+# variable "cluster_type_policy" {
+#   description = "Object cotains the type of the cluster and deletion policy. If not set, defaults to cluster_type `PRIMARY` with deletion policy `null`. For cluster_type `SECONDARY` deletion_policy must be set to`FORCE`"
+#   type = object({
+#     cluster_type    = optional(string, "PRIMARY")
+#     deletion_policy = optional(string)
+#   })
+#   default = { cluster_type = "PRIMARY" }
+#   validation {
+#     condition     = contains(["PRIMARY", "SECONDARY"], var.cluster.cluster_type)
+#     error_message = "ERROR: Cluster Type can be PRIMARY or SECONDARY"
+#   }
+#   validation {
+#     condition     = (var.cluster.cluster_type == "SECONDARY" && var.cluster.deletion_policy == "FORCE") || var.cluster.cluster_type == "PRIMARY"
+#     error_message = "ERROR: deletion_policy should be FORCE when Cluster Type is SECONDARY"
+#   }
+# }
+variable "primary_cluster_name" {
+  type        = string
+  description = "Primary cluster name"
+  default     = null
+}

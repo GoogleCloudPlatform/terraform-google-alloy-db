@@ -14,10 +14,11 @@ This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+
 
 ## Version
 
-Current version is 0.2. Upgrade guides:
+Current version is 2.X. Upgrade guides:
 
 - [0.1 -> 0.2](/docs/upgrading_to_v0.2.md)
 - [0.2 -> 1.0](/docs/upgrading_to_v1.0.md)
+- [1.X -> 2.0](/docs/upgrading_to_v2.0.md)
 
 ## Usage
 
@@ -110,6 +111,7 @@ Functional examples are included in the
 | continuous\_backup\_encryption\_key\_name | The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. | `string` | n/a | yes |
+| primary\_cluster\_name | Primary cluster name | `string` | `null` | no |
 | primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id       = string,<br>    display_name      = optional(string),<br>    database_flags    = optional(map(string))<br>    labels            = optional(map(string))<br>    annotations       = optional(map(string))<br>    gce_zone          = optional(string)<br>    availability_type = optional(string)<br>    machine_cpu_count = optional(number, 2),<br>  })</pre> | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id       = string<br>    display_name      = string<br>    node_count        = optional(number, 1)<br>    database_flags    = optional(map(string))<br>    availability_type = optional(string)<br>    gce_zone          = optional(string)<br>    machine_cpu_count = optional(number, 2)<br>  }))</pre> | `[]` | no |
@@ -120,6 +122,7 @@ Functional examples are included in the
 |------|-------------|
 | cluster | Cluster created |
 | cluster\_id | ID of the Alloy DB Cluster created |
+| cluster\_name | ID of the Alloy DB Cluster created |
 | primary\_instance | Primary instance created |
 | primary\_instance\_id | ID of the primary instance created |
 | read\_instance\_ids | IDs of the read instances created |

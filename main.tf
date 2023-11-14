@@ -27,18 +27,23 @@ locals {
   time_based_retention_count = (
     var.automated_backup_policy != null ? (var.automated_backup_policy.time_based_retention_count != null ? [var.automated_backup_policy.time_based_retention_count] : []) : []
   )
+
+  is_secondary_cluster = var.primary_cluster_name != null
 }
 
 resource "google_alloydb_cluster" "default" {
-  cluster_id   = var.cluster_id
-  location     = var.cluster_location
-  network      = var.network_self_link
-  display_name = var.cluster_display_name
-  project      = var.project_id
-  labels       = var.cluster_labels
+  cluster_id      = var.cluster_id
+  location        = var.cluster_location
+  network         = var.network_self_link
+  display_name    = var.cluster_display_name
+  project         = var.project_id
+  labels          = var.cluster_labels
+  cluster_type    = local.is_secondary_cluster ? "SECONDARY" : "PRIMARY"
+  deletion_policy = local.is_secondary_cluster ? "FORCE" : null
 
+  # N/A for secondary cluster
   dynamic "automated_backup_policy" {
-    for_each = var.automated_backup_policy != null ? [var.automated_backup_policy] : []
+    for_each = var.automated_backup_policy != null && !local.is_secondary_cluster ? [var.automated_backup_policy] : []
     content {
       location      = automated_backup_policy.value.location
       backup_window = automated_backup_policy.value.backup_window
@@ -90,8 +95,9 @@ resource "google_alloydb_cluster" "default" {
 
   }
 
+  # N/A for secondary cluster
   dynamic "continuous_backup_config" {
-    for_each = var.continuous_backup_enable ? ["continuous_backup_config"] : []
+    for_each = var.continuous_backup_enable && !local.is_secondary_cluster ? ["continuous_backup_config"] : []
     content {
       enabled              = var.continuous_backup_enable
       recovery_window_days = var.continuous_backup_recovery_window_days
@@ -119,25 +125,39 @@ resource "google_alloydb_cluster" "default" {
       kms_key_name = var.cluster_encryption_key_name
     }
   }
+
+  ## Needed for Secondary Cluster
+  dynamic "secondary_config" {
+    for_each = local.is_secondary_cluster ? ["secondary_config"] : []
+    content {
+      primary_cluster_name = var.primary_cluster_name
+    }
+  }
+
 }
 
 resource "google_alloydb_instance" "primary" {
   cluster           = google_alloydb_cluster.default.name
   instance_id       = var.primary_instance.instance_id
-  instance_type     = "PRIMARY"
+  instance_type     = google_alloydb_cluster.default.cluster_type
   display_name      = var.primary_instance.display_name
   database_flags    = var.primary_instance.database_flags
   labels            = var.primary_instance.labels
   annotations       = var.primary_instance.annotations
-  gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
   availability_type = var.primary_instance.availability_type
+  gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
 
   machine_config {
     cpu_count = var.primary_instance.machine_cpu_count
   }
 
+  lifecycle {
+    ignore_changes = [instance_type]
+  }
+
 }
 
+# Cannot create for secondary cluster
 resource "google_alloydb_instance" "read_pool" {
   for_each          = local.read_pool_instance
   cluster           = google_alloydb_cluster.default.name
@@ -145,6 +165,8 @@ resource "google_alloydb_instance" "read_pool" {
   instance_type     = "READ_POOL"
   availability_type = each.value.availability_type
   gce_zone          = each.value.availability_type == "ZONAL" ? each.value.gce_zone : null
+  labels            = var.primary_instance.labels
+  annotations       = var.primary_instance.annotations
 
   read_pool_config {
     node_count = each.value.node_count

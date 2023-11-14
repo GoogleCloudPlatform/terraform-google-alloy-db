@@ -28,6 +28,12 @@ variable "network_name" {
 
 variable "region" {
   default     = "us-central1"
-  description = "The region to apply resources within"
+  description = "The region for primary cluster"
+  type        = string
+}
+
+variable "secondary_region" {
+  default     = "us-east1"
+  description = "The region for cross region replica secondary cluster"
   type        = string
 }
