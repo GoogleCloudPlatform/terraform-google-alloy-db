@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-# provider "google" {
-#   project = var.project_id
-#   region  = var.region
-# }
-
-
 resource "google_compute_network" "default" {
   name    = var.network_name
   project = var.project_id
