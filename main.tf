@@ -34,12 +34,16 @@ locals {
 resource "google_alloydb_cluster" "default" {
   cluster_id      = var.cluster_id
   location        = var.cluster_location
-  network         = var.network_self_link
   display_name    = var.cluster_display_name
   project         = var.project_id
   labels          = var.cluster_labels
   cluster_type    = local.is_secondary_cluster ? "SECONDARY" : "PRIMARY"
   deletion_policy = local.is_secondary_cluster ? "FORCE" : null
+
+  network_config {
+    network            = var.network_self_link
+    allocated_ip_range = var.allocated_ip_range
+  }
 
   # N/A for secondary cluster
   dynamic "automated_backup_policy" {
