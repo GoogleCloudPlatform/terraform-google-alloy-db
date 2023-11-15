@@ -59,11 +59,6 @@ variable "cluster_encryption_key_name" {
   default     = null
 }
 
-variable "network_self_link" {
-  description = "Network ID where the AlloyDb cluster will be deployed."
-  type        = string
-}
-
 variable "automated_backup_policy" {
   description = "The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days"
   type = object({
@@ -136,4 +131,21 @@ variable "read_pool_instance" {
     machine_cpu_count = optional(number, 2)
   }))
   default = []
+}
+
+variable "primary_cluster_name" {
+  type        = string
+  description = "Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster"
+  default     = null
+}
+
+variable "network_self_link" {
+  description = "Network ID where the AlloyDb cluster will be deployed."
+  type        = string
+}
+
+variable "allocated_ip_range" {
+  type        = string
+  description = "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
+  default     = null
 }

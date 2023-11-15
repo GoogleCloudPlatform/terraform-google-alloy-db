@@ -31,6 +31,11 @@ output "read_instance_ids" {
   ]
 }
 
+output "cluster_name" {
+  description = "ID of the Alloy DB Cluster created"
+  value       = google_alloydb_cluster.default.name
+}
+
 output "cluster" {
   description = "Cluster created"
   value       = resource.google_alloydb_cluster.default
