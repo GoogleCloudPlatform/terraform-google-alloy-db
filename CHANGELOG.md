@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.2...v2.0.0) (2023-11-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG >=5.5:** add support for cross region replica cluster ([#47](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/47))
+
+### Features
+
+* **TPG >=5.5:** add support for cross region replica cluster ([#47](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/47)) ([a467efa](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/a467efa1414728f396472d7c1f6ef669bccc2d1a))
+
 ## [1.1.2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.1...v1.1.2) (2023-11-09)
 
 
