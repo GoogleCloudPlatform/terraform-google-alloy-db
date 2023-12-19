@@ -19,7 +19,9 @@ provider "google" {
 }
 
 module "alloy-db" {
-  source           = "../.."
+  source  = "GoogleCloudPlatform/alloy-db/google"
+  version = "~> 2.0"
+
   project_id       = var.project_id
   cluster_id       = "alloydb-cluster-with-prim"
   cluster_location = "us-central1"

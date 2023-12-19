@@ -36,7 +36,9 @@ resource "google_service_networking_connection" "vpc_connection" {
 }
 
 module "alloy-db" {
-  source           = "../.."
+  source  = "GoogleCloudPlatform/alloy-db/google"
+  version = "~> 2.0"
+
   cluster_id       = "alloydb-v6-cluster"
   cluster_location = var.region
   project_id       = var.project_id
