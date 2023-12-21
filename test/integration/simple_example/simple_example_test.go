@@ -30,36 +30,65 @@ func TestSimpleExample(t *testing.T) {
 		// Getting the expected Project ID from the outputs
 		projectId := example.GetStringOutput("project_id")
 		kmsKeyName := example.GetStringOutput("kms_key_name")
+		secondarykmsKeyName := example.GetStringOutput("secondary_kms_key_name")
+		region := example.GetStringOutput("region")
+		secondaryRegion := example.GetStringOutput("secondary_region")
 
 		// Cluster Information
-		alloydb_cluster_id_path := example.GetStringOutput("cluster_id")
-		alloydb_cluster_id_path_list := strings.Split(example.GetStringOutput("cluster_id"), "/")
-		alloydb_cluster_id := alloydb_cluster_id_path_list[len(alloydb_cluster_id_path_list)-1]
+		alloydbClusterIdPath := example.GetStringOutput("cluster_id")
+		alloydbClusterIdPathList := strings.Split(example.GetStringOutput("cluster_id"), "/")
+		alloydbClusterId := alloydbClusterIdPathList[len(alloydbClusterIdPathList)-1]
 
 		// Primary Instance Information
-		alloydb_primary_instance_path := example.GetStringOutput("primary_instance_id")
+		alloydbPrimaryInstancePath := example.GetStringOutput("primary_instance_id")
 
-		cluster_location := "us-central1"
+		cluster_location := region
 		state := "READY"
-		gcOps_ClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
-		gcOps_PrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--cluster", alloydb_cluster_id, "--format", "json"})
+		gcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
+		gcOpsPrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--cluster", alloydbClusterId, "--format", "json"})
 
-		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydb_cluster_id, gcOps_ClusterInfo)
-		alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", gcOps_PrimaryInstanceInfo).Array()[0]
+		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydbClusterId, gcOpsClusterInfo)
+		alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", gcOpsPrimaryInstanceInfo).Array()[0]
+
+		// Secondary Cluster Information
+		secondaryAlloydbClusterIdPath := example.GetStringOutput("secondary_cluster_id")
+		secondaryAlloydbClusterIdPathList := strings.Split(example.GetStringOutput("secondary_cluster_id"), "/")
+		secondaryAlloydbClusterId := secondaryAlloydbClusterIdPathList[len(secondaryAlloydbClusterIdPathList)-1]
+
+		// Secondary Primary Instance Information
+		secondaryAlloydbPrimaryInstancePath := example.GetStringOutput("secondary_primary_instance_id")
+
+		secondary_cluster_location := secondaryRegion
+		secondaryGcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_cluster_location, "--format", "json"})
+		secondaryGcOpsPrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_cluster_location, "--cluster", secondaryAlloydbClusterId, "--format", "json"})
+
+		secondaryAlloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+secondaryAlloydbClusterId, secondaryGcOpsClusterInfo)
+		SecondaryAlloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", secondaryGcOpsPrimaryInstanceInfo).Array()[0]
 
 		// check for Cluster
-		assert.Equal(alloydb_cluster_id_path, alloyDBClusterInfo.Get("name").String(), "Has to be same Cluster path")
+		assert.Equal(alloydbClusterIdPath, alloyDBClusterInfo.Get("name").String(), "Has to be same Cluster path")
 		assert.True(alloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to True")
 		assert.Equal("10", alloyDBClusterInfo.Get("continuousBackupConfig.recoveryWindowDays").String(), "continuousBackupConfig.recoveryWindowDays has expected value 10")
 		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("continuousBackupConfig.encryptionConfig.kmsKeyName").String(), "continuous Backup Encryption key name match")
 		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("encryptionConfig.kmsKeyName").String(), "Cluster Encryption key name match")
-		assert.Equal("us-central1", alloyDBClusterInfo.Get("automatedBackupPolicy.location").String(), "Cluster backup region match")
+		assert.Equal(region, alloyDBClusterInfo.Get("automatedBackupPolicy.location").String(), "Cluster backup region match")
 		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("automatedBackupPolicy.encryptionConfig.kmsKeyName").String(), "Cluster automatic backup Encryption key name match")
 		assert.Equal("PRIMARY", alloyDBClusterInfo.Get("clusterType").String(), "Cluster type match")
 
 		// Check for Primary Instance
-		assert.Equal(alloydb_primary_instance_path, alloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path")
+		assert.Equal(alloydbPrimaryInstancePath, alloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path")
 		assert.Equal(state, alloyDBInstanceInfo.Get("state").String())
+
+		// check for Secondary Cluster
+		assert.Equal(secondaryAlloydbClusterIdPath, secondaryAlloyDBClusterInfo.Get("name").String(), "Has to be same secondary Cluster path")
+		assert.False(secondaryAlloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to False")
+		assert.Equal(secondarykmsKeyName, secondaryAlloyDBClusterInfo.Get("encryptionConfig.kmsKeyName").String(), "Cluster Encryption key name match for secondary cluster")
+		assert.Equal("SECONDARY", secondaryAlloyDBClusterInfo.Get("clusterType").String(), "Cluster type match")
+
+		// Check for Secondary  Instance
+		assert.Equal(secondaryAlloydbPrimaryInstancePath, SecondaryAlloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path for secondary cluster")
+		assert.Equal(state, SecondaryAlloyDBInstanceInfo.Get("state").String())
+
 	})
 
 	example.Test()

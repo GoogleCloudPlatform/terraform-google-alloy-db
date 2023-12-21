@@ -19,7 +19,9 @@ provider "google" {
 }
 
 module "alloy-db" {
-  source               = "../.."
+  source  = "GoogleCloudPlatform/alloy-db/google"
+  version = "~> 2.0"
+
   project_id           = var.project_id
   cluster_id           = "alloydb-cluster-nrp"
   cluster_location     = "us-central1"
@@ -50,7 +52,7 @@ module "alloy-db" {
       node_count        = 1,
       database_flags    = {},
       availability_type = "ZONAL",
-      ZONE              = "us-central1-a",
+      gce_zone          = "us-central1-a",
       machine_cpu_count = 1
     }
   ]

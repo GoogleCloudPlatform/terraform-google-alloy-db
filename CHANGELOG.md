@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.2...v2.0.0) (2023-11-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG >=5.5:** add support for cross region replica cluster ([#47](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/47))
+
+### Features
+
+* **TPG >=5.5:** add support for cross region replica cluster ([#47](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/47)) ([a467efa](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/a467efa1414728f396472d7c1f6ef669bccc2d1a))
+
+## [1.1.2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.1...v1.1.2) (2023-11-09)
+
+
+### Bug Fixes
+
+* fix bug when accessing gce_zone value in for_each ([#43](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/43)) ([f9e8593](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/f9e8593b1586b017671bbf2762d4d7f588eb9d0f))
+* make examples pass `gce_zone` values for read pool instance into module ([#45](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/45)) ([1e9f8bf](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/1e9f8bfcd8225cb665e041e814b8b737b69caa80))
+
 ## [1.1.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.0...v1.1.1) (2023-10-23)
 
 
