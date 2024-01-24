@@ -155,6 +155,12 @@ resource "google_alloydb_instance" "primary" {
     cpu_count = var.primary_instance.machine_cpu_count
   }
 
+  client_connection_config {
+    ssl_config {
+      ssl_mode = var.primary_instance.ssl_mode
+    }
+  }
+
   lifecycle {
     ignore_changes = [instance_type]
   }
@@ -181,6 +187,11 @@ resource "google_alloydb_instance" "read_pool" {
     cpu_count = each.value.machine_cpu_count
   }
 
+  client_connection_config {
+    ssl_config {
+      ssl_mode = each.value.ssl_mode
+    }
+  }
 
   depends_on = [google_alloydb_instance.primary]
 }
