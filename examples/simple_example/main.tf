@@ -67,12 +67,20 @@ module "alloy-db" {
 
   primary_instance = {
     instance_id = "primary-instance-1",
+    client_connection_config = {
+      require_connectors = "false"
+      ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    }
   }
 
   read_pool_instance = [
     {
       instance_id  = "read-instance-1",
       display_name = "read-instance-1",
+      client_connection_config = {
+        require_connectors = "false"
+        ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+      }
     }
   ]
 
@@ -83,4 +91,3 @@ module "alloy-db" {
     google_kms_crypto_key_iam_member.alloydb_sa_iam,
   ]
 }
-
