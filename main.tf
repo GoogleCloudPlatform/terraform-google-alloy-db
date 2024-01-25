@@ -157,12 +157,12 @@ resource "google_alloydb_instance" "primary" {
 
   dynamic "client_connection_config" {
     for_each = coalesce(var.primary_instance.ssl_mode, var.primary_instance.require_connectors) == null ? [] : ["client_connection_config"]
-      content {
-        require_connectors  = coalesce(var.primary_instance.require_connectors)
-        ssl_config {
-          ssl_mode          = coalesce(var.primary_instance.ssl_mode)
-        }
+    content {
+      require_connectors = coalesce(var.primary_instance.require_connectors)
+      ssl_config {
+        ssl_mode = coalesce(var.primary_instance.ssl_mode)
       }
+    }
   }
 
   lifecycle {
@@ -193,12 +193,12 @@ resource "google_alloydb_instance" "read_pool" {
 
   dynamic "client_connection_config" {
     for_each = coalesce(var.primary_instance.ssl_mode, var.primary_instance.require_connectors) == null ? [] : ["client_connection_config"]
-      content {
-        require_connectors    = coalesce(each.value.require_connectors)
-        ssl_config {
-          ssl_mode            = coalesce(each.value.ssl_mode)
-        }
+    content {
+      require_connectors = coalesce(each.value.require_connectors)
+      ssl_config {
+        ssl_mode = coalesce(each.value.ssl_mode)
       }
+    }
   }
 
   depends_on = [google_alloydb_instance.primary]

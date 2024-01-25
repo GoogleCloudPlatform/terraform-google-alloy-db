@@ -100,15 +100,15 @@ variable "continuous_backup_encryption_key_name" {
 variable "primary_instance" {
   description = "Primary cluster configuration that supports read and write operations."
   type = object({
-    instance_id       = string,
-    display_name      = optional(string),
-    database_flags    = optional(map(string))
-    labels            = optional(map(string))
-    annotations       = optional(map(string))
-    gce_zone          = optional(string)
-    availability_type = optional(string)
-    machine_cpu_count = optional(number, 2),
-    ssl_mode = optional(string)
+    instance_id        = string,
+    display_name       = optional(string),
+    database_flags     = optional(map(string))
+    labels             = optional(map(string))
+    annotations        = optional(map(string))
+    gce_zone           = optional(string)
+    availability_type  = optional(string)
+    machine_cpu_count  = optional(number, 2),
+    ssl_mode           = optional(string)
     require_connectors = optional(string),
   })
   validation {
@@ -124,14 +124,14 @@ variable "primary_instance" {
 variable "read_pool_instance" {
   description = "List of Read Pool Instances to be created"
   type = list(object({
-    instance_id       = string
-    display_name      = string
-    node_count        = optional(number, 1)
-    database_flags    = optional(map(string))
-    availability_type = optional(string)
-    gce_zone          = optional(string)
-    machine_cpu_count = optional(number, 2),
-    ssl_mode = optional(string)
+    instance_id        = string
+    display_name       = string
+    node_count         = optional(number, 1)
+    database_flags     = optional(map(string))
+    availability_type  = optional(string)
+    gce_zone           = optional(string)
+    machine_cpu_count  = optional(number, 2),
+    ssl_mode           = optional(string)
     require_connectors = optional(string),
   }))
   default = []
