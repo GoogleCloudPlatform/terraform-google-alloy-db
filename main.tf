@@ -155,9 +155,13 @@ resource "google_alloydb_instance" "primary" {
     cpu_count = var.primary_instance.machine_cpu_count
   }
 
-  client_connection_config {
-    ssl_config {
-      ssl_mode = var.primary_instance.ssl_mode
+  dynamic "client_connection_config" {
+  for_each = coalesce(var.primary_instance.ssl_mode, var.primary_instance.require_connectors) == null ? [] : ["client_connection_config"]
+    content {
+      require_connectors  = coalesce(var.primary_instance.require_connectors)
+      ssl_config {
+        ssl_mode          = coalesce(var.primary_instance.ssl_mode)
+      }
     }
   }
 
@@ -187,9 +191,13 @@ resource "google_alloydb_instance" "read_pool" {
     cpu_count = each.value.machine_cpu_count
   }
 
-  client_connection_config {
-    ssl_config {
-      ssl_mode = each.value.ssl_mode
+  dynamic "client_connection_config" {
+  for_each = coalesce(var.primary_instance.ssl_mode, var.primary_instance.require_connectors) == null ? [] : ["client_connection_config"]
+    content {
+      require_connectors    = coalesce(each.value.require_connectors)
+      ssl_config {
+        ssl_mode            = coalesce(each.value.ssl_mode)
+      }
     }
   }
 

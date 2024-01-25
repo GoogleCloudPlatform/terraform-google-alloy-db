@@ -108,7 +108,8 @@ variable "primary_instance" {
     gce_zone          = optional(string)
     availability_type = optional(string)
     machine_cpu_count = optional(number, 2),
-    ssl_mode          = optional(string, "ALLOW_UNENCRYPTED_AND_ENCRYPTED"),
+    ssl_mode = optional(string)
+    require_connectors = optional(string),
   })
   validation {
     condition     = can(regex("^(2|4|8|16|32|64|96)$", var.primary_instance.machine_cpu_count))
@@ -130,7 +131,8 @@ variable "read_pool_instance" {
     availability_type = optional(string)
     gce_zone          = optional(string)
     machine_cpu_count = optional(number, 2),
-    ssl_mode          = optional(string, "ALLOW_UNENCRYPTED_AND_ENCRYPTED"),
+    ssl_mode = optional(string)
+    require_connectors = optional(string),
   }))
   default = []
 }
