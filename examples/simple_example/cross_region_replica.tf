@@ -27,6 +27,10 @@ module "alloy-db-secondary" {
 
   primary_instance = {
     instance_id = "primary-instance-sec-1",
+    client_connection_config = {
+      require_connectors = "false"
+      ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    }
   }
 
 
