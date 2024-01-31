@@ -155,6 +155,17 @@ resource "google_alloydb_instance" "primary" {
     cpu_count = var.primary_instance.machine_cpu_count
   }
 
+  dynamic "client_connection_config" {
+    for_each = lookup(var.primary_instance, "ssl_mode", null) != null || lookup(var.primary_instance, "require_connectors", null) != null ? ["client_connection_config"] : []
+
+    content {
+      require_connectors = try(var.primary_instance.require_connectors, null)
+      ssl_config {
+        ssl_mode = try(var.primary_instance.ssl_mode, null)
+      }
+    }
+  }
+
   lifecycle {
     ignore_changes = [instance_type]
   }
@@ -181,6 +192,15 @@ resource "google_alloydb_instance" "read_pool" {
     cpu_count = each.value.machine_cpu_count
   }
 
+  dynamic "client_connection_config" {
+    for_each = lookup(each.value, "ssl_mode", null) != null || lookup(each.value, "require_connectors", null) != null ? ["client_connection_config"] : []
+    content {
+      require_connectors = try(each.value.require_connectors, null)
+      ssl_config {
+        ssl_mode = try(each.value.ssl_mode, null)
+      }
+    }
+  }
 
   depends_on = [google_alloydb_instance.primary]
 }
