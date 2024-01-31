@@ -56,10 +56,6 @@ module "alloy-db" {
       "google_columnar_engine.scan_mode" = 2
     }
     display_name = "alloydb-primary-instance",
-    client_connection_config = {
-      require_connectors = "false"
-      ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-    }
   }
 
   read_pool_instance = null

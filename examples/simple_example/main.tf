@@ -68,7 +68,7 @@ module "alloy-db" {
   primary_instance = {
     instance_id = "primary-instance-1",
     client_connection_config = {
-      require_connectors = "false"
+      require_connectors = false
       ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   }
@@ -78,7 +78,7 @@ module "alloy-db" {
       instance_id  = "read-instance-1",
       display_name = "read-instance-1",
       client_connection_config = {
-        require_connectors = "false"
+        require_connectors = false
         ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
       }
     }

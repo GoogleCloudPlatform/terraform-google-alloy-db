@@ -41,10 +41,6 @@ module "alloy-db" {
     machine_cpu_count = 2,
     database_flags    = {},
     display_name      = "alloydb-primary-instance",
-    client_connection_config = {
-      require_connectors = "false"
-      ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-    }
   }
 
 
@@ -58,10 +54,6 @@ module "alloy-db" {
       availability_type = "ZONAL",
       gce_zone          = "us-central1-a",
       machine_cpu_count = 1,
-      client_connection_config = {
-        require_connectors = "false"
-        ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-      }
     }
   ]
 

@@ -156,11 +156,12 @@ resource "google_alloydb_instance" "primary" {
   }
 
   dynamic "client_connection_config" {
-    for_each = coalesce(var.primary_instance.ssl_mode, var.primary_instance.require_connectors) == null ? [] : ["client_connection_config"]
+    for_each = lookup(var.primary_instance, "ssl_mode", null) != null || lookup(var.primary_instance, "require_connectors", null) != null ? ["client_connection_config"] : []
+
     content {
-      require_connectors = coalesce(var.primary_instance.require_connectors)
+      require_connectors = try(var.primary_instance.require_connectors, null)
       ssl_config {
-        ssl_mode = coalesce(var.primary_instance.ssl_mode)
+        ssl_mode = try(var.primary_instance.ssl_mode, null)
       }
     }
   }
@@ -192,11 +193,11 @@ resource "google_alloydb_instance" "read_pool" {
   }
 
   dynamic "client_connection_config" {
-    for_each = coalesce(var.primary_instance.ssl_mode, var.primary_instance.require_connectors) == null ? [] : ["client_connection_config"]
+    for_each = lookup(each.value, "ssl_mode", null) != null || lookup(each.value, "require_connectors", null) != null ? ["client_connection_config"] : []
     content {
-      require_connectors = coalesce(each.value.require_connectors)
+      require_connectors = try(each.value.require_connectors, null)
       ssl_config {
-        ssl_mode = coalesce(each.value.ssl_mode)
+        ssl_mode = try(each.value.ssl_mode, null)
       }
     }
   }
