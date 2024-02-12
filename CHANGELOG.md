@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.0.0...v2.1.0) (2024-02-12)
+
+
+### Features
+
+* 128 vCPU support for instances ([#64](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/64)) ([2e9402d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/2e9402db75129c99f1f597a1ab1a446d51f385d2))
+* Add support for SSL enforcement modes ([#59](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/59)) ([a946b67](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/a946b67b9d4d5cc99695fbd390e14e501250ed1a))
+
 ## [2.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v1.1.2...v2.0.0) (2023-11-15)
 
 
