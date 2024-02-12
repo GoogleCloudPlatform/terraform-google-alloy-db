@@ -112,8 +112,8 @@ variable "primary_instance" {
     require_connectors = optional(bool),
   })
   validation {
-    condition     = can(regex("^(2|4|8|16|32|64|96)$", var.primary_instance.machine_cpu_count))
-    error_message = "cpu count must be one of [2 4 8 16 32 64 96]"
+    condition     = can(regex("^(2|4|8|16|32|64|96|128)$", var.primary_instance.machine_cpu_count))
+    error_message = "cpu count must be one of [2 4 8 16 32 64 96 128]"
   }
   validation {
     condition     = can(regex("^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$", var.primary_instance.instance_id))
