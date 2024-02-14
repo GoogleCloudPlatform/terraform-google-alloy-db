@@ -153,3 +153,9 @@ variable "allocated_ip_range" {
   description = "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
   default     = null
 }
+
+variable "database_version" {
+  type        = string
+  description = "The database version to use for the cluster"
+  default     = "POSTGRES_14"
+}
