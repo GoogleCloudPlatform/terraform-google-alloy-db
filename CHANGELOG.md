@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.1.0...v2.2.0) (2024-02-14)
+
+
+### Features
+
+* Enable support for database version ([#65](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/65)) ([8a03b9d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/8a03b9ded36c22da5af695c12e2f76bd0372047c))
+
 ## [2.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.0.0...v2.1.0) (2024-02-12)
 
 
