@@ -156,6 +156,6 @@ variable "allocated_ip_range" {
 
 variable "database_version" {
   type        = string
-  description = "The database version to use for the cluster"
-  default     = "POSTGRES_14"
+  description = "The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES_14, POSTGRES_15"
+  default     = null
 }
