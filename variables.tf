@@ -38,6 +38,12 @@ variable "cluster_labels" {
   default     = {}
 }
 
+variable "database_version" {
+  type        = string
+  default     = "POSTGRES_14"
+  description = "The database engine major version, populated at the Cluster creation time. This field cannot be changed after cluster creation"
+}
+
 variable "cluster_display_name" {
   description = "Human readable display name for the Alloy DB Cluster"
   type        = string
