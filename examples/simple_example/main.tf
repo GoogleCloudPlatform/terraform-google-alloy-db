@@ -66,21 +66,17 @@ module "alloy-db" {
   continuous_backup_encryption_key_name  = google_kms_crypto_key.key.id
 
   primary_instance = {
-    instance_id = "primary-instance-1",
-    client_connection_config = {
-      require_connectors = false
-      ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-    }
+    instance_id        = "primary-instance-1",
+    require_connectors = false
+    ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
   }
 
   read_pool_instance = [
     {
-      instance_id  = "read-instance-1",
-      display_name = "read-instance-1",
-      client_connection_config = {
-        require_connectors = false
-        ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-      }
+      instance_id        = "read-instance-1",
+      display_name       = "read-instance-1",
+      require_connectors = false
+      ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   ]
 
