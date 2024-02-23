@@ -167,6 +167,17 @@ resource "google_alloydb_instance" "primary" {
     }
   }
 
+  dynamic "query_insights_config" {
+    for_each = lookup(var.primary_instance, "query_insights_config", null) != null ? ["query_insights_config"] : []
+
+    content {
+      query_string_length     = try(var.primary_instance.query_insights_config.query_string_length, null)
+      record_application_tags = try(var.primary_instance.query_insights_config.record_application_tags, null)
+      record_client_address   = try(var.primary_instance.query_insights_config.record_client_address, null)
+      query_plans_per_minute  = try(var.primary_instance.query_insights_config.query_plans_per_minute, null)
+    }
+  }
+
   lifecycle {
     ignore_changes = [instance_type]
   }
@@ -202,6 +213,18 @@ resource "google_alloydb_instance" "read_pool" {
       }
     }
   }
+
+    dynamic "query_insights_config" {
+    for_each = lookup(each.value, "query_insights_config", null) != null ? ["query_insights_config"] : []
+
+    content {
+      query_string_length     = try(each.value.query_insights_config.query_string_length, null)
+      record_application_tags = try(each.value.query_insights_config.record_application_tags, null)
+      record_client_address   = try(each.value.query_insights_config.record_client_address, null)
+      query_plans_per_minute  = try(each.value.query_insights_config.query_plans_per_minute, null)
+    }
+  }
+
 
   depends_on = [google_alloydb_instance.primary]
 }
