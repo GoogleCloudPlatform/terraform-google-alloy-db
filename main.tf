@@ -214,7 +214,7 @@ resource "google_alloydb_instance" "read_pool" {
     }
   }
 
-    dynamic "query_insights_config" {
+  dynamic "query_insights_config" {
     for_each = lookup(each.value, "query_insights_config", null) != null ? ["query_insights_config"] : []
 
     content {

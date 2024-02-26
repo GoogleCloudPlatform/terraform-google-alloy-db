@@ -100,16 +100,16 @@ variable "continuous_backup_encryption_key_name" {
 variable "primary_instance" {
   description = "Primary cluster configuration that supports read and write operations."
   type = object({
-    instance_id           = string,
-    display_name          = optional(string),
-    database_flags        = optional(map(string))
-    labels                = optional(map(string))
-    annotations           = optional(map(string))
-    gce_zone              = optional(string)
-    availability_type     = optional(string)
-    machine_cpu_count     = optional(number, 2)
-    ssl_mode              = optional(string)
-    require_connectors    = optional(bool)
+    instance_id        = string,
+    display_name       = optional(string),
+    database_flags     = optional(map(string))
+    labels             = optional(map(string))
+    annotations        = optional(map(string))
+    gce_zone           = optional(string)
+    availability_type  = optional(string)
+    machine_cpu_count  = optional(number, 2)
+    ssl_mode           = optional(string)
+    require_connectors = optional(bool)
     query_insights_config = optional(object({
       query_string_length     = optional(number)
       record_application_tags = optional(bool)
@@ -129,16 +129,16 @@ variable "primary_instance" {
 
   validation {
     condition = var.primary_instance.query_insights_config == null || (
-      try(var.primary_instance.query_insights_config.query_string_length,0) >= 256 &&
-      try(var.primary_instance.query_insights_config.query_string_length,0) <= 4500
+      try(var.primary_instance.query_insights_config.query_string_length, 0) >= 256 &&
+      try(var.primary_instance.query_insights_config.query_string_length, 0) <= 4500
     )
     error_message = "Query string length must be between 256 and 4500. The default value is 1024."
   }
-  
+
   validation {
     condition = var.primary_instance.query_insights_config == null || (
-      try(var.primary_instance.query_insights_config.query_plans_per_minute,0) >= 0 &&
-      try(var.primary_instance.query_insights_config.query_plans_per_minute,0) <= 20
+      try(var.primary_instance.query_insights_config.query_plans_per_minute, 0) >= 0 &&
+      try(var.primary_instance.query_insights_config.query_plans_per_minute, 0) <= 20
     )
     error_message = "Query plans per minute must be between 0 and 20. The default value is 5."
   }
@@ -147,15 +147,15 @@ variable "primary_instance" {
 variable "read_pool_instance" {
   description = "List of Read Pool Instances to be created"
   type = list(object({
-    instance_id           = string
-    display_name          = string
-    node_count            = optional(number, 1)
-    database_flags        = optional(map(string))
-    availability_type     = optional(string)
-    gce_zone              = optional(string)
-    machine_cpu_count     = optional(number, 2)
-    ssl_mode              = optional(string)
-    require_connectors    = optional(bool)
+    instance_id        = string
+    display_name       = string
+    node_count         = optional(number, 1)
+    database_flags     = optional(map(string))
+    availability_type  = optional(string)
+    gce_zone           = optional(string)
+    machine_cpu_count  = optional(number, 2)
+    ssl_mode           = optional(string)
+    require_connectors = optional(bool)
     query_insights_config = optional(object({
       query_string_length     = optional(number)
       record_application_tags = optional(bool)
