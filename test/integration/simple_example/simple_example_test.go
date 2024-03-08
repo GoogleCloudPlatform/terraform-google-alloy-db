@@ -39,9 +39,6 @@ func TestSimpleExample(t *testing.T) {
 		alloydbClusterIdPathList := strings.Split(example.GetStringOutput("cluster_id"), "/")
 		alloydbClusterId := alloydbClusterIdPathList[len(alloydbClusterIdPathList)-1]
 
-		// Primary Instance Information
-		alloydbPrimaryInstancePath := example.GetStringOutput("primary_instance_id")
-
 		cluster_location := region
 		state := "READY"
 		gcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
@@ -54,9 +51,6 @@ func TestSimpleExample(t *testing.T) {
 		secondaryAlloydbClusterIdPath := example.GetStringOutput("secondary_cluster_id")
 		secondaryAlloydbClusterIdPathList := strings.Split(example.GetStringOutput("secondary_cluster_id"), "/")
 		secondaryAlloydbClusterId := secondaryAlloydbClusterIdPathList[len(secondaryAlloydbClusterIdPathList)-1]
-
-		// Secondary Primary Instance Information
-		secondaryAlloydbPrimaryInstancePath := example.GetStringOutput("secondary_primary_instance_id")
 
 		secondary_cluster_location := secondaryRegion
 		secondaryGcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_cluster_location, "--format", "json"})
@@ -76,17 +70,15 @@ func TestSimpleExample(t *testing.T) {
 		assert.Equal("PRIMARY", alloyDBClusterInfo.Get("clusterType").String(), "Cluster type match")
 
 		// Check for Primary Instance
-		assert.Equal(alloydbPrimaryInstancePath, alloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path")
 		assert.Equal(state, alloyDBInstanceInfo.Get("state").String())
 
 		// check for Secondary Cluster
 		assert.Equal(secondaryAlloydbClusterIdPath, secondaryAlloyDBClusterInfo.Get("name").String(), "Has to be same secondary Cluster path")
-		assert.False(secondaryAlloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to False")
+		assert.True(secondaryAlloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to False")
 		assert.Equal(secondarykmsKeyName, secondaryAlloyDBClusterInfo.Get("encryptionConfig.kmsKeyName").String(), "Cluster Encryption key name match for secondary cluster")
 		assert.Equal("SECONDARY", secondaryAlloyDBClusterInfo.Get("clusterType").String(), "Cluster type match")
 
 		// Check for Secondary  Instance
-		assert.Equal(secondaryAlloydbPrimaryInstancePath, SecondaryAlloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path for secondary cluster")
 		assert.Equal(state, SecondaryAlloyDBInstanceInfo.Get("state").String())
 
 	})

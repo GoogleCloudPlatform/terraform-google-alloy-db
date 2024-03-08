@@ -56,7 +56,6 @@ module "alloydb1" {
       display_name       = "cluster-1-rr-1"
       require_connectors = false
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-      # availability_type = "ZONAL"
     }
   ]
 
