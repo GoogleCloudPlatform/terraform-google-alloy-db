@@ -22,18 +22,18 @@ variable "project_id" {
 variable "network_name" {
   description = "The ID of the network in which to provision resources."
   type        = string
-  default     = "simple"
+  default     = "simple-adb"
 }
 
 
-variable "region" {
+variable "region1" {
   default     = "us-central1"
-  description = "The region for primary cluster"
+  description = "The region for cluster 1"
   type        = string
 }
 
-variable "secondary_region" {
+variable "region2" {
   default     = "us-east1"
-  description = "The region for cross region replica secondary cluster"
+  description = "The region for cluster 2"
   type        = string
 }

@@ -14,23 +14,6 @@
  * limitations under the License.
  */
 
-resource "random_string" "key_suffix" {
-  length  = 3
-  special = false
-  upper   = false
-}
-
-resource "google_kms_key_ring" "keyring" {
-  project  = var.project_id
-  name     = "alloydb-keyring-example-${random_string.key_suffix.result}"
-  location = var.region
-}
-
-resource "google_kms_crypto_key" "key" {
-  name     = "crypto-key-example-${random_string.key_suffix.result}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
 resource "google_project_service_identity" "alloydb_sa" {
   provider = google-beta
 
@@ -38,8 +21,26 @@ resource "google_project_service_identity" "alloydb_sa" {
   service = "alloydb.googleapis.com"
 }
 
+resource "random_string" "key_suffix" {
+  length  = 3
+  special = false
+  upper   = false
+}
+
+resource "google_kms_key_ring" "keyring_region1" {
+  project  = var.project_id
+  name     = "keyring-${var.region1}-${random_string.key_suffix.result}"
+  location = var.region1
+}
+
+resource "google_kms_crypto_key" "key_region1" {
+  name     = "key-${var.region1}-${random_string.key_suffix.result}"
+  key_ring = google_kms_key_ring.keyring_region1.id
+}
+
+
 resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam" {
-  crypto_key_id = google_kms_crypto_key.key.id
+  crypto_key_id = google_kms_crypto_key.key_region1.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${google_project_service_identity.alloydb_sa.email}"
 }
@@ -47,19 +48,19 @@ resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam" {
 
 ## Cross Region Secondary Cluster Keys
 
-resource "google_kms_key_ring" "keyring_secondary" {
+resource "google_kms_key_ring" "keyring_region2" {
   project  = var.project_id
-  name     = "alloydb-keyring-example-sec-${random_string.key_suffix.result}"
-  location = var.secondary_region
+  name     = "keyring-${var.region2}-${random_string.key_suffix.result}"
+  location = var.region2
 }
 
-resource "google_kms_crypto_key" "key_secondary" {
-  name     = "crypto-key-example-sec-${random_string.key_suffix.result}"
-  key_ring = google_kms_key_ring.keyring_secondary.id
+resource "google_kms_crypto_key" "key_region2" {
+  name     = "key-${var.region2}-${random_string.key_suffix.result}"
+  key_ring = google_kms_key_ring.keyring_region2.id
 }
 
 resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam_secondary" {
-  crypto_key_id = google_kms_crypto_key.key_secondary.id
+  crypto_key_id = google_kms_crypto_key.key_region2.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${google_project_service_identity.alloydb_sa.email}"
 }

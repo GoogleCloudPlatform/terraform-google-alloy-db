@@ -37,7 +37,7 @@ resource "google_alloydb_cluster" "default" {
   display_name     = var.cluster_display_name
   project          = var.project_id
   labels           = var.cluster_labels
-  cluster_type     = local.is_secondary_cluster ? "SECONDARY" : "PRIMARY"
+  cluster_type     = local.is_secondary_cluster ? "SECONDARY" : var.cluster_type
   deletion_policy  = local.is_secondary_cluster ? "FORCE" : null
   database_version = var.database_version
 
@@ -46,9 +46,8 @@ resource "google_alloydb_cluster" "default" {
     allocated_ip_range = var.allocated_ip_range
   }
 
-  # N/A for secondary cluster
   dynamic "automated_backup_policy" {
-    for_each = var.automated_backup_policy != null && !local.is_secondary_cluster ? [var.automated_backup_policy] : []
+    for_each = var.automated_backup_policy != null ? [var.automated_backup_policy] : []
     content {
       location      = automated_backup_policy.value.location
       backup_window = automated_backup_policy.value.backup_window
@@ -100,21 +99,33 @@ resource "google_alloydb_cluster" "default" {
 
   }
 
-  # N/A for secondary cluster
-  dynamic "continuous_backup_config" {
-    for_each = var.continuous_backup_enable && !local.is_secondary_cluster ? ["continuous_backup_config"] : []
-    content {
-      enabled              = var.continuous_backup_enable
-      recovery_window_days = var.continuous_backup_recovery_window_days
-      dynamic "encryption_config" {
-        for_each = var.continuous_backup_encryption_key_name == null ? [] : ["cont_backup_encryption_config"]
-        content {
-          kms_key_name = var.continuous_backup_encryption_key_name
-        }
+  continuous_backup_config {
+    enabled              = var.continuous_backup_enable
+    recovery_window_days = var.continuous_backup_recovery_window_days
+    dynamic "encryption_config" {
+      for_each = var.continuous_backup_encryption_key_name == null ? [] : ["cont_backup_encryption_config"]
+      content {
+        kms_key_name = var.continuous_backup_encryption_key_name
       }
-
     }
+
   }
+
+  # # N/A for secondary cluster
+  # dynamic "continuous_backup_config" {
+  #   for_each = var.continuous_backup_enable && !local.is_secondary_cluster ? ["continuous_backup_config"] : []
+  #   content {
+  #     enabled              = var.continuous_backup_enable
+  #     recovery_window_days = var.continuous_backup_recovery_window_days
+  #     dynamic "encryption_config" {
+  #       for_each = var.continuous_backup_encryption_key_name == null ? [] : ["cont_backup_encryption_config"]
+  #       content {
+  #         kms_key_name = var.continuous_backup_encryption_key_name
+  #       }
+  #     }
+
+  #   }
+  # }
 
   dynamic "initial_user" {
     for_each = var.cluster_initial_user == null ? [] : ["cluster_initial_user"]

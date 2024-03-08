@@ -107,7 +107,8 @@ Functional examples are included in the
 | cluster\_id | The ID of the alloydb cluster | `string` | n/a | yes |
 | cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | `null` | no |
 | cluster\_labels | User-defined labels for the alloydb cluster | `map(string)` | `{}` | no |
-| cluster\_location | Location where AlloyDb cluster will be deployed. | `string` | n/a | yes |
+| cluster\_location | Location where AlloyDb cluster will be deployed | `string` | n/a | yes |
+| cluster\_type | The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY | `string` | `"PRIMARY"` | no |
 | continuous\_backup\_enable | Whether continuous backup recovery is enabled. If not set, defaults to true | `bool` | `true` | no |
 | continuous\_backup\_encryption\_key\_name | The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |

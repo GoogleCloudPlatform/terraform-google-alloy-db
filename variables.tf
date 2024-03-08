@@ -26,10 +26,15 @@ variable "cluster_id" {
   }
 }
 
-variable "cluster_location" {
-  description = "Location where AlloyDb cluster will be deployed."
+variable "cluster_type" {
+  description = "The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY"
   type        = string
-  # default     = "us-central1"
+  default     = "PRIMARY"
+}
+
+variable "cluster_location" {
+  description = "Location where AlloyDb cluster will be deployed"
+  type        = string
 }
 
 variable "cluster_labels" {
