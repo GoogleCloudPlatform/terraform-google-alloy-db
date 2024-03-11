@@ -19,23 +19,24 @@ terraform destroy
 
 ## Failover to Instance 2
 
-Steps to promote `cluster 2` as primary and change `cluster 1` as failover replica
+There are two clusters deployed in this example. `cluster east` is the primary cluster and `cluster central` is the failover replica. Steps to promote `cluster east` as primary and change `cluster central` as failover replica
 
-1) remove  `primary_cluster_name` from `cluster 2` and Execute `terraform apply`
+1) remove  `primary_cluster_name` from `cluster east` and Execute `terraform apply`
 
 ```diff
-module "alloydb2" {
+module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 2.0"
 
   ## Comment this out in order to promote cluster as primary cluster
--  primary_cluster_name = module.alloydb1.cluster_name
+-  primary_cluster_name = module.alloydb_central.cluster_name
+}
 ```
 
 2) Remove cluster 1 by removing cluster 1 code and Execute `terraform apply`
 
 ```diff
-- module "alloydb1" {
+- module "alloydb_central" {
 -   source  = "GoogleCloudPlatform/alloy-db/google"
 -   version = "~> 2.0"
 -   cluster_id       = "cluster-1"
@@ -47,26 +48,26 @@ module "alloydb2" {
 - }
 - output "cluster_id" {
 -   description = "ID of the Alloy DB Cluster created"
--   value       = module.alloydb1.cluster_id
+-   value       = module.alloydb_central.cluster_id
 - }
 - output "primary_instance_id" {
 -   description = "ID of the primary instance created"
--   value       = module.alloydb1.primary_instance_id
+-   value       = module.alloydb_central.primary_instance_id
 - }
 - output "cluster_name" {
 -   description = "The name of the cluster resource"
--   value       = module.alloydb1.cluster_name
+-   value       = module.alloydb_central.cluster_name
 - }
 ```
 
 3) Create cluster 1 as failover replica by adding cluster 1 code with following additional line and Execute `terraform apply`
 
 ```diff
-module "alloydb1" {
+module "alloydb_central" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 2.0"
 
-+  primary_cluster_name = module.alloydb2.cluster_name
++  primary_cluster_name = module.alloydb_east.cluster_name
 
   cluster_id       = "cluster-1"
   cluster_location = var.region1
@@ -76,7 +77,7 @@ module "alloydb1" {
   cluster_encryption_key_name = google_kms_crypto_key.key_region1.id
 ...
   depends_on = [
--    module.alloydb1,
+-    module.alloydb_central,
     google_service_networking_connection.vpc_connection,
     google_kms_crypto_key_iam_member.alloydb_sa_iam_secondary,
   ]
@@ -90,8 +91,8 @@ module "alloydb1" {
 |------|-------------|------|---------|:--------:|
 | network\_name | The ID of the network in which to provision resources. | `string` | `"simple-adb"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| region1 | The region for cluster 1 | `string` | `"us-central1"` | no |
-| region2 | The region for cluster 2 | `string` | `"us-east1"` | no |
+| region\_central | The region for cluster in central us | `string` | `"us-central1"` | no |
+| region\_east | The region for cluster in east us | `string` | `"us-east1"` | no |
 
 ## Outputs
 

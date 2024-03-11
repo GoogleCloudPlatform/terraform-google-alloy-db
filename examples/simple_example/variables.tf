@@ -26,14 +26,14 @@ variable "network_name" {
 }
 
 
-variable "region1" {
+variable "region_central" {
   default     = "us-central1"
-  description = "The region for cluster 1"
+  description = "The region for cluster in central us"
   type        = string
 }
 
-variable "region2" {
+variable "region_east" {
   default     = "us-east1"
-  description = "The region for cluster 2"
+  description = "The region for cluster in east us"
   type        = string
 }

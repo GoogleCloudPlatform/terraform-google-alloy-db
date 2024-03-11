@@ -27,20 +27,20 @@ resource "random_string" "key_suffix" {
   upper   = false
 }
 
-resource "google_kms_key_ring" "keyring_region1" {
+resource "google_kms_key_ring" "keyring_region_central" {
   project  = var.project_id
-  name     = "keyring-${var.region1}-${random_string.key_suffix.result}"
-  location = var.region1
+  name     = "keyring-${var.region_central}-${random_string.key_suffix.result}"
+  location = var.region_central
 }
 
-resource "google_kms_crypto_key" "key_region1" {
-  name     = "key-${var.region1}-${random_string.key_suffix.result}"
-  key_ring = google_kms_key_ring.keyring_region1.id
+resource "google_kms_crypto_key" "key_region_central" {
+  name     = "key-${var.region_central}-${random_string.key_suffix.result}"
+  key_ring = google_kms_key_ring.keyring_region_central.id
 }
 
 
 resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam" {
-  crypto_key_id = google_kms_crypto_key.key_region1.id
+  crypto_key_id = google_kms_crypto_key.key_region_central.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${google_project_service_identity.alloydb_sa.email}"
 }
@@ -48,19 +48,19 @@ resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam" {
 
 ## Cross Region Secondary Cluster Keys
 
-resource "google_kms_key_ring" "keyring_region2" {
+resource "google_kms_key_ring" "keyring_region_east" {
   project  = var.project_id
-  name     = "keyring-${var.region2}-${random_string.key_suffix.result}"
-  location = var.region2
+  name     = "keyring-${var.region_east}-${random_string.key_suffix.result}"
+  location = var.region_east
 }
 
-resource "google_kms_crypto_key" "key_region2" {
-  name     = "key-${var.region2}-${random_string.key_suffix.result}"
-  key_ring = google_kms_key_ring.keyring_region2.id
+resource "google_kms_crypto_key" "key_region_east" {
+  name     = "key-${var.region_east}-${random_string.key_suffix.result}"
+  key_ring = google_kms_key_ring.keyring_region_east.id
 }
 
 resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam_secondary" {
-  crypto_key_id = google_kms_crypto_key.key_region2.id
+  crypto_key_id = google_kms_crypto_key.key_region_east.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${google_project_service_identity.alloydb_sa.email}"
 }

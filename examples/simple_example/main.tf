@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-module "alloydb1" {
+module "alloydb_central" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 2.0"
 
-  cluster_id       = "cluster-1"
-  cluster_location = var.region1
+  cluster_id       = "cluster-${var.region_central}"
+  cluster_location = var.region_central
   project_id       = var.project_id
 
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
-  cluster_encryption_key_name = google_kms_crypto_key.key_region1.id
+  cluster_encryption_key_name = google_kms_crypto_key.key_region_central.id
 
   automated_backup_policy = {
-    location      = var.region1
+    location      = var.region_central
     backup_window = "1800s"
     enabled       = true
     weekly_schedule = {
@@ -38,22 +38,22 @@ module "alloydb1" {
     labels = {
       test = "alloydb-cluster-with-prim"
     }
-    backup_encryption_key_name = google_kms_crypto_key.key_region1.id
+    backup_encryption_key_name = google_kms_crypto_key.key_region_central.id
   }
 
   continuous_backup_recovery_window_days = 10
-  continuous_backup_encryption_key_name  = google_kms_crypto_key.key_region1.id
+  continuous_backup_encryption_key_name  = google_kms_crypto_key.key_region_central.id
 
   primary_instance = {
-    instance_id        = "cluster-1-instance-1",
+    instance_id        = "cluster-${var.region_central}-instance-1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
   }
 
   read_pool_instance = [
     {
-      instance_id        = "cluster-1-rr-1"
-      display_name       = "cluster-1-rr-1"
+      instance_id        = "cluster-${var.region_central}-rr-1"
+      display_name       = "cluster-${var.region_central}-rr-1"
       require_connectors = false
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
