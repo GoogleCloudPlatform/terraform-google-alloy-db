@@ -45,15 +45,15 @@ module "alloydb_central" {
   continuous_backup_encryption_key_name  = google_kms_crypto_key.key_region_central.id
 
   primary_instance = {
-    instance_id        = "cluster-${var.region_central}-instance-1",
+    instance_id        = "cluster-${var.region_central}-instance1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
   }
 
   read_pool_instance = [
     {
-      instance_id        = "cluster-${var.region_central}-rr-1"
-      display_name       = "cluster-${var.region_central}-rr-1"
+      instance_id        = "cluster-${var.region_central}-r1"
+      display_name       = "cluster-${var.region_central}-r1"
       require_connectors = false
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }

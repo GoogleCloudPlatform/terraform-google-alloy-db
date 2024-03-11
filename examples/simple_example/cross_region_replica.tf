@@ -28,7 +28,7 @@ module "alloydb_east" {
   cluster_encryption_key_name = google_kms_crypto_key.key_region_east.id
 
   primary_instance = {
-    instance_id = "cluster-${var.region_east}-instance-1",
+    instance_id = "cluster-${var.region_east}-instance1",
 
     client_connection_config = {
       require_connectors = false
