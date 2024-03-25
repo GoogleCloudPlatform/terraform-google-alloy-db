@@ -22,11 +22,10 @@ module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 2.0"
 
-  project_id           = var.project_id
-  cluster_id           = "alloydb-cluster-nrp"
-  cluster_location     = "us-central1"
-  cluster_labels       = {}
-  cluster_display_name = ""
+  project_id       = var.project_id
+  cluster_id       = "alloydb-cluster-nrp"
+  cluster_location = "us-central1"
+  cluster_labels   = {}
   cluster_initial_user = {
     user     = "alloydb-cluster-full",
     password = "alloydb-cluster-password"
@@ -36,24 +35,24 @@ module "alloy-db" {
   automated_backup_policy = null
 
   primary_instance = {
-    instance_id       = "primary-instance-1",
-    instance_type     = "PRIMARY",
-    machine_cpu_count = 2,
-    database_flags    = {},
-    display_name      = "alloydb-primary-instance",
+    instance_id       = "primary-instance-1"
+    instance_type     = "PRIMARY"
+    machine_cpu_count = 2
+    database_flags    = {}
+    display_name      = "alloydb-primary-instance"
   }
 
 
   read_pool_instance = [
     {
-      instance_id       = "read-instance-1",
-      display_name      = "read-instance-1",
-      instance_type     = "READ_POOL",
-      node_count        = 1,
-      database_flags    = {},
-      availability_type = "ZONAL",
-      gce_zone          = "us-central1-a",
-      machine_cpu_count = 1,
+      instance_id       = "read-instance-1"
+      display_name      = "read-instance-1"
+      instance_type     = "READ_POOL"
+      node_count        = 1
+      database_flags    = {}
+      availability_type = "ZONAL"
+      gce_zone          = "us-central1-a"
+      machine_cpu_count = 2
     }
   ]
 

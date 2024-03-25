@@ -55,7 +55,7 @@ module "alloy-db" {
     database_flags = {
       "google_columnar_engine.scan_mode" = 2
     }
-    display_name = "alloydb-primary-instance",
+    display_name = "alloydb-primary-instance"
   }
 
   read_pool_instance = null
