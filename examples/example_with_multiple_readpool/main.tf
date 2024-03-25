@@ -36,34 +36,34 @@ module "alloy-db" {
   automated_backup_policy = null
 
   primary_instance = {
-    instance_id       = "primary-instance-1",
-    instance_type     = "PRIMARY",
-    machine_cpu_count = 2,
-    database_flags    = {},
-    display_name      = "alloydb-primary-instance",
+    instance_id       = "primary-instance-1"
+    instance_type     = "PRIMARY"
+    machine_cpu_count = 2
+    database_flags    = {}
+    display_name      = "alloydb-primary-instance"
   }
 
 
   read_pool_instance = [
     {
-      instance_id       = "read-instance-1",
-      display_name      = "read-instance-1",
-      instance_type     = "READ_POOL",
-      node_count        = 1,
-      database_flags    = {},
-      availability_type = "ZONAL",
-      gce_zone          = "us-central1-a",
-      machine_cpu_count = 1,
+      instance_id       = "read-instance-1"
+      display_name      = "read-instance-1"
+      instance_type     = "READ_POOL"
+      node_count        = 1
+      database_flags    = {}
+      availability_type = "ZONAL"
+      gce_zone          = "us-central1-a"
+      machine_cpu_count = 2
     },
     {
-      instance_id       = "read-instance-2",
-      display_name      = "read-instance-2",
-      instance_type     = "READ_POOL",
-      node_count        = 1,
-      database_flags    = {},
-      availability_type = "ZONAL",
-      gce_zone          = "us-central1-a",
-      machine_cpu_count = 1,
+      instance_id       = "read-instance-2"
+      display_name      = "read-instance-2"
+      instance_type     = "READ_POOL"
+      node_count        = 1
+      database_flags    = {}
+      availability_type = "ZONAL"
+      gce_zone          = "us-central1-a"
+      machine_cpu_count = 2
     }
   ]
 

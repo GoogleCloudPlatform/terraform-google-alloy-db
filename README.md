@@ -22,7 +22,8 @@ Current version is 2.X. Upgrade guides:
 
 ## Usage
 
-- Usage of this module for creating a AlloyDB Cluster with a scheduled automated backup policy
+- Functional examples are included in the [examples](./examples/) directory. If you want to create a cluster with failover replica and manage lifecycle of primary and secondary instance clusters lifecycle using this module, follow example in [simple_example](./examples/simple_example/)
+- Basic usage of this module is as follows:
 
 ```hcl
 module "alloy-db" {
@@ -61,7 +62,7 @@ module "alloy-db" {
 }
 ```
 
-- Usage of this module for creating a AlloyDB Cluster with a primary instance
+- Usage of this module for creating a AlloyDB Cluster with a primary instance and a read replica instance
 
 ```hcl
 module "alloy-db" {
@@ -87,13 +88,20 @@ module "alloy-db" {
     database_flags    = {},
     display_name      = "alloydb-primary-instance"
   }
-  read_pool_instance = null
+
+  read_pool_instance = [
+    {
+      instance_id        = "cluster-1-rr-1"
+      display_name       = "cluster-1-rr-1"
+      require_connectors = false
+      ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    }
+  ]
 
   depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
 }
 ```
-Functional examples are included in the
-[examples](./examples/) directory.
+
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -107,7 +115,8 @@ Functional examples are included in the
 | cluster\_id | The ID of the alloydb cluster | `string` | n/a | yes |
 | cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | `null` | no |
 | cluster\_labels | User-defined labels for the alloydb cluster | `map(string)` | `{}` | no |
-| cluster\_location | Location where AlloyDb cluster will be deployed. | `string` | n/a | yes |
+| cluster\_location | Location where AlloyDb cluster will be deployed | `string` | n/a | yes |
+| cluster\_type | The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY | `string` | `"PRIMARY"` | no |
 | continuous\_backup\_enable | Whether continuous backup recovery is enabled. If not set, defaults to true | `bool` | `true` | no |
 | continuous\_backup\_encryption\_key\_name | The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
@@ -141,7 +150,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v1.3
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v4.77
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v5.13+
 
 ### Service Account
 
@@ -150,19 +159,12 @@ the resources of this module:
 
 - Cloud AlloyDB Admin: `roles/alloydb.admin`
 
-The [Project Factory module][project-factory-module] and the
-[IAM module][iam-module] may be used in combination to provision a
-service account with the necessary roles applied.
-
 ### APIs
 
 A project with the following APIs enabled must be used to host the
 resources of this module:
 
 -  `alloydb.googleapis.com`
-
-The [Project Factory module][project-factory-module] can be used to
-provision a project with the necessary APIs enabled.
 
 ## Contributing
 

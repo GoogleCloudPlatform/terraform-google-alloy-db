@@ -26,10 +26,15 @@ variable "cluster_id" {
   }
 }
 
-variable "cluster_location" {
-  description = "Location where AlloyDb cluster will be deployed."
+variable "cluster_type" {
+  description = "The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY"
   type        = string
-  # default     = "us-central1"
+  default     = "PRIMARY"
+}
+
+variable "cluster_location" {
+  description = "Location where AlloyDb cluster will be deployed"
+  type        = string
 }
 
 variable "cluster_labels" {
@@ -120,7 +125,7 @@ variable "primary_instance" {
 
   validation {
     condition     = can(regex("^(2|4|8|16|32|64|96|128)$", var.primary_instance.machine_cpu_count))
-    error_message = "cpu count must be one of [2 4 8 16 32 64 96 128]"
+    error_message = "machine_cpu_count must be one of [2, 4, 8, 16, 32, 64, 96, 128]"
   }
   validation {
     condition     = can(regex("^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$", var.primary_instance.instance_id))
@@ -164,6 +169,10 @@ variable "read_pool_instance" {
     }))
   }))
   default = []
+  validation {
+    condition     = try(alltrue([for rp in var.read_pool_instance : contains(["2", "4", "8", "16", "32", "64", "96", "128"], tostring(rp.machine_cpu_count))]), false) || var.read_pool_instance == null
+    error_message = "machine_cpu_count must be one of [2, 4, 8, 16, 32, 64, 96, 128]"
+  }
 }
 
 variable "primary_cluster_name" {
