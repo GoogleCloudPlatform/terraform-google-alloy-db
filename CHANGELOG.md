@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.2.0...v2.3.0) (2024-03-26)
+
+
+### Features
+
+* add support for query insights support ([#71](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/71)) ([3287298](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/328729820f67a0e51d04ba3a4a0ea7f50e0d61e7))
+
+
+### Bug Fixes
+
+* continuous_backup_config and automated_backup_policy issue for failover replica ([#72](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/72)) ([3cf0cc4](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/3cf0cc42affe43dd228ad77ae76f917cf5bbf560))
+
 ## [2.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.1.0...v2.2.0) (2024-02-14)
 
 
