@@ -192,6 +192,18 @@ variable "allocated_ip_range" {
   default     = null
 }
 
+variable "enable_public_ip" {
+  description = "Enable public IP for the AlloyDB instance. Defaults to false if not specified."
+  type        = optional(bool)
+  default     = false
+}
+
+variable "authorized_external_networks" {
+  description = "List of external networks authorized to access this instance"
+  type        = list(string)
+  default     = []
+}
+
 variable "database_version" {
   type        = string
   description = "The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES_14, POSTGRES_15"

@@ -151,6 +151,17 @@ resource "google_alloydb_instance" "primary" {
     cpu_count = var.primary_instance.machine_cpu_count
   }
 
+  network_config {
+    enable_public_ip = var.enable_public_ip
+
+    dynamic "authorized_external_network" {
+      for_each = var.enable_public_ip ? var.authorized_external_networks : []
+      content {
+        cidr_range = authorized_external_network.value
+      }
+    }
+  }
+
   dynamic "client_connection_config" {
     for_each = lookup(var.primary_instance, "ssl_mode", null) != null || lookup(var.primary_instance, "require_connectors", null) != null ? ["client_connection_config"] : []
 
