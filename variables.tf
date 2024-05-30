@@ -121,6 +121,8 @@ variable "primary_instance" {
       record_client_address   = optional(bool)
       query_plans_per_minute  = optional(number)
     }))
+    enable_public_ip = optional(bool, false)
+    cidr_range = optional(list(string))
   })
 
   validation {
@@ -190,18 +192,6 @@ variable "allocated_ip_range" {
   type        = string
   description = "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
   default     = null
-}
-
-variable "enable_public_ip" {
-  description = "Enable public IP for the AlloyDB instance. Defaults to false if not specified."
-  type        = optional(bool)
-  default     = false
-}
-
-variable "authorized_external_networks" {
-  description = "List of external networks authorized to access this instance"
-  type        = list(string)
-  default     = []
 }
 
 variable "database_version" {
