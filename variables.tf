@@ -121,6 +121,8 @@ variable "primary_instance" {
       record_client_address   = optional(bool)
       query_plans_per_minute  = optional(number)
     }))
+    enable_public_ip = optional(bool, false)
+    cidr_range       = optional(list(string))
   })
 
   validation {

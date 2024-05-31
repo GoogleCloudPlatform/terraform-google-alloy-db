@@ -147,6 +147,17 @@ resource "google_alloydb_instance" "primary" {
   availability_type = var.primary_instance.availability_type
   gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
 
+  network_config {
+    enable_public_ip = var.primary_instance.enable_public_ip
+
+    dynamic "authorized_external_networks" {
+      for_each = var.primary_instance.enable_public_ip ? var.primary_instance.cidr_range : []
+      content {
+        cidr_range = authorized_external_networks.value
+      }
+    }
+  }
+
   machine_config {
     cpu_count = var.primary_instance.machine_cpu_count
   }
