@@ -41,9 +41,12 @@ resource "google_alloydb_cluster" "default" {
   deletion_policy  = local.is_secondary_cluster ? "FORCE" : null
   database_version = var.database_version
 
-  network_config {
-    network            = var.network_self_link
-    allocated_ip_range = var.allocated_ip_range
+  dynamic "network_config" {
+    for_each = var.network_self_link == null || var.psc_enabled ? [] : ["network_config"]
+    content {
+      network            = var.network_self_link
+      allocated_ip_range = var.allocated_ip_range
+    }
   }
 
   dynamic "automated_backup_policy" {
@@ -134,6 +137,10 @@ resource "google_alloydb_cluster" "default" {
     }
   }
 
+  psc_config {
+    psc_enabled = var.psc_enabled
+  }
+
 }
 
 resource "google_alloydb_instance" "primary" {
@@ -147,14 +154,20 @@ resource "google_alloydb_instance" "primary" {
   availability_type = var.primary_instance.availability_type
   gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
 
-  network_config {
-    enable_public_ip = var.primary_instance.enable_public_ip
-
-    dynamic "authorized_external_networks" {
-      for_each = var.primary_instance.enable_public_ip ? var.primary_instance.cidr_range : []
-      content {
+  dynamic "network_config" {
+    for_each = var.primary_instance.enable_public_ip == null ? [] : ["network_config"]
+    content {
+      enable_public_ip = var.primary_instance.enable_public_ip
+      authorized_external_networks {
         cidr_range = authorized_external_networks.value
       }
+    }
+  }
+
+  dynamic "psc_instance_config" {
+    for_each = var.psc_enabled ? ["psc_instance_config"] : []
+    content {
+      allowed_consumer_projects = var.psc_allowed_consumer_projects
     }
   }
 
@@ -228,6 +241,13 @@ resource "google_alloydb_instance" "read_pool" {
       record_application_tags = try(each.value.query_insights_config.record_application_tags, null)
       record_client_address   = try(each.value.query_insights_config.record_client_address, null)
       query_plans_per_minute  = try(each.value.query_insights_config.query_plans_per_minute, null)
+    }
+  }
+
+  dynamic "psc_instance_config" {
+    for_each = var.psc_enabled ? ["psc_instance_config"] : []
+    content {
+      allowed_consumer_projects = var.psc_allowed_consumer_projects
     }
   }
 

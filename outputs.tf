@@ -24,10 +24,34 @@ output "primary_instance_id" {
   value       = google_alloydb_instance.primary.id
 }
 
+output "primary_psc_attachment_link" {
+  description = "The private service connect (psc) attachment created for primary instance"
+  value       = google_alloydb_instance.primary.psc_instance_config[0].service_attachment_link
+}
+
+output "primary_psc_dns_name" {
+  description = "The DNS name of the instance for PSC connectivity created for primary instance"
+  value       = google_alloydb_instance.primary.psc_instance_config[0].psc_dns_name
+}
+
 output "read_instance_ids" {
   description = "IDs of the read instances created"
   value = [
     for rd, details in google_alloydb_instance.read_pool : details.id
+  ]
+}
+
+output "read_psc_attachment_links" {
+  description = "The private service connect (psc) attachment created read replica instances"
+  value = [
+    for rd, details in google_alloydb_instance.read_pool : details.psc_instance_config[0].service_attachment_link
+  ]
+}
+
+output "read_psc_dns_names" {
+  description = "The DNS names of the instances for PSC connectivity created for replica instances"
+  value = [
+    for rd, details in google_alloydb_instance.read_pool : details.psc_instance_config[0].service_attachment_link
   ]
 }
 

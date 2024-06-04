@@ -121,7 +121,7 @@ variable "primary_instance" {
       record_client_address   = optional(bool)
       query_plans_per_minute  = optional(number)
     }))
-    enable_public_ip = optional(bool, false)
+    enable_public_ip = optional(bool)
     cidr_range       = optional(list(string))
   })
 
@@ -186,6 +186,7 @@ variable "primary_cluster_name" {
 variable "network_self_link" {
   description = "Network ID where the AlloyDb cluster will be deployed."
   type        = string
+  default     = null
 }
 
 variable "allocated_ip_range" {
@@ -198,4 +199,16 @@ variable "database_version" {
   type        = string
   description = "The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES_14, POSTGRES_15"
   default     = null
+}
+
+variable "psc_enabled" {
+  type        = bool
+  description = "Create an instance that allows connections from Private Service Connect endpoints to the instance"
+  default     = null
+}
+
+variable "psc_allowed_consumer_projects" {
+  type        = list(string)
+  description = "List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only."
+  default     = []
 }
