@@ -1,4 +1,4 @@
-# Cluster with primary instance & public IP address
+# AlloyDBCluster and primary instance with public IP address
 
 This example illustrates how to use the `alloy-db` module.
 
@@ -21,15 +21,18 @@ terraform apply
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| network\_name | n/a | `string` | `"primary-instance"` | no |
-| project\_id | n/a | `string` | n/a | yes |
+| network\_name | The name of the vpc network | `string` | `"primary-instance"` | no |
+| project\_id | project ID | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| cluster | cluster |
 | cluster\_id | The AlloyDB Cluster id |
+| primary\_instance | primary instance created |
 | primary\_instance\_id | The Primary Instance ID |
+| primary\_instance\_public\_ip\_address | primary instance public IP |
 | project\_id | The Project id |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

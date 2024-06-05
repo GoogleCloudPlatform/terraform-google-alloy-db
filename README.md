@@ -8,6 +8,8 @@ The resource/resources that this module will create are:
 - Creates a Primary Instance
 - Creates a pool of Read Instances
 
+You can also create Cross Region Replica using this module. See example in [cross_region_replica](./examples/simple_example/)
+
 ## Compatibility
 
 This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+. If you find incompatibilities using Terraform >=1.3, please open an issue.
@@ -19,16 +21,22 @@ Current version is 2.X. Upgrade guides:
 - [0.1 -> 0.2](/docs/upgrading_to_v0.2.md)
 - [0.2 -> 1.0](/docs/upgrading_to_v1.0.md)
 - [1.X -> 2.0](/docs/upgrading_to_v2.0.md)
+- [2.X -> 3.0](/docs/upgrading_to_v3.0.md)
 
 ## Usage
 
-- Functional examples are included in the [examples](./examples/) directory. If you want to create a cluster with failover replica and manage lifecycle of primary and secondary instance clusters lifecycle using this module, follow example in [simple_example](./examples/simple_example/)
-- Basic usage of this module is as follows:
+- Functional examples are included in the [examples](./examples/) directory.
+- If you want to create a cluster with failover replica and manage lifecycle of primary and secondary instance clusters lifecycle using this module, follow example in [simple_example](./examples/simple_example/).
+- If you are planning to create cluster/instance with private service connect follow example in [private_service_connect](./examples/example_with_private_service_connect/).
+
+
+Basic usage of this module is as follows:
 
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 0.1"
+  version              = "~> 3.0"
+
   cluster_id           = "alloydb-cluster"
   cluster_location     = "us-central1"
   project_id           = <"PROJECT_ID">
@@ -58,7 +66,6 @@ module "alloy-db" {
 
   read_pool_instance = null
 
-  depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
 }
 ```
 
@@ -67,7 +74,7 @@ module "alloy-db" {
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 0.1"
+  version              = "~> 3.0"
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
   cluster_location     = "us-central1"
@@ -98,7 +105,6 @@ module "alloy-db" {
     }
   ]
 
-  depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
 }
 ```
 
@@ -156,7 +162,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v1.3
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v5.13+
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v5.32+
 
 ### Service Account
 

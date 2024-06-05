@@ -1,6 +1,10 @@
 # Example AlloyDB with private service connect (PSC) enabled
 
-This example illustrates how to use the `alloy-db` module to deploy a cluster with private service connect (PSC) enabled.
+This example illustrates how to use the `alloy-db` module to deploy a cluster with private service connect (PSC) enabled. This example creates 
+- alloyDB cluster/instances in region us-central1 in project passed in `project_id`.
+- alloyDB cross region replica cluster/instances in region us-east1 in project passed in `project_id`.
+- VPC and subnet in project passed in `attachment_project_id`.
+- It also creates consumer psc endpoint using alloyDB psc attachment in project passed in `attachment_project_id`.
 
 ## Usage
 
@@ -8,6 +12,8 @@ To run this example you need to execute:
 
 ```bash
 export TF_VAR_project_id="your_project_id"
+export TF_VAR_attachment_project_id="project_id_for_psc_endpoint"
+export TF_VAR_attachment_project_number="project_number_for_psc_endpoint"
 ```
 
 ```bash
@@ -108,8 +114,8 @@ module "alloydb_central" {
 | primary\_instance\_id\_central | ID of the primary instance created |
 | primary\_psc\_attachment\_link\_central | The private service connect (psc) attachment created for primary instance |
 | project\_id | Project ID of the Alloy DB Cluster created |
+| psc\_consumer\_fwd\_rule\_ip | Consumer psc endpoint created |
 | psc\_dns\_name\_central | he DNS name of the instance for PSC connectivity. Name convention: ...alloydb-psc.goog |
-| psc\_fwd\_rule\_consumer | Consumer psc endpoint created |
 | read\_instance\_ids\_central | IDs of the read instances created |
 | read\_psc\_attachment\_links\_central | n/a |
 | region\_central | The region for primary cluster |

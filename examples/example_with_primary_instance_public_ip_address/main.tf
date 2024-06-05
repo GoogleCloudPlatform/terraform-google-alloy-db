@@ -19,27 +19,31 @@
 # }
 
 module "alloy-db" {
-  # source  = "GoogleCloudPlatform/alloy-db/google"
-  # version = "~> 2.0"
-  source = "../../"
+  source  = "GoogleCloudPlatform/alloy-db/google"
+  version = "~> 3.0"
 
 
   project_id       = var.project_id
   cluster_id       = "alloydb-cluster-with-prim"
   cluster_location = "us-central1"
 
-  network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}" #google_compute_network.default.id      #
+  network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
   cluster_encryption_key_name = google_kms_crypto_key.key.id
 
   primary_instance = {
     instance_id       = "primary-instance"
     instance_type     = "PRIMARY"
     machine_cpu_count = 2
+
     database_flags = {
-      "google_columnar_engine.scan_mode" = 2
+      "google_columnar_engine.scan_mode" = "2"
+      "password.enforce_complexity"      = "on" # parameter is needed for instance with public IP address
     }
-    display_name     = "alloydb-primary-instance"
-    enable_public_ip = true
+
+    display_name       = "alloydb-primary-instance"
+    enable_public_ip   = true
+    require_connectors = false
+    ssl_mode           = "ENCRYPTED_ONLY"
   }
 
   read_pool_instance = null

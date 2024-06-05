@@ -84,7 +84,7 @@ output "kms_key_name_east" {
   value       = google_kms_crypto_key.key_region_east.id
 }
 
-output "psc_fwd_rule_consumer" {
+output "psc_consumer_fwd_rule_ip" {
   description = "Consumer psc endpoint created"
   value       = google_compute_address.psc_consumer_address.address
 }

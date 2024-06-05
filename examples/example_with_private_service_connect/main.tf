@@ -15,9 +15,8 @@
  */
 
 module "alloydb_central" {
-  # source  = "GoogleCloudPlatform/alloy-db/google"
-  # version = "~> 2.0"
-  source = "../../"
+  source  = "GoogleCloudPlatform/alloy-db/google"
+  version = "~> 3.0"
 
   cluster_id       = "cluster-${var.region_central}-psc"
   cluster_location = var.region_central
@@ -66,4 +65,28 @@ module "alloydb_central" {
     google_kms_crypto_key_iam_member.alloydb_sa_iam,
     google_kms_crypto_key.key_region_central,
   ]
+}
+
+# Create psc endpoing using alloydb psc attachment
+
+resource "google_compute_address" "psc_consumer_address" {
+  name    = "psc-consumer-address"
+  project = var.attachment_project_id
+  region  = var.region_central
+
+  subnetwork   = google_compute_subnetwork.psc_subnet.name
+  address_type = "INTERNAL"
+  address      = "10.2.0.10"
+}
+
+resource "google_compute_forwarding_rule" "psc_fwd_rule_consumer" {
+  name    = "psc-fwd-rule-consumer-endpoint"
+  region  = var.region_central
+  project = var.attachment_project_id
+
+  target                  = module.alloydb_central.primary_instance.psc_instance_config[0].service_attachment_link
+  load_balancing_scheme   = "" # need to override EXTERNAL default when target is a service attachment
+  network                 = google_compute_network.psc_vpc.name
+  ip_address              = google_compute_address.psc_consumer_address.id
+  allow_psc_global_access = true
 }

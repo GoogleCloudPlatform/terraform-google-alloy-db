@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-output "project_id" {
-  description = "The Project id"
-  value       = var.project_id
+variable "network_name" {
+  type        = string
+  default     = "primary-instance"
+  description = "The name of the vpc network"
 }
 
-output "cluster_id" {
-  description = "The AlloyDB Cluster id"
-  value       = module.alloy-db.cluster_id
-}
-
-output "primary_instance_id" {
-  description = "The Primary Instance ID"
-  value       = module.alloy-db.primary_instance_id
+variable "project_id" {
+  type        = string
+  description = "project ID"
 }

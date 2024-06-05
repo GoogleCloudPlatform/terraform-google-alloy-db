@@ -248,7 +248,7 @@ resource "google_alloydb_instance" "read_pool" {
   }
 
   dynamic "psc_instance_config" {
-    for_each = coalesce(var.psc_enabled, false) ? [] : ["psc_instance_config"]
+    for_each = var.psc_enabled ? ["psc_instance_config"] : []
     content {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
     }
