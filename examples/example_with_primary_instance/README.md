@@ -1,4 +1,4 @@
-# Cluster with primary instance
+# Cluster with primary instance & public IP address
 
 This example illustrates how to use the `alloy-db` module.
 

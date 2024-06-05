@@ -121,7 +121,7 @@ variable "primary_instance" {
       record_client_address   = optional(bool)
       query_plans_per_minute  = optional(number)
     }))
-    enable_public_ip = optional(bool)
+    enable_public_ip = optional(bool, false)
     cidr_range       = optional(list(string))
   })
 
@@ -204,7 +204,7 @@ variable "database_version" {
 variable "psc_enabled" {
   type        = bool
   description = "Create an instance that allows connections from Private Service Connect endpoints to the instance"
-  default     = null
+  default     = false
 }
 
 variable "psc_allowed_consumer_projects" {

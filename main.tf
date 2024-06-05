@@ -41,11 +41,15 @@ resource "google_alloydb_cluster" "default" {
   deletion_policy  = local.is_secondary_cluster ? "FORCE" : null
   database_version = var.database_version
 
-  dynamic "network_config" {
-    for_each = var.network_self_link == null || var.psc_enabled ? [] : ["network_config"]
+  network_config {
+    network            = var.network_self_link
+    allocated_ip_range = var.allocated_ip_range
+  }
+
+  dynamic "psc_config" {
+    for_each = var.psc_enabled ? ["psc_config"] : []
     content {
-      network            = var.network_self_link
-      allocated_ip_range = var.allocated_ip_range
+      psc_enabled = var.psc_enabled
     }
   }
 
@@ -137,10 +141,6 @@ resource "google_alloydb_cluster" "default" {
     }
   }
 
-  psc_config {
-    psc_enabled = var.psc_enabled
-  }
-
 }
 
 resource "google_alloydb_instance" "primary" {
@@ -155,11 +155,14 @@ resource "google_alloydb_instance" "primary" {
   gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
 
   dynamic "network_config" {
-    for_each = var.primary_instance.enable_public_ip == null ? [] : ["network_config"]
+    for_each = var.primary_instance.enable_public_ip ? ["network_config"] : []
     content {
       enable_public_ip = var.primary_instance.enable_public_ip
-      authorized_external_networks {
-        cidr_range = authorized_external_networks.value
+      dynamic "authorized_external_networks" {
+        for_each = var.primary_instance.cidr_range == null ? [] : ["authorized_external_networks"]
+        content {
+          cidr_range = var.primary_instance.cidr_range
+        }
       }
     }
   }
@@ -245,7 +248,7 @@ resource "google_alloydb_instance" "read_pool" {
   }
 
   dynamic "psc_instance_config" {
-    for_each = var.psc_enabled ? ["psc_instance_config"] : []
+    for_each = coalesce(var.psc_enabled, false) ? [] : ["psc_instance_config"]
     content {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
     }

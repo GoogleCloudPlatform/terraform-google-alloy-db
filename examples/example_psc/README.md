@@ -97,20 +97,22 @@ module "alloydb_central" {
 
 | Name | Description |
 |------|-------------|
-| cluster | cluster |
-| cluster\_id | ID of the Alloy DB Cluster created |
-| cluster\_name | The name of the cluster resource |
-| primary\_instance | primary\_instance |
-| primary\_instance\_id | ID of the primary instance created |
+| cluster\_central | cluster |
+| cluster\_east | cluster created |
+| cluster\_id\_central | ID of the Alloy DB Cluster created |
+| cluster\_name\_central | The name of the cluster resource |
+| kms\_key\_name\_central | he fully-qualified resource name of the KMS key |
+| kms\_key\_name\_east | he fully-qualified resource name of the Secondary clusterKMS key |
+| primary\_instance\_central | primary instance created |
+| primary\_instance\_east | primary instance created |
+| primary\_instance\_id\_central | ID of the primary instance created |
+| primary\_psc\_attachment\_link\_central | The private service connect (psc) attachment created for primary instance |
 | project\_id | Project ID of the Alloy DB Cluster created |
-| psc\_attachment\_link | The service attachment created when Private Service Connect (PSC) is enabled for the instance. The name of the resource will be in the format of projects/<alloydb-tenant-project-number>/regions/<region-name>/serviceAttachments/<service-attachment-name> |
-| psc\_dns\_name | he DNS name of the instance for PSC connectivity. Name convention: ...alloydb-psc.goog |
+| psc\_dns\_name\_central | he DNS name of the instance for PSC connectivity. Name convention: ...alloydb-psc.goog |
 | psc\_fwd\_rule\_consumer | Consumer psc endpoint created |
-| read\_instance\_ids | IDs of the read instances created |
-| read\_psc\_attachment\_links | n/a |
-| region | The region for primary cluster |
-| secondary\_cluster\_name | The name of the Secondary cluster resource |
-| secondary\_kms\_key\_name | he fully-qualified resource name of the Secondary clusterKMS key |
-| secondary\_region | The region for cross region replica secondary cluster |
+| read\_instance\_ids\_central | IDs of the read instances created |
+| read\_psc\_attachment\_links\_central | n/a |
+| region\_central | The region for primary cluster |
+| region\_east | The region for cross region replica secondary cluster |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

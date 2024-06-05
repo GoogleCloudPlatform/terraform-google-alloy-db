@@ -123,10 +123,10 @@ module "alloy-db" {
 | database\_version | The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES\_14, POSTGRES\_15 | `string` | `null` | no |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. | `string` | `null` | no |
 | primary\_cluster\_name | Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster | `string` | `null` | no |
-| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id        = string,<br>    display_name       = optional(string),<br>    database_flags     = optional(map(string))<br>    labels             = optional(map(string))<br>    annotations        = optional(map(string))<br>    gce_zone           = optional(string)<br>    availability_type  = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip = optional(bool)<br>    cidr_range       = optional(list(string))<br>  })</pre> | n/a | yes |
+| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id        = string,<br>    display_name       = optional(string),<br>    database_flags     = optional(map(string))<br>    labels             = optional(map(string))<br>    annotations        = optional(map(string))<br>    gce_zone           = optional(string)<br>    availability_type  = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip = optional(bool, false)<br>    cidr_range       = optional(list(string))<br>  })</pre> | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | psc\_allowed\_consumer\_projects | List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only. | `list(string)` | `[]` | no |
-| psc\_enabled | Create an instance that allows connections from Private Service Connect endpoints to the instance | `bool` | `null` | no |
+| psc\_enabled | Create an instance that allows connections from Private Service Connect endpoints to the instance | `bool` | `false` | no |
 | read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id        = string<br>    display_name       = string<br>    node_count         = optional(number, 1)<br>    database_flags     = optional(map(string))<br>    availability_type  = optional(string)<br>    gce_zone           = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>  }))</pre> | `[]` | no |
 
 ## Outputs
@@ -139,8 +139,10 @@ module "alloy-db" {
 | primary\_instance | Primary instance created |
 | primary\_instance\_id | ID of the primary instance created |
 | primary\_psc\_attachment\_link | The private service connect (psc) attachment created for primary instance |
+| primary\_psc\_dns\_name | The DNS name of the instance for PSC connectivity created for primary instance |
 | read\_instance\_ids | IDs of the read instances created |
 | read\_psc\_attachment\_links | The private service connect (psc) attachment created read replica instances |
+| read\_psc\_dns\_names | The DNS names of the instances for PSC connectivity created for replica instances |
 | replica\_instances | Replica instances created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -14,39 +14,22 @@
  * limitations under the License.
  */
 
-provider "google" {
-  project = var.project_id
-}
+# provider "google" {
+#   project = var.project_id
+# }
 
 module "alloy-db" {
-  source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 2.0"
+  # source  = "GoogleCloudPlatform/alloy-db/google"
+  # version = "~> 2.0"
+  source = "../../"
+
 
   project_id       = var.project_id
   cluster_id       = "alloydb-cluster-with-prim"
   cluster_location = "us-central1"
-  cluster_initial_user = {
-    user     = "alloydb-cluster-full",
-    password = "T3st-c1ust3r-p@33w0rd"
-  }
-  network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
-  cluster_encryption_key_name = google_kms_crypto_key.key.id
 
-  automated_backup_policy = {
-    location      = "us-central1"
-    backup_window = "1800s"
-    enabled       = true
-    weekly_schedule = {
-      days_of_week = ["FRIDAY"],
-      start_times  = ["2:00:00:00", ]
-    }
-    quantity_based_retention_count = 1
-    time_based_retention_count     = null
-    labels = {
-      test = "alloydb-cluster-with-prim"
-    }
-    backup_encryption_key_name = google_kms_crypto_key.key.id
-  }
+  network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}" #google_compute_network.default.id      #
+  cluster_encryption_key_name = google_kms_crypto_key.key.id
 
   primary_instance = {
     instance_id       = "primary-instance"
@@ -55,7 +38,8 @@ module "alloy-db" {
     database_flags = {
       "google_columnar_engine.scan_mode" = 2
     }
-    display_name = "alloydb-primary-instance"
+    display_name     = "alloydb-primary-instance"
+    enable_public_ip = true
   }
 
   read_pool_instance = null
@@ -69,11 +53,13 @@ module "alloy-db" {
 }
 
 resource "google_compute_network" "default" {
-  name = var.network_name
+  name    = var.network_name
+  project = var.project_id
 }
 
 
 resource "google_compute_global_address" "private_ip_alloc" {
+  project       = var.project_id
   name          = "adb-private-ip"
   address_type  = "INTERNAL"
   purpose       = "VPC_PEERING"
@@ -85,4 +71,5 @@ resource "google_service_networking_connection" "vpc_connection" {
   network                 = google_compute_network.default.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_alloc.name]
+  deletion_policy         = "ABANDON"
 }
