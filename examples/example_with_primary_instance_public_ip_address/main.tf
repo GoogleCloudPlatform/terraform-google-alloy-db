@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-# provider "google" {
-#   project = var.project_id
-# }
-
 module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 3.0"
