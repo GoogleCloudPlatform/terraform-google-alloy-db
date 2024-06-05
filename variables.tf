@@ -184,7 +184,7 @@ variable "primary_cluster_name" {
 }
 
 variable "network_self_link" {
-  description = "Network ID where the AlloyDb cluster will be deployed."
+  description = "Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false"
   type        = string
   default     = null
 }
@@ -203,7 +203,7 @@ variable "database_version" {
 
 variable "psc_enabled" {
   type        = bool
-  description = "Create an instance that allows connections from Private Service Connect endpoints to the instance"
+  description = "Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null"
   default     = false
 }
 
