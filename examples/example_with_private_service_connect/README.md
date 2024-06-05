@@ -1,6 +1,6 @@
 # Example AlloyDB with private service connect (PSC) enabled
 
-This example illustrates how to use the `alloy-db` module to deploy a cluster with private service connect (PSC) enabled. This example creates 
+This example illustrates how to use the `alloy-db` module to deploy a cluster with private service connect (PSC) enabled. This example creates:
 - alloyDB cluster/instances in region us-central1 in project passed in `project_id`.
 - alloyDB cross region replica cluster/instances in region us-east1 in project passed in `project_id`.
 - VPC and subnet in project passed in `attachment_project_id`.
