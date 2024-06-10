@@ -28,5 +28,5 @@ output "sa_key" {
 }
 
 output "attachment_project_number" {
-  value = data.google_project.project.number
+  value = module.psc_project.project_number
 }

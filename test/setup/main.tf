@@ -59,7 +59,3 @@ module "psc_project" {
     "dns.googleapis.com",
   ]
 }
-
-data "google_project" "project" {
-  project_id = module.psc_project.project_id
-}
