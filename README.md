@@ -8,6 +8,8 @@ The resource/resources that this module will create are:
 - Creates a Primary Instance
 - Creates a pool of Read Instances
 
+You can also create Cross Region Replica using this module. See example in [cross_region_replica](./examples/simple_example/)
+
 ## Compatibility
 
 This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+. If you find incompatibilities using Terraform >=1.3, please open an issue.
@@ -19,16 +21,22 @@ Current version is 2.X. Upgrade guides:
 - [0.1 -> 0.2](/docs/upgrading_to_v0.2.md)
 - [0.2 -> 1.0](/docs/upgrading_to_v1.0.md)
 - [1.X -> 2.0](/docs/upgrading_to_v2.0.md)
+- [2.X -> 3.0](/docs/upgrading_to_v3.0.md)
 
 ## Usage
 
-- Functional examples are included in the [examples](./examples/) directory. If you want to create a cluster with failover replica and manage lifecycle of primary and secondary instance clusters lifecycle using this module, follow example in [simple_example](./examples/simple_example/)
-- Basic usage of this module is as follows:
+- Functional examples are included in the [examples](./examples/) directory.
+- If you want to create a cluster with failover replica and manage lifecycle of primary and secondary instance clusters lifecycle using this module, follow example in [simple_example](./examples/simple_example/).
+- If you are planning to create cluster/instance with private service connect follow example in [private_service_connect](./examples/example_with_private_service_connect/).
+
+
+Basic usage of this module is as follows:
 
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 0.1"
+  version              = "~> 3.0"
+
   cluster_id           = "alloydb-cluster"
   cluster_location     = "us-central1"
   project_id           = <"PROJECT_ID">
@@ -58,7 +66,6 @@ module "alloy-db" {
 
   read_pool_instance = null
 
-  depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
 }
 ```
 
@@ -67,7 +74,7 @@ module "alloy-db" {
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 0.1"
+  version              = "~> 3.0"
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
   cluster_location     = "us-central1"
@@ -98,7 +105,6 @@ module "alloy-db" {
     }
   ]
 
-  depends_on = [google_compute_network.default, google_compute_global_address.private_ip_alloc, google_service_networking_connection.vpc_connection]
 }
 ```
 
@@ -121,10 +127,12 @@ module "alloy-db" {
 | continuous\_backup\_encryption\_key\_name | The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
 | database\_version | The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES\_14, POSTGRES\_15 | `string` | `null` | no |
-| network\_self\_link | Network ID where the AlloyDb cluster will be deployed. | `string` | n/a | yes |
+| network\_self\_link | Network ID where the AlloyDb cluster will be deployed. If network\_self\_link is set then psc\_enabled should be set to false | `string` | `null` | no |
 | primary\_cluster\_name | Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster | `string` | `null` | no |
 | primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id        = string,<br>    display_name       = optional(string),<br>    database_flags     = optional(map(string))<br>    labels             = optional(map(string))<br>    annotations        = optional(map(string))<br>    gce_zone           = optional(string)<br>    availability_type  = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip = optional(bool, false)<br>    cidr_range       = optional(list(string))<br>  })</pre> | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| psc\_allowed\_consumer\_projects | List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only. | `list(string)` | `[]` | no |
+| psc\_enabled | Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc\_enabled is set to true, then network\_self\_link should be set to null | `bool` | `false` | no |
 | read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id        = string<br>    display_name       = string<br>    node_count         = optional(number, 1)<br>    database_flags     = optional(map(string))<br>    availability_type  = optional(string)<br>    gce_zone           = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>  }))</pre> | `[]` | no |
 
 ## Outputs
@@ -136,7 +144,11 @@ module "alloy-db" {
 | cluster\_name | ID of the Alloy DB Cluster created |
 | primary\_instance | Primary instance created |
 | primary\_instance\_id | ID of the primary instance created |
+| primary\_psc\_attachment\_link | The private service connect (psc) attachment created for primary instance |
+| primary\_psc\_dns\_name | The DNS name of the instance for PSC connectivity created for primary instance |
 | read\_instance\_ids | IDs of the read instances created |
+| read\_psc\_attachment\_links | The private service connect (psc) attachment created read replica instances |
+| read\_psc\_dns\_names | The DNS names of the instances for PSC connectivity created for replica instances |
 | replica\_instances | Replica instances created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
@@ -150,7 +162,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v1.3
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v5.13+
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v5.32+
 
 ### Service Account
 

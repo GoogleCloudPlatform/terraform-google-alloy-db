@@ -20,15 +20,17 @@ module "alloydb_east" {
 
   primary_cluster_name = module.alloydb_central.cluster_name ## Comment this line to promote this cluster as primary cluster
 
-  cluster_id       = "cluster-${var.region_east}"
+  cluster_id       = "cluster-${var.region_east}-psc"
   cluster_location = var.region_east
   project_id       = var.project_id
 
-  network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
+  psc_enabled                   = true
+  psc_allowed_consumer_projects = [var.attachment_project_number]
+
   cluster_encryption_key_name = google_kms_crypto_key.key_region_east.id
 
   primary_instance = {
-    instance_id = "cluster-${var.region_east}-instance1",
+    instance_id = "cluster-${var.region_east}-instance1-psc",
 
     client_connection_config = {
       require_connectors = false
@@ -58,8 +60,8 @@ module "alloydb_east" {
 
   depends_on = [
     module.alloydb_central,
-    google_service_networking_connection.vpc_connection,
     google_kms_crypto_key_iam_member.alloydb_sa_iam_secondary,
+    google_kms_crypto_key.key_region_east,
   ]
 }
 

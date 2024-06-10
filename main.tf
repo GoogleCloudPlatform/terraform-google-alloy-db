@@ -46,6 +46,13 @@ resource "google_alloydb_cluster" "default" {
     allocated_ip_range = var.allocated_ip_range
   }
 
+  dynamic "psc_config" {
+    for_each = var.psc_enabled ? ["psc_config"] : []
+    content {
+      psc_enabled = var.psc_enabled
+    }
+  }
+
   dynamic "automated_backup_policy" {
     for_each = var.automated_backup_policy != null ? [var.automated_backup_policy] : []
     content {
@@ -147,14 +154,23 @@ resource "google_alloydb_instance" "primary" {
   availability_type = var.primary_instance.availability_type
   gce_zone          = var.primary_instance.availability_type == "ZONAL" ? var.primary_instance.gce_zone : null
 
-  network_config {
-    enable_public_ip = var.primary_instance.enable_public_ip
-
-    dynamic "authorized_external_networks" {
-      for_each = var.primary_instance.enable_public_ip ? var.primary_instance.cidr_range : []
-      content {
-        cidr_range = authorized_external_networks.value
+  dynamic "network_config" {
+    for_each = var.primary_instance.enable_public_ip ? ["network_config"] : []
+    content {
+      enable_public_ip = var.primary_instance.enable_public_ip
+      dynamic "authorized_external_networks" {
+        for_each = var.primary_instance.cidr_range == null ? [] : ["authorized_external_networks"]
+        content {
+          cidr_range = var.primary_instance.cidr_range
+        }
       }
+    }
+  }
+
+  dynamic "psc_instance_config" {
+    for_each = var.psc_enabled ? ["psc_instance_config"] : []
+    content {
+      allowed_consumer_projects = var.psc_allowed_consumer_projects
     }
   }
 
@@ -228,6 +244,13 @@ resource "google_alloydb_instance" "read_pool" {
       record_application_tags = try(each.value.query_insights_config.record_application_tags, null)
       record_client_address   = try(each.value.query_insights_config.record_client_address, null)
       query_plans_per_minute  = try(each.value.query_insights_config.query_plans_per_minute, null)
+    }
+  }
+
+  dynamic "psc_instance_config" {
+    for_each = var.psc_enabled ? ["psc_instance_config"] : []
+    content {
+      allowed_consumer_projects = var.psc_allowed_consumer_projects
     }
   }
 
