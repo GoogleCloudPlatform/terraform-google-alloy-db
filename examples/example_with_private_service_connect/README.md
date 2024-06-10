@@ -32,7 +32,7 @@ There are two clusters deployed in this example. `cluster east` is the primary c
 ```diff
 module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 2.3"
+  version = "~> 3.0"
 
   ## Comment this out in order to promote cluster as primary cluster
 -  primary_cluster_name = module.alloydb_central.cluster_name

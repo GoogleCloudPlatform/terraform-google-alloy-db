@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.3.0...v3.0.0) (2024-06-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG >=5.32:** added support for private service connect ([#85](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/85))
+
+### Features
+
+* enable public ip and authorized external networks ([#82](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/82)) ([5b774b9](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/5b774b97e3634427facc25aa64e97d9e16b5d43a))
+* **TPG >=5.32:** added support for private service connect ([#85](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/85)) ([56e9fc9](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/56e9fc97725fe7bdefe8717b027b8a2b63ac1122))
+
 ## [2.3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.2.0...v2.3.0) (2024-03-26)
 
 
