@@ -159,9 +159,9 @@ resource "google_alloydb_instance" "primary" {
     content {
       enable_public_ip = var.primary_instance.enable_public_ip
       dynamic "authorized_external_networks" {
-        for_each = var.primary_instance.cidr_range == null ? [] : ["authorized_external_networks"]
+        for_each = var.primary_instance.cidr_range != null ? var.primary_instance.cidr_range : []
         content {
-          cidr_range = var.primary_instance.cidr_range
+          cidr_range = authorized_external_networks.value
         }
       }
     }
@@ -216,6 +216,21 @@ resource "google_alloydb_instance" "read_pool" {
   gce_zone          = each.value.availability_type == "ZONAL" ? each.value.gce_zone : null
   labels            = var.primary_instance.labels
   annotations       = var.primary_instance.annotations
+
+  dynamic "network_config" {
+    for_each = each.value.enable_public_ip ? ["network_config"] : []
+    content {
+      enable_public_ip = each.value.enable_public_ip
+
+      dynamic "authorized_external_networks" {
+        for_each = each.value.cidr_range != null ? each.value.cidr_range : []
+        content {
+          cidr_range = authorized_external_networks.value
+        }
+      }
+    }
+  }
+
 
   read_pool_config {
     node_count = each.value.node_count
