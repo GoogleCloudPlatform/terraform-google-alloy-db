@@ -159,9 +159,9 @@ resource "google_alloydb_instance" "primary" {
     content {
       enable_public_ip = var.primary_instance.enable_public_ip
       dynamic "authorized_external_networks" {
-        for_each = var.primary_instance.cidr_range != null ? var.primary_instance.cidr_range : []
+        for_each = var.primary_instance.cidr_range == null ? [] : ["authorized_external_networks"]
         content {
-          cidr_range = authorized_external_networks.value
+          cidr_range = join(",", var.primary_instance.cidr_range)
         }
       }
     }
