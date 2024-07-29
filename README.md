@@ -26,7 +26,7 @@ Current version is 2.X. Upgrade guides:
 ## Usage
 
 - Functional examples are included in the [examples](./examples/) directory.
-- If you want to create a cluster with failover replica and manage lifecycle of primary and secondary instance clusters lifecycle using this module, follow example in [simple_example](./examples/simple_example/).
+- If you want to create a cluster with failover replicas and manage complete lifecycle (including failover and switchover) of primary and DR clusters using this module, follow the example in [simple_example](./examples/simple_example/) folder.
 - If you are planning to create cluster/instance with private service connect follow example in [private_service_connect](./examples/example_with_private_service_connect/).
 
 
@@ -127,6 +127,7 @@ module "alloy-db" {
 | continuous\_backup\_encryption\_key\_name | The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
 | database\_version | The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES\_14, POSTGRES\_15 | `string` | `null` | no |
+| deletion\_policy | Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster | `string` | `null` | no |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. If network\_self\_link is set then psc\_enabled should be set to false | `string` | `null` | no |
 | primary\_cluster\_name | Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster | `string` | `null` | no |
 | primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id        = string,<br>    display_name       = optional(string),<br>    database_flags     = optional(map(string))<br>    labels             = optional(map(string))<br>    annotations        = optional(map(string))<br>    gce_zone           = optional(string)<br>    availability_type  = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip = optional(bool, false)<br>    cidr_range       = optional(list(string))<br>  })</pre> | n/a | yes |

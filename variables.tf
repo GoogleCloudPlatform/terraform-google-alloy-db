@@ -212,3 +212,9 @@ variable "psc_allowed_consumer_projects" {
   description = "List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only."
   default     = []
 }
+
+variable "deletion_policy" {
+  type        = string
+  description = "Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster"
+  default     = null
+}

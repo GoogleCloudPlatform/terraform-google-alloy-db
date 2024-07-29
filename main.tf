@@ -38,7 +38,7 @@ resource "google_alloydb_cluster" "default" {
   project          = var.project_id
   labels           = var.cluster_labels
   cluster_type     = local.is_secondary_cluster ? "SECONDARY" : var.cluster_type
-  deletion_policy  = local.is_secondary_cluster ? "FORCE" : null
+  deletion_policy  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
   database_version = var.database_version
 
   network_config {
