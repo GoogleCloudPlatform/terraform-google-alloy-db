@@ -36,7 +36,6 @@ module "alloydb_east" {
     }
   }
 
-  continuous_backup_enable               = true
   continuous_backup_recovery_window_days = 10
   continuous_backup_encryption_key_name  = google_kms_crypto_key.key_region_east.id
 
