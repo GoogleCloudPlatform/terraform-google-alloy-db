@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.0.0...v3.1.0) (2024-08-12)
+
+
+### Features
+
+* add ability to create public read instance ([#90](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/90)) ([3eb87e2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/3eb87e250ec2bd6c7a6831a039120b140697b05e))
+* added doc for switchover between clusters ([#94](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/94)) ([abcb346](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/abcb3466b11fb61287214c295317566c7fa19fef))
+
 ## [3.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v2.3.0...v3.0.0) (2024-06-10)
 
 
