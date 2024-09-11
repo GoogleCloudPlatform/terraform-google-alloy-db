@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.1.0...v3.2.0) (2024-09-11)
+
+
+### Features
+
+* **deps:** Update Terraform google to v6 ([#99](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/99)) ([2e8d5fd](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/2e8d5fd3561c675e90804f92fcaf3b12c1731a06))
+
 ## [3.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.0.0...v3.1.0) (2024-08-12)
 
 
