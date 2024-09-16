@@ -16,7 +16,7 @@
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 15.0"
+  version = "~> 16.0"
 
   name              = "ci-alloy-db-1"
   random_project_id = "true"
@@ -39,7 +39,7 @@ module "project" {
 
 module "psc_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 15.0"
+  version = "~> 16.0"
 
   name              = "ci-alloy-db-psc"
   random_project_id = "true"
