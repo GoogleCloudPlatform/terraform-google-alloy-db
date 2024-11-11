@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.2.0...v3.2.1) (2024-11-11)
+
+
+### Bug Fixes
+
+* Correct read pool PSC DNS name reference ([#104](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/104)) ([a20453d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/a20453d60ba70941097d210f28fa7c32d7ffe88c))
+
 ## [3.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.1.0...v3.2.0) (2024-09-11)
 
 
