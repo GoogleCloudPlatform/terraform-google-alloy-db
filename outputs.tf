@@ -51,7 +51,7 @@ output "read_psc_attachment_links" {
 output "read_psc_dns_names" {
   description = "The DNS names of the instances for PSC connectivity created for replica instances"
   value = try([
-    for rd, details in google_alloydb_instance.read_pool : details.psc_instance_config[0].service_attachment_link
+    for rd, details in google_alloydb_instance.read_pool : details.psc_instance_config[0].psc_dns_name
   ], "")
 }
 
