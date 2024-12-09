@@ -128,7 +128,7 @@ resource "google_alloydb_cluster" "default" {
           # accepted value is only 0 for now https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/alloydb_cluster#minutes-2 
           minutes = 0
           seconds = 0
-          nanos = 0
+          nanos   = 0
         }
       }
     }
