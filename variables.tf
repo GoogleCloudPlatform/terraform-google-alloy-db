@@ -96,6 +96,19 @@ variable "continuous_backup_recovery_window_days" {
   default     = 14
 }
 
+variable "maintenance_update_policy" {
+  description = "defines the policy for system updates"
+  type = object({
+    maintenance_windows = optional(object({
+      day = optional(string)
+      start_time = optional(object({
+        hours = optional(number)
+      }))
+    }))
+  })
+  default = null
+}
+
 variable "continuous_backup_encryption_key_name" {
   type        = string
   description = "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
