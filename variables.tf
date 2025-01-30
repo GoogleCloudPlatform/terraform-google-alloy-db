@@ -205,7 +205,7 @@ variable "database_version" {
 
 variable "psc_enabled" {
   type        = bool
-  description = "Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null"
+  description = "Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect`"
   default     = false
 }
 

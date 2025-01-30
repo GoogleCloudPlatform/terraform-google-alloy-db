@@ -1,6 +1,7 @@
 # Example AlloyDB with private service connect (PSC) enabled
 
 This example illustrates how to use the `alloy-db` module to deploy a cluster with private service connect (PSC) enabled. This example creates:
+
 - alloyDB cluster/instances in region us-central1 in project passed in `project_id`.
 - alloyDB cross region replica cluster/instances in region us-east1 in project passed in `project_id`.
 - VPC and subnet in project passed in `attachment_project_id`.
@@ -23,11 +24,24 @@ terraform apply
 terraform destroy
 ```
 
+## Additional resources deployed outside of the module
+
+In order to [connect to Alloydb with language connectors](https://cloud.google.com/alloydb/docs/connect-language-connectors#python-pg8000_1), additional networking resources are required.
+
+In addition to setting the flag `psc_enabled = true` in this module, you must must create the following network resources outside of the module:
+
+- `google_compute_address`
+- `google_compute_forwarding_rule`
+- `google_dns_managed_zone`
+- `google_dns_record_set`
+
+For details, see [main.tf](./main.tf) in this example folder.
+
 ## Failover to Instance 2
 
 There are two clusters deployed in this example. `cluster east` is the primary cluster and `cluster central` is the failover replica. Steps to promote `cluster east` as primary and change `cluster central` as failover replica
 
-1) remove  `primary_cluster_name` from `cluster east` and Execute `terraform apply`
+1. remove `primary_cluster_name` from `cluster east` and Execute `terraform apply`
 
 ```diff
 module "alloydb_east" {
@@ -39,7 +53,7 @@ module "alloydb_east" {
 }
 ```
 
-2) Remove cluster 1 by removing cluster 1 code and Execute `terraform apply`
+2. Remove cluster 1 by removing cluster 1 code and Execute `terraform apply`
 
 ```diff
 - module "alloydb_central" {
@@ -64,7 +78,7 @@ module "alloydb_east" {
 - }
 ```
 
-3) Create cluster 1 as failover replica by adding cluster 1 code with following additional line and Execute `terraform apply`
+3. Create cluster 1 as failover replica by adding cluster 1 code with following additional line and Execute `terraform apply`
 
 ```diff
 module "alloydb_central" {
