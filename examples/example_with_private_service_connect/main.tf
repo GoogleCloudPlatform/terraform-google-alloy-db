@@ -50,6 +50,16 @@ module "alloydb_central" {
     instance_id        = "cluster-${var.region_central}-instance1-psc",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    database_flags = {
+      "alloydb.enable_pgaudit"     = "on"
+      "alloydb.iam_authentication" = "on"
+      "log_connections"            = "on"
+      "log_disconnections"         = "on"
+      "log_replication_commands"   = "on"
+      "log_statement"              = "all"
+      "log_timezone"               = "CET"
+      "pgaudit.log"                = "ddl,write"
+    }
   }
 
   read_pool_instance = [
@@ -60,6 +70,8 @@ module "alloydb_central" {
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   ]
+
+
 
   depends_on = [
     google_kms_crypto_key_iam_member.alloydb_sa_iam,

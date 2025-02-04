@@ -36,6 +36,12 @@ module "alloydb_east" {
       require_connectors = false
       ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
+
+    database_flags = {
+      "alloydb.enable_pgaudit"     = "on"
+      "alloydb.iam_authentication" = "on"
+      "pgaudit.log"                = "ddl,write"
+    }
   }
 
   continuous_backup_enable               = true

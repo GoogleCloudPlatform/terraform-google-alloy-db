@@ -41,9 +41,12 @@ resource "google_alloydb_cluster" "default" {
   deletion_policy  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
   database_version = var.database_version
 
-  network_config {
-    network            = var.network_self_link
-    allocated_ip_range = var.allocated_ip_range
+  dynamic "network_config" {
+    for_each = var.network_self_link == null ? [] : ["network_config"]
+    content {
+      network            = var.network_self_link
+      allocated_ip_range = var.allocated_ip_range
+    }
   }
 
   dynamic "psc_config" {

@@ -73,6 +73,11 @@ output "primary_instance_east" {
   value       = module.alloydb_east.primary_instance
 }
 
+output "cluster_id_east" {
+  description = "ID of the Alloy DB Cluster created"
+  value       = module.alloydb_east.cluster_id
+}
+
 output "kms_key_name_central" {
   description = "he fully-qualified resource name of the KMS key"
   value       = google_kms_crypto_key.key_region_central.id
