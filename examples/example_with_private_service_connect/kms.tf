@@ -21,6 +21,11 @@ resource "google_project_service_identity" "alloydb_sa" {
   service = "alloydb.googleapis.com"
 }
 
+resource "time_sleep" "wait_for_alloydb_sa_ready_state" {
+  create_duration = "60s"
+  depends_on      = [google_project_service_identity.alloydb_sa]
+}
+
 resource "random_string" "key_suffix" {
   length  = 3
   special = false
@@ -43,6 +48,8 @@ resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam" {
   crypto_key_id = google_kms_crypto_key.key_region_central.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${google_project_service_identity.alloydb_sa.email}"
+
+  depends_on = [time_sleep.wait_for_alloydb_sa_ready_state]
 }
 
 
@@ -63,4 +70,6 @@ resource "google_kms_crypto_key_iam_member" "alloydb_sa_iam_secondary" {
   crypto_key_id = google_kms_crypto_key.key_region_east.id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${google_project_service_identity.alloydb_sa.email}"
+
+  depends_on = [time_sleep.wait_for_alloydb_sa_ready_state]
 }

@@ -120,6 +120,7 @@ module "alloydb_central" {
 | cluster\_central | cluster |
 | cluster\_east | cluster created |
 | cluster\_id\_central | ID of the Alloy DB Cluster created |
+| cluster\_id\_east | ID of the Alloy DB Cluster created |
 | cluster\_name\_central | The name of the cluster resource |
 | kms\_key\_name\_central | he fully-qualified resource name of the KMS key |
 | kms\_key\_name\_east | he fully-qualified resource name of the Secondary clusterKMS key |
