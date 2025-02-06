@@ -99,12 +99,12 @@ variable "continuous_backup_recovery_window_days" {
 variable "maintenance_update_policy" {
   description = "defines the policy for system updates"
   type = object({
-    maintenance_windows = optional(object({
-      day = optional(string)
-      start_time = optional(object({
-        hours = optional(number)
-      }))
-    }))
+    maintenance_windows = object({
+      day = string
+      start_time = object({
+        hours = number
+      })
+    })
   })
   default = null
 }
