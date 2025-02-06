@@ -50,6 +50,16 @@ module "alloydb_central" {
     instance_id        = "cluster-${var.region_central}-instance1-psc",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    database_flags = {
+      "alloydb.enable_pgaudit"     = "on"
+      "alloydb.iam_authentication" = "on"
+      "log_connections"            = "on"
+      "log_disconnections"         = "on"
+      "log_replication_commands"   = "on"
+      "log_statement"              = "all"
+      "log_timezone"               = "CET"
+      "pgaudit.log"                = "ddl,write"
+    }
   }
 
   read_pool_instance = [
@@ -60,6 +70,8 @@ module "alloydb_central" {
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   ]
+
+
 
   depends_on = [
     google_kms_crypto_key_iam_member.alloydb_sa_iam,
@@ -79,8 +91,8 @@ resource "google_compute_address" "psc_consumer_address" {
   address      = "10.2.0.10"
 }
 
-resource "google_compute_forwarding_rule" "psc_fwd_rule_consumer" {
-  name    = "psc-fwd-rule-consumer-endpoint"
+resource "google_compute_forwarding_rule" "psc_consumer_fwd_rule" {
+  name    = "psc-consumer-fwd-rule"
   region  = var.region_central
   project = var.attachment_project_id
 
@@ -89,4 +101,28 @@ resource "google_compute_forwarding_rule" "psc_fwd_rule_consumer" {
   network                 = google_compute_network.psc_vpc.name
   ip_address              = google_compute_address.psc_consumer_address.id
   allow_psc_global_access = true
+}
+
+resource "google_dns_managed_zone" "psc_consumer_dns_zone" {
+  name    = "psc-consumer-dns-zone"
+  project = var.attachment_project_id
+
+  dns_name    = module.alloydb_central.primary_psc_dns_name
+  description = "DNS Zone for PSC access to Alloydb"
+  visibility  = "private"
+  private_visibility_config {
+    networks {
+      network_url = google_compute_network.psc_vpc.id
+    }
+  }
+}
+
+resource "google_dns_record_set" "psc_consumer_dns_record" {
+  name    = module.alloydb_central.primary_psc_dns_name
+  project = var.attachment_project_id
+
+  type         = "A"
+  ttl          = 300
+  managed_zone = google_dns_managed_zone.psc_consumer_dns_zone.name
+  rrdatas      = [google_compute_address.psc_consumer_address.address]
 }
