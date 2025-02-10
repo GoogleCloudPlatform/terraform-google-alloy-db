@@ -25,6 +25,15 @@ module "alloydb_central" {
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
   cluster_encryption_key_name = google_kms_crypto_key.key_region_central.id
 
+  maintenance_update_policy = {
+    maintenance_windows = {
+      day = "SUNDAY"
+      start_time = {
+        hours = 2 // Maintenance will start at 2 AM
+      }
+    }
+  }
+
   automated_backup_policy = {
     location      = var.region_central
     backup_window = "1800s"

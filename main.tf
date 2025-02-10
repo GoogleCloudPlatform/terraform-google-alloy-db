@@ -121,6 +121,21 @@ resource "google_alloydb_cluster" "default" {
 
   }
 
+  dynamic "maintenance_update_policy" {
+    for_each = var.maintenance_update_policy != null ? [var.maintenance_update_policy] : []
+    content {
+      maintenance_windows {
+        day = maintenance_update_policy.value.maintenance_windows.day
+        start_time {
+          hours   = maintenance_update_policy.value.maintenance_windows.start_time.hours
+          minutes = 0
+          seconds = 0
+          nanos   = 0
+        }
+      }
+    }
+  }
+
   dynamic "initial_user" {
     for_each = var.cluster_initial_user == null ? [] : ["cluster_initial_user"]
     content {
