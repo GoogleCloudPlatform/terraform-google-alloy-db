@@ -127,8 +127,7 @@ resource "google_alloydb_cluster" "default" {
       maintenance_windows {
         day = maintenance_update_policy.value.maintenance_windows.day
         start_time {
-          hours = maintenance_update_policy.value.maintenance_windows.start_time.hours
-          # accepted value is only 0 for now https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/alloydb_cluster#minutes-2 
+          hours   = maintenance_update_policy.value.maintenance_windows.start_time.hours
           minutes = 0
           seconds = 0
           nanos   = 0

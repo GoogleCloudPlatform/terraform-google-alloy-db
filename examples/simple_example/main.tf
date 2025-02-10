@@ -29,7 +29,7 @@ module "alloydb_central" {
     maintenance_windows = {
       day = "SUNDAY"
       start_time = {
-        hours = 2  // Maintenance will start at 2 AM
+        hours = 2 // Maintenance will start at 2 AM
       }
     }
   }
