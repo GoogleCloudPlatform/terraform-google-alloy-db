@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.2.1...v3.3.0) (2025-02-10)
+
+
+### Features
+
+* Add Maintenance Update Policy ([#108](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/108)) ([80e4fa7](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/80e4fa7f9af58220601a2182e9f418096ab90904))
+
+
+### Bug Fixes
+
+* improve guidance and examples for connecting with PSC ([#116](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/116)) ([89ed688](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/89ed68884e76a555ab3a300419259ee87a39b29a))
+* perma diff for network_config ([#115](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/115)) ([8de2e80](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/8de2e80c61f38331bb62c72a93e299756a06093c))
+
 ## [3.2.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.2.0...v3.2.1) (2024-11-11)
 
 
