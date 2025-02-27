@@ -66,7 +66,7 @@ variable "skip_await_major_version_upgrade" {
 
 variable "subscription_type" {
   description = "The subscription type of cluster. Possible values are: TRIAL, STANDARD"
-  type        = bool
+  type        = string
   default     = "STANDARD"
 }
 
