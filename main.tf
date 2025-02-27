@@ -241,8 +241,8 @@ resource "google_alloydb_instance" "read_pool" {
   dynamic "network_config" {
     for_each = each.value.enable_public_ip ? ["network_config"] : []
     content {
-      enable_public_ip = each.value.enable_public_ip
-
+      enable_public_ip          = each.value.enable_public_ip
+      enable_outbound_public_ip = var.primary_instance.enable_outbound_public_ip
       dynamic "authorized_external_networks" {
         for_each = each.value.cidr_range == null ? [] : toset(each.value.cidr_range)
         content {
