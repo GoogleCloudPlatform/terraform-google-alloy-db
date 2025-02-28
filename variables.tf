@@ -58,6 +58,18 @@ variable "cluster_initial_user" {
   default = null
 }
 
+variable "skip_await_major_version_upgrade" {
+  description = "Set to true to skip awaiting on the major version upgrade of the cluster. Possible values: true, false. Default value: true"
+  type        = bool
+  default     = true
+}
+
+variable "subscription_type" {
+  description = "The subscription type of cluster. Possible values are: TRIAL, STANDARD"
+  type        = string
+  default     = "STANDARD"
+}
+
 variable "cluster_encryption_key_name" {
   description = "The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
   type        = string
@@ -134,8 +146,9 @@ variable "primary_instance" {
       record_client_address   = optional(bool)
       query_plans_per_minute  = optional(number)
     }))
-    enable_public_ip = optional(bool, false)
-    cidr_range       = optional(list(string))
+    enable_public_ip          = optional(bool, false)
+    enable_outbound_public_ip = optional(bool, false)
+    cidr_range                = optional(list(string))
   })
 
   validation {
@@ -182,8 +195,9 @@ variable "read_pool_instance" {
       record_client_address   = optional(bool)
       query_plans_per_minute  = optional(number)
     }))
-    enable_public_ip = optional(bool, false)
-    cidr_range       = optional(list(string))
+    enable_public_ip          = optional(bool, false)
+    enable_outbound_public_ip = optional(bool, false)
+    cidr_range                = optional(list(string))
   }))
   default = []
   validation {

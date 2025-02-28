@@ -32,14 +32,16 @@ locals {
 }
 
 resource "google_alloydb_cluster" "default" {
-  cluster_id       = var.cluster_id
-  location         = var.cluster_location
-  display_name     = var.cluster_display_name
-  project          = var.project_id
-  labels           = var.cluster_labels
-  cluster_type     = local.is_secondary_cluster ? "SECONDARY" : var.cluster_type
-  deletion_policy  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
-  database_version = var.database_version
+  cluster_id                       = var.cluster_id
+  location                         = var.cluster_location
+  display_name                     = var.cluster_display_name
+  project                          = var.project_id
+  labels                           = var.cluster_labels
+  cluster_type                     = local.is_secondary_cluster ? "SECONDARY" : var.cluster_type
+  deletion_policy                  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
+  database_version                 = var.database_version
+  skip_await_major_version_upgrade = var.skip_await_major_version_upgrade
+  subscription_type                = var.subscription_type
 
   dynamic "network_config" {
     for_each = var.network_self_link == null ? [] : ["network_config"]
@@ -175,7 +177,8 @@ resource "google_alloydb_instance" "primary" {
   dynamic "network_config" {
     for_each = var.primary_instance.enable_public_ip ? ["network_config"] : []
     content {
-      enable_public_ip = var.primary_instance.enable_public_ip
+      enable_public_ip          = var.primary_instance.enable_public_ip
+      enable_outbound_public_ip = var.primary_instance.enable_outbound_public_ip
       dynamic "authorized_external_networks" {
         for_each = var.primary_instance.cidr_range == null ? [] : toset(var.primary_instance.cidr_range)
         content {
@@ -238,8 +241,8 @@ resource "google_alloydb_instance" "read_pool" {
   dynamic "network_config" {
     for_each = each.value.enable_public_ip ? ["network_config"] : []
     content {
-      enable_public_ip = each.value.enable_public_ip
-
+      enable_public_ip          = each.value.enable_public_ip
+      enable_outbound_public_ip = var.primary_instance.enable_outbound_public_ip
       dynamic "authorized_external_networks" {
         for_each = each.value.cidr_range == null ? [] : toset(each.value.cidr_range)
         content {
