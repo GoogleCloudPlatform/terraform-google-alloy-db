@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.3.0...v4.0.0) (2025-02-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>= 6.18:** added skip_await_major_version_upgrade, subscription_type, enable_outbound_public_ip ([#120](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/120))
+
+### Features
+
+* **TPG>= 6.18:** added skip_await_major_version_upgrade, subscription_type, enable_outbound_public_ip ([#120](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/120)) ([b758cce](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/b758cce8767e4d045a436959e42beab32f20e955))
+
 ## [3.3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.2.1...v3.3.0) (2025-02-10)
 
 
