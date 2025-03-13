@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 module "alloydb_central" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   cluster_id       = "cluster-${var.region_central}-psc"
   cluster_location = var.region_central
@@ -26,6 +26,8 @@ module "alloydb_central" {
   psc_allowed_consumer_projects = [var.attachment_project_number]
 
   cluster_encryption_key_name = google_kms_crypto_key.key_region_central.id
+
+  network_attachment_resource = google_compute_network_attachment.psc_attachment.id
 
   automated_backup_policy = {
     location      = var.region_central

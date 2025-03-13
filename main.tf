@@ -192,6 +192,13 @@ resource "google_alloydb_instance" "primary" {
     for_each = var.psc_enabled ? ["psc_instance_config"] : []
     content {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
+
+      dynamic "psc_interface_configs" {
+        for_each = var.network_attachment_resource == null ? [] : ["psc_interface_configs"]
+        content {
+          network_attachment_resource = var.network_attachment_resource
+        }
+      }
     }
   }
 

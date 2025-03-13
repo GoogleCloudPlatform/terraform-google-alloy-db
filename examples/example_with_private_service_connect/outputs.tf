@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,4 +102,9 @@ output "region_central" {
 output "region_east" {
   description = "The region for cross region replica secondary cluster"
   value       = var.region_east
+}
+
+output "psc_attachment" {
+  value       = google_compute_network_attachment.psc_attachment
+  description = "The network attachment resource created in the consumer project to which the PSC interface will be linked"
 }
