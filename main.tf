@@ -41,7 +41,8 @@ resource "google_alloydb_cluster" "default" {
   deletion_policy                  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
   database_version                 = var.database_version
   skip_await_major_version_upgrade = var.skip_await_major_version_upgrade
-  subscription_type                = var.subscription_type
+
+  subscription_type = var.subscription_type
 
   dynamic "network_config" {
     for_each = var.network_self_link == null ? [] : ["network_config"]
@@ -192,6 +193,13 @@ resource "google_alloydb_instance" "primary" {
     for_each = var.psc_enabled ? ["psc_instance_config"] : []
     content {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
+
+      dynamic "psc_interface_configs" {
+        for_each = var.network_attachment_resource == null ? [] : ["psc_interface_configs"]
+        content {
+          network_attachment_resource = var.network_attachment_resource
+        }
+      }
     }
   }
 

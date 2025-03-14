@@ -2,10 +2,11 @@
 
 This example illustrates how to use the `alloy-db` module to deploy a cluster with private service connect (PSC) enabled. This example creates:
 
+- VPC and subnet in project passed in `attachment_project_id`.
+- Creates a network attachment in `attachment_project_id` to which the AlloyDB PSC interface will be linked. Needed only if AlloyDB needs to connect outbound
 - alloyDB cluster/instances in region us-central1 in project passed in `project_id`.
 - alloyDB cross region replica cluster/instances in region us-east1 in project passed in `project_id`.
-- VPC and subnet in project passed in `attachment_project_id`.
-- It also creates consumer psc endpoint using alloyDB psc attachment in project passed in `attachment_project_id`.
+- Creates consumer psc endpoint using alloyDB psc attachment in project passed in `attachment_project_id`.
 
 ## Usage
 
@@ -129,6 +130,7 @@ module "alloydb_central" {
 | primary\_instance\_id\_central | ID of the primary instance created |
 | primary\_psc\_attachment\_link\_central | The private service connect (psc) attachment created for primary instance |
 | project\_id | Project ID of the Alloy DB Cluster created |
+| psc\_attachment | The network attachment resource created in the consumer project to which the PSC interface will be linked |
 | psc\_consumer\_fwd\_rule\_ip | Consumer psc endpoint created |
 | psc\_dns\_name\_central | he DNS name of the instance for PSC connectivity. Name convention: ...alloydb-psc.goog |
 | read\_instance\_ids\_central | IDs of the read instances created |

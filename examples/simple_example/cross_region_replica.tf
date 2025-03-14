@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   primary_cluster_name = module.alloydb_central.cluster_name ## Comment this line to promote this cluster as primary cluster
 
