@@ -32,7 +32,7 @@ resource "google_compute_network_attachment" "psc_attachment" {
   provider    = google-beta
   name        = "psc-network-attachment"
   region      = var.region_central
-  description = "PSC network attachment for psc testing interface"
+  description = "PSC network attachment for PSC testing interface"
   project     = var.attachment_project_id
 
   subnetworks           = [google_compute_subnetwork.psc_subnet.id]

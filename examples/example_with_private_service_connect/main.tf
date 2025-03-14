@@ -28,7 +28,6 @@ module "alloydb_central" {
   cluster_encryption_key_name = google_kms_crypto_key.key_region_central.id
 
   network_attachment_resource = google_compute_network_attachment.psc_attachment.id
-
   automated_backup_policy = {
     location      = var.region_central
     backup_window = "1800s"
