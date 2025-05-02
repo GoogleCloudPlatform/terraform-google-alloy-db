@@ -74,3 +74,12 @@ output "replica_instances" {
   description = "Replica instances created"
   value       = resource.google_alloydb_instance.read_pool
 }
+
+output "user_passwords" {
+  description = "Map containing the password of all users created through terraform."
+  value = {
+    for name, user in google_alloydb_user.users :
+    name => user.password
+  }
+  sensitive = true
+}

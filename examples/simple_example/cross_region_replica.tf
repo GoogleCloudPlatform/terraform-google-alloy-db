@@ -48,7 +48,6 @@ module "alloydb_east" {
       start_times  = ["2:00:00:00", ]
     }
     quantity_based_retention_count = 1
-    time_based_retention_count     = null
     labels = {
       test = "alloydb-cluster-with-prim"
     }

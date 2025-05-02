@@ -15,10 +15,15 @@
  */
 
 locals {
-  read_pool_instance = (
-    var.read_pool_instance != null ?
-    { for read_pool_instances in var.read_pool_instance : read_pool_instances["instance_id"] => read_pool_instances } : {}
-  )
+  read_pool_instance = {
+    for read_pool_instances in var.read_pool_instance :
+    read_pool_instances["instance_id"] => read_pool_instances
+  }
+
+  users = {
+    for user in var.users :
+    user["name"] => user
+  }
 
   quantity_based_retention_count = (
     var.automated_backup_policy != null ? (var.automated_backup_policy.quantity_based_retention_count != null ? [var.automated_backup_policy.quantity_based_retention_count] : []) : []
@@ -161,7 +166,6 @@ resource "google_alloydb_cluster" "default" {
       primary_cluster_name = var.primary_cluster_name
     }
   }
-
 }
 
 resource "google_alloydb_instance" "primary" {
@@ -232,25 +236,25 @@ resource "google_alloydb_instance" "primary" {
   lifecycle {
     ignore_changes = [instance_type]
   }
-
 }
 
-# Cannot create for secondary cluster
+# Read pool (instance_type = "READ_POOL") cannot be created for secondary cluster
+# and does not support the following attributes:
+# * availability_type: Because 1 node pool (read_pool_config.node_count) is always zonal, two or more is always regional.
+# * gce_zone
+# * network_config.enable_outbound_public_ip
 resource "google_alloydb_instance" "read_pool" {
-  for_each          = local.read_pool_instance
-  cluster           = google_alloydb_cluster.default.name
-  instance_id       = each.key
-  instance_type     = "READ_POOL"
-  availability_type = each.value.availability_type
-  gce_zone          = each.value.availability_type == "ZONAL" ? each.value.gce_zone : null
-  labels            = var.primary_instance.labels
-  annotations       = var.primary_instance.annotations
+  for_each      = local.read_pool_instance
+  cluster       = google_alloydb_cluster.default.name
+  instance_id   = each.key
+  instance_type = "READ_POOL"
+  labels        = var.primary_instance.labels
+  annotations   = var.primary_instance.annotations
 
   dynamic "network_config" {
     for_each = each.value.enable_public_ip ? ["network_config"] : []
     content {
-      enable_public_ip          = each.value.enable_public_ip
-      enable_outbound_public_ip = var.primary_instance.enable_outbound_public_ip
+      enable_public_ip = each.value.enable_public_ip
       dynamic "authorized_external_networks" {
         for_each = each.value.cidr_range == null ? [] : toset(each.value.cidr_range)
         content {
@@ -259,7 +263,6 @@ resource "google_alloydb_instance" "read_pool" {
       }
     }
   }
-
 
   read_pool_config {
     node_count = each.value.node_count
@@ -298,6 +301,26 @@ resource "google_alloydb_instance" "read_pool" {
     }
   }
 
+  depends_on = [google_alloydb_instance.primary]
+}
+
+resource "random_password" "passwords" {
+  for_each = {
+    for k, v in local.users :
+    k => v
+    if v.type == "ALLOYDB_BUILT_IN" && v.password == null
+  }
+  length  = 16
+  special = true
+}
+
+resource "google_alloydb_user" "users" {
+  for_each       = local.users
+  cluster        = google_alloydb_cluster.default.id
+  user_id        = each.key
+  user_type      = each.value.type
+  password       = each.value.type == "ALLOYDB_BUILT_IN" && each.value.password == null ? random_password.passwords[each.key].result : each.value.password
+  database_roles = each.value.roles
 
   depends_on = [google_alloydb_instance.primary]
 }

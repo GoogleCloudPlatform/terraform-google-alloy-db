@@ -42,8 +42,6 @@ module "alloy-db" {
     ssl_mode           = "ENCRYPTED_ONLY"
   }
 
-  read_pool_instance = null
-
   depends_on = [
     google_compute_network.default,
     google_compute_global_address.private_ip_alloc,
