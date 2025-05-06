@@ -20,11 +20,6 @@ locals {
     read_pool_instances["instance_id"] => read_pool_instances
   }
 
-  users = {
-    for user in var.users :
-    user["name"] => user
-  }
-
   quantity_based_retention_count = (
     var.automated_backup_policy != null ? (var.automated_backup_policy.quantity_based_retention_count != null ? [var.automated_backup_policy.quantity_based_retention_count] : []) : []
   )
@@ -300,27 +295,6 @@ resource "google_alloydb_instance" "read_pool" {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
     }
   }
-
-  depends_on = [google_alloydb_instance.primary]
-}
-
-resource "random_password" "passwords" {
-  for_each = {
-    for k, v in local.users :
-    k => v
-    if v.type == "ALLOYDB_BUILT_IN" && v.password == null
-  }
-  length  = 16
-  special = true
-}
-
-resource "google_alloydb_user" "users" {
-  for_each       = local.users
-  cluster        = google_alloydb_cluster.default.id
-  user_id        = each.key
-  user_type      = each.value.type
-  password       = each.value.type == "ALLOYDB_BUILT_IN" && each.value.password == null ? random_password.passwords[each.key].result : each.value.password
-  database_roles = each.value.roles
 
   depends_on = [google_alloydb_instance.primary]
 }

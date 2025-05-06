@@ -52,7 +52,7 @@ module "alloy-db" {
 }
 ```
 
-- Usage of this module for creating a AlloyDB Cluster with the automated backup policy, a primary instance, zonal and regional read replica instances and additional users:
+- Usage of this module for creating a AlloyDB Cluster with the automated backup policy, a primary instance, zonal and regional read replica instances:
 
 ```hcl
 module "alloy-db" {
@@ -106,17 +106,6 @@ module "alloy-db" {
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   ]
-
-  users = [
-    {
-      name     = "user1"
-      password = null # generate a password for user1
-    },
-    {
-      name     = "user2"
-      password = "mypassword"
-    }
-  ]
 }
 ```
 
@@ -127,11 +116,11 @@ module "alloy-db" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | allocated\_ip\_range | The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range | `string` | `null` | no |
-| automated\_backup\_policy | The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days | <pre>object({<br>    location      = optional(string)<br>    backup_window = optional(string)<br>    enabled       = optional(bool)<br><br>    weekly_schedule = optional(object({<br>      days_of_week = optional(list(string))<br>      start_times  = list(string)<br>    })),<br><br>    quantity_based_retention_count = optional(number)<br>    time_based_retention_count     = optional(string)<br>    labels                         = optional(map(string))<br>    backup_encryption_key_name     = optional(string)<br>  })</pre> | `null` | no |
+| automated\_backup\_policy | The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days | <pre>object({<br/>    location      = optional(string)<br/>    backup_window = optional(string)<br/>    enabled       = optional(bool)<br/><br/>    weekly_schedule = optional(object({<br/>      days_of_week = optional(list(string))<br/>      start_times  = list(string)<br/>    })),<br/><br/>    quantity_based_retention_count = optional(number)<br/>    time_based_retention_count     = optional(string)<br/>    labels                         = optional(map(string))<br/>    backup_encryption_key_name     = optional(string)<br/>  })</pre> | `null` | no |
 | cluster\_display\_name | Human readable display name for the Alloy DB Cluster | `string` | `null` | no |
 | cluster\_encryption\_key\_name | The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | cluster\_id | The ID of the alloydb cluster | `string` | n/a | yes |
-| cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | `null` | no |
+| cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br/>    user     = optional(string),<br/>    password = string<br/>  })</pre> | `null` | no |
 | cluster\_labels | User-defined labels for the alloydb cluster | `map(string)` | `{}` | no |
 | cluster\_location | Location where AlloyDb cluster will be deployed | `string` | n/a | yes |
 | cluster\_type | The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY | `string` | `"PRIMARY"` | no |
@@ -140,18 +129,17 @@ module "alloy-db" {
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
 | database\_version | The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES\_14, POSTGRES\_15 | `string` | `null` | no |
 | deletion\_policy | Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster | `string` | `null` | no |
-| maintenance\_update\_policy | defines the policy for system updates | <pre>object({<br>    maintenance_windows = object({<br>      day = string<br>      start_time = object({<br>        hours = number<br>      })<br>    })<br>  })</pre> | `null` | no |
+| maintenance\_update\_policy | defines the policy for system updates | <pre>object({<br/>    maintenance_windows = object({<br/>      day = string<br/>      start_time = object({<br/>        hours = number<br/>      })<br/>    })<br/>  })</pre> | `null` | no |
 | network\_attachment\_resource | The network attachment resource created in the consumer project to which the PSC interface will be linked. Needed for AllloyDB outbound connectivity. This is of the format: projects/{CONSUMER\_PROJECT}/regions/{REGION}/networkAttachments/{NETWORK\_ATTACHMENT\_NAME}. The network attachment must be in the same region as the instance | `string` | `null` | no |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. If network\_self\_link is set then psc\_enabled should be set to false | `string` | `null` | no |
 | primary\_cluster\_name | Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster | `string` | `null` | no |
-| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br>    instance_id        = string,<br>    display_name       = optional(string),<br>    database_flags     = optional(map(string))<br>    labels             = optional(map(string))<br>    annotations        = optional(map(string))<br>    gce_zone           = optional(string)<br>    availability_type  = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip          = optional(bool, false)<br>    enable_outbound_public_ip = optional(bool, false)<br>    cidr_range                = optional(list(string))<br>  })</pre> | n/a | yes |
+| primary\_instance | Primary cluster configuration that supports read and write operations. | <pre>object({<br/>    instance_id        = string,<br/>    display_name       = optional(string),<br/>    database_flags     = optional(map(string))<br/>    labels             = optional(map(string))<br/>    annotations        = optional(map(string))<br/>    gce_zone           = optional(string)<br/>    availability_type  = optional(string)<br/>    machine_cpu_count  = optional(number, 2)<br/>    ssl_mode           = optional(string)<br/>    require_connectors = optional(bool)<br/>    query_insights_config = optional(object({<br/>      query_string_length     = optional(number)<br/>      record_application_tags = optional(bool)<br/>      record_client_address   = optional(bool)<br/>      query_plans_per_minute  = optional(number)<br/>    }))<br/>    enable_public_ip          = optional(bool, false)<br/>    enable_outbound_public_ip = optional(bool, false)<br/>    cidr_range                = optional(list(string))<br/>  })</pre> | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | psc\_allowed\_consumer\_projects | List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only. | `list(string)` | `[]` | no |
 | psc\_enabled | Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc\_enabled is set to true, then network\_self\_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect` | `bool` | `false` | no |
-| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id        = string<br>    display_name       = string<br>    node_count         = optional(number, 1)<br>    database_flags     = optional(map(string))<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip = optional(bool, false)<br>    cidr_range       = optional(list(string))<br>  }))</pre> | `[]` | no |
+| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br/>    instance_id        = string<br/>    display_name       = string<br/>    node_count         = optional(number, 1)<br/>    database_flags     = optional(map(string))<br/>    machine_cpu_count  = optional(number, 2)<br/>    ssl_mode           = optional(string)<br/>    require_connectors = optional(bool)<br/>    query_insights_config = optional(object({<br/>      query_string_length     = optional(number)<br/>      record_application_tags = optional(bool)<br/>      record_client_address   = optional(bool)<br/>      query_plans_per_minute  = optional(number)<br/>    }))<br/>    enable_public_ip = optional(bool, false)<br/>    cidr_range       = optional(list(string))<br/>  }))</pre> | `[]` | no |
 | skip\_await\_major\_version\_upgrade | Set to true to skip awaiting on the major version upgrade of the cluster. Possible values: true, false. Default value: true | `bool` | `true` | no |
 | subscription\_type | The subscription type of cluster. Possible values are: TRIAL, STANDARD | `string` | `"STANDARD"` | no |
-| users | List of users to create in the primary instance (and replicated to other replicas). Set PASSWORD to null if you want to get an autogenerated password. The user types available are: 'ALLOYDB\_BUILT\_IN' or 'ALLOYDB\_IAM\_USER'. | <pre>list(object({<br>    name     = string<br>    password = optional(string)<br>    roles    = optional(list(string), ["alloydbsuperuser"])<br>    type     = optional(string, "ALLOYDB_BUILT_IN")<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
@@ -168,7 +156,6 @@ module "alloy-db" {
 | read\_psc\_attachment\_links | The private service connect (psc) attachment created read replica instances |
 | read\_psc\_dns\_names | The DNS names of the instances for PSC connectivity created for replica instances |
 | replica\_instances | Replica instances created |
-| user\_passwords | Map containing the password of all users created through terraform. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
