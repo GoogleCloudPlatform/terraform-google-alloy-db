@@ -33,8 +33,6 @@ module "alloy-db" {
   }
   network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
 
-  automated_backup_policy = null
-
   primary_instance = {
     instance_id       = "primary-instance-1"
     instance_type     = "PRIMARY"
@@ -43,16 +41,12 @@ module "alloy-db" {
     display_name      = "alloydb-primary-instance"
   }
 
-
   read_pool_instance = [
     {
       instance_id       = "read-instance-1"
       display_name      = "read-instance-1"
       instance_type     = "READ_POOL"
       node_count        = 1
-      database_flags    = {}
-      availability_type = "ZONAL"
-      gce_zone          = "us-central1-a"
       machine_cpu_count = 2
     },
     {
@@ -60,9 +54,6 @@ module "alloy-db" {
       display_name      = "read-instance-2"
       instance_type     = "READ_POOL"
       node_count        = 1
-      database_flags    = {}
-      availability_type = "ZONAL"
-      gce_zone          = "us-central1-a"
       machine_cpu_count = 2
     }
   ]
@@ -73,7 +64,6 @@ module "alloy-db" {
 resource "google_compute_network" "default" {
   name = var.network_name
 }
-
 
 resource "google_compute_global_address" "private_ip_alloc" {
   name          = "adb-all"
