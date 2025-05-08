@@ -22,7 +22,7 @@ spec:
   info:
     title: terraform-google-alloy-db
     source:
-      repo: https://github.com/imrannayer/terraform-google-alloy-db.git
+      repo: https://github.com/GoogleCloudPlatform/terraform-google-alloy-db.git
       sourceType: git
     version: 4.0.0
     actuationTool:
