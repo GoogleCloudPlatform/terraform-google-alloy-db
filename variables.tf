@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -252,4 +252,18 @@ variable "network_attachment_resource" {
   type        = string
   description = "The network attachment resource created in the consumer project to which the PSC interface will be linked. Needed for AllloyDB outbound connectivity. This is of the format: projects/{CONSUMER_PROJECT}/regions/{REGION}/networkAttachments/{NETWORK_ATTACHMENT_NAME}. The network attachment must be in the same region as the instance"
   default     = null
+}
+
+variable "restore_cluster" {
+  description = "restore cluster from a backup source. Only one of restore_backup_source or restore_continuous_backup_source should be set"
+  type = object({
+    restore_backup_source = optional(object({
+      backup_name = string
+    }))
+    restore_continuous_backup_source = optional(object({
+      cluster       = string
+      point_in_time = string
+    }))
+  })
+  default = null
 }

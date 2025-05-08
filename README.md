@@ -18,10 +18,11 @@ This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+
 
 Current version is 2.X. Upgrade guides:
 
-- [0.1 -> 0.2](/docs/upgrading_to_v0.2.md)
-- [0.2 -> 1.0](/docs/upgrading_to_v1.0.md)
-- [1.X -> 2.0](/docs/upgrading_to_v2.0.md)
-- [2.X -> 3.0](/docs/upgrading_to_v3.0.md)
+- [0.1 -> 0.2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v0.2.md)
+- [0.2 -> 1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v1.0.md)
+- [1.X -> 2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v2.0.md)
+- [2.X -> 3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v3.0.md)
+- [3.X -> 4.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v4.0.md)
 
 ## Usage
 
@@ -35,7 +36,7 @@ Basic usage of this module is as follows:
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 3.0"
+  version              = "~> 4.0"
 
   cluster_id           = "alloydb-cluster"
   cluster_location     = "us-central1"
@@ -74,7 +75,7 @@ module "alloy-db" {
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 3.0"
+  version              = "~> 4.0"
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
   cluster_location     = "us-central1"
@@ -137,6 +138,7 @@ module "alloy-db" {
 | psc\_allowed\_consumer\_projects | List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only. | `list(string)` | `[]` | no |
 | psc\_enabled | Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc\_enabled is set to true, then network\_self\_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect` | `bool` | `false` | no |
 | read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id        = string<br>    display_name       = string<br>    node_count         = optional(number, 1)<br>    database_flags     = optional(map(string))<br>    availability_type  = optional(string)<br>    gce_zone           = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip          = optional(bool, false)<br>    enable_outbound_public_ip = optional(bool, false)<br>    cidr_range                = optional(list(string))<br>  }))</pre> | `[]` | no |
+| restore\_cluster | restore cluster from a backup source. Only one of restore\_backup\_source or restore\_continuous\_backup\_source should be set | <pre>object({<br>    restore_backup_source = optional(object({<br>      backup_name = string<br>    }))<br>    restore_continuous_backup_source = optional(object({<br>      cluster       = string<br>      point_in_time = string<br>    }))<br>  })</pre> | `null` | no |
 | skip\_await\_major\_version\_upgrade | Set to true to skip awaiting on the major version upgrade of the cluster. Possible values: true, false. Default value: true | `bool` | `true` | no |
 | subscription\_type | The subscription type of cluster. Possible values are: TRIAL, STANDARD | `string` | `"STANDARD"` | no |
 
@@ -167,7 +169,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v1.3
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v5.32+
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v6.26+
 
 ### Service Account
 
