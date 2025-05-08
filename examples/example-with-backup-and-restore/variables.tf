@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 1.3"
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 6.26, < 7"
-    }
-  }
+variable "project_id" {
+  description = "The ID of the project in which to provision resources."
+  type        = string
+}
 
-  provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-alloy-db/v4.0.0"
-  }
+variable "network_name" {
+  description = "The ID of the network in which to provision resources."
+  type        = string
+  default     = "adb-bkup-rest"
+}
+
+
+variable "region_central" {
+  default     = "us-central1"
+  description = "The region for cluster in central us"
+  type        = string
 }

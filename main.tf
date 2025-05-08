@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,7 +162,23 @@ resource "google_alloydb_cluster" "default" {
     }
   }
 
+  dynamic "restore_continuous_backup_source" {
+    for_each = var.restore_cluster != null && try(var.restore_cluster.restore_continuous_backup_source != null, false) ? ["restore_continuous_backup_source"] : []
+    content {
+      cluster       = var.restore_cluster.restore_continuous_backup_source.cluster
+      point_in_time = var.restore_cluster.restore_continuous_backup_source.point_in_time
+    }
+  }
+
+  dynamic "restore_backup_source" {
+    for_each = var.restore_cluster != null && try(var.restore_cluster.restore_backup_source != null, false) ? ["restore_backup_source"] : []
+    content {
+      backup_name = var.restore_cluster.restore_backup_source.backup_name
+    }
+  }
+
 }
+
 
 resource "google_alloydb_instance" "primary" {
   cluster           = google_alloydb_cluster.default.name

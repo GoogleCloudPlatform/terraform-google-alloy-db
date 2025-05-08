@@ -1,0 +1,257 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-alloy-db
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  info:
+    title: terraform-google-alloy-db
+    source:
+      repo: https://github.com/GoogleCloudPlatform/terraform-google-alloy-db.git
+      sourceType: git
+    version: 4.0.0
+    actuationTool:
+      flavor: Terraform
+      version: ">= 1.3"
+    description: {}
+    icon: assets/icon.png
+  content:
+    examples:
+      - name: example-with-backup-and-restore
+        location: examples/example-with-backup-and-restore
+      - name: example_with_multiple_readpool
+        location: examples/example_with_multiple_readpool
+      - name: example_with_primary_instance_public_ip_address
+        location: examples/example_with_primary_instance_public_ip_address
+      - name: example_with_private_service_connect
+        location: examples/example_with_private_service_connect
+      - name: example_with_readpool_instances
+        location: examples/example_with_readpool_instances
+      - name: simple_example
+        location: examples/simple_example
+  interfaces:
+    variables:
+      - name: project_id
+        description: The ID of the project in which to provision resources.
+        varType: string
+        required: true
+      - name: cluster_id
+        description: The ID of the alloydb cluster
+        varType: string
+        required: true
+      - name: cluster_type
+        description: "The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY"
+        varType: string
+        defaultValue: PRIMARY
+      - name: cluster_location
+        description: Location where AlloyDb cluster will be deployed
+        varType: string
+        required: true
+      - name: cluster_labels
+        description: User-defined labels for the alloydb cluster
+        varType: map(string)
+        defaultValue: {}
+      - name: cluster_display_name
+        description: Human readable display name for the Alloy DB Cluster
+        varType: string
+      - name: cluster_initial_user
+        description: Alloy DB Cluster Initial User Credentials
+        varType: |-
+          object({
+              user     = optional(string),
+              password = string
+            })
+      - name: skip_await_major_version_upgrade
+        description: "Set to true to skip awaiting on the major version upgrade of the cluster. Possible values: true, false. Default value: true"
+        varType: bool
+        defaultValue: true
+      - name: subscription_type
+        description: "The subscription type of cluster. Possible values are: TRIAL, STANDARD"
+        varType: string
+        defaultValue: STANDARD
+      - name: cluster_encryption_key_name
+        description: "The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
+        varType: string
+      - name: automated_backup_policy
+        description: The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days
+        varType: |-
+          object({
+              location      = optional(string)
+              backup_window = optional(string)
+              enabled       = optional(bool)
+
+              weekly_schedule = optional(object({
+                days_of_week = optional(list(string))
+                start_times  = list(string)
+              })),
+
+              quantity_based_retention_count = optional(number)
+              time_based_retention_count     = optional(string)
+              labels                         = optional(map(string))
+              backup_encryption_key_name     = optional(string)
+            })
+      - name: continuous_backup_enable
+        description: Whether continuous backup recovery is enabled. If not set, defaults to true
+        varType: bool
+        defaultValue: true
+      - name: continuous_backup_recovery_window_days
+        description: The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35
+        varType: number
+        defaultValue: 14
+      - name: maintenance_update_policy
+        description: defines the policy for system updates
+        varType: |-
+          object({
+              maintenance_windows = object({
+                day = string
+                start_time = object({
+                  hours = number
+                })
+              })
+            })
+      - name: continuous_backup_encryption_key_name
+        description: "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
+        varType: string
+      - name: primary_instance
+        description: Primary cluster configuration that supports read and write operations.
+        varType: |-
+          object({
+              instance_id        = string,
+              display_name       = optional(string),
+              database_flags     = optional(map(string))
+              labels             = optional(map(string))
+              annotations        = optional(map(string))
+              gce_zone           = optional(string)
+              availability_type  = optional(string)
+              machine_cpu_count  = optional(number, 2)
+              ssl_mode           = optional(string)
+              require_connectors = optional(bool)
+              query_insights_config = optional(object({
+                query_string_length     = optional(number)
+                record_application_tags = optional(bool)
+                record_client_address   = optional(bool)
+                query_plans_per_minute  = optional(number)
+              }))
+              enable_public_ip          = optional(bool, false)
+              enable_outbound_public_ip = optional(bool, false)
+              cidr_range                = optional(list(string))
+            })
+        required: true
+      - name: read_pool_instance
+        description: List of Read Pool Instances to be created
+        varType: |-
+          list(object({
+              instance_id        = string
+              display_name       = string
+              node_count         = optional(number, 1)
+              database_flags     = optional(map(string))
+              availability_type  = optional(string)
+              gce_zone           = optional(string)
+              machine_cpu_count  = optional(number, 2)
+              ssl_mode           = optional(string)
+              require_connectors = optional(bool)
+              query_insights_config = optional(object({
+                query_string_length     = optional(number)
+                record_application_tags = optional(bool)
+                record_client_address   = optional(bool)
+                query_plans_per_minute  = optional(number)
+              }))
+              enable_public_ip          = optional(bool, false)
+              enable_outbound_public_ip = optional(bool, false)
+              cidr_range                = optional(list(string))
+            }))
+        defaultValue: []
+      - name: primary_cluster_name
+        description: Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster
+        varType: string
+      - name: network_self_link
+        description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false
+        varType: string
+      - name: allocated_ip_range
+        description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
+        varType: string
+      - name: database_version
+        description: "The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES_14, POSTGRES_15"
+        varType: string
+      - name: psc_enabled
+        description: Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect`
+        varType: bool
+        defaultValue: false
+      - name: psc_allowed_consumer_projects
+        description: List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only.
+        varType: list(string)
+        defaultValue: []
+      - name: deletion_policy
+        description: Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster
+        varType: string
+      - name: network_attachment_resource
+        description: "The network attachment resource created in the consumer project to which the PSC interface will be linked. Needed for AllloyDB outbound connectivity. This is of the format: projects/{CONSUMER_PROJECT}/regions/{REGION}/networkAttachments/{NETWORK_ATTACHMENT_NAME}. The network attachment must be in the same region as the instance"
+        varType: string
+      - name: restore_cluster
+        description: restore cluster from a backup source. Only one of restore_backup_source or restore_continuous_backup_source should be set
+        varType: |-
+          object({
+              restore_backup_source = optional(object({
+                backup_name = string
+              }))
+              restore_continuous_backup_source = optional(object({
+                cluster       = string
+                point_in_time = string
+              }))
+            })
+    outputs:
+      - name: cluster
+        description: Cluster created
+      - name: cluster_id
+        description: ID of the Alloy DB Cluster created
+      - name: cluster_name
+        description: ID of the Alloy DB Cluster created
+      - name: primary_instance
+        description: Primary instance created
+      - name: primary_instance_id
+        description: ID of the primary instance created
+      - name: primary_psc_attachment_link
+        description: The private service connect (psc) attachment created for primary instance
+      - name: primary_psc_dns_name
+        description: The DNS name of the instance for PSC connectivity created for primary instance
+      - name: read_instance_ids
+        description: IDs of the read instances created
+      - name: read_psc_attachment_links
+        description: The private service connect (psc) attachment created read replica instances
+      - name: read_psc_dns_names
+        description: The DNS names of the instances for PSC connectivity created for replica instances
+      - name: replica_instances
+        description: Replica instances created
+  requirements:
+    roles:
+      - level: Project
+        roles:
+          - roles/owner
+          - roles/alloydb.admin
+    services:
+      - cloudresourcemanager.googleapis.com
+      - storage-api.googleapis.com
+      - serviceusage.googleapis.com
+      - servicenetworking.googleapis.com
+      - cloudkms.googleapis.com
+      - alloydb.googleapis.com
+      - servicedirectory.googleapis.com
+      - dns.googleapis.com
+    providerVersions:
+      - source: hashicorp/google
+        version: ">= 6.26, < 7"
