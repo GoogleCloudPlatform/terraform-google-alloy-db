@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v4.0.0...v4.1.0) (2025-05-08)
+
+
+### Features
+
+* added restore cluster capability ([#131](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/131)) ([4d3cf12](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/4d3cf12c03b91b19a937c51340a46b03549b40ed))
+
 ## [4.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v3.3.0...v4.0.0) (2025-03-14)
 
 
