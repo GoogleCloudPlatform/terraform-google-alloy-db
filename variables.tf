@@ -140,6 +140,7 @@ variable "primary_instance" {
     gce_zone           = optional(string)
     availability_type  = optional(string)
     machine_cpu_count  = optional(number, 2)
+    machine_type       = optional(string)
     ssl_mode           = optional(string)
     require_connectors = optional(bool)
     query_insights_config = optional(object({
@@ -154,8 +155,8 @@ variable "primary_instance" {
   })
   nullable = false
   validation {
-    condition     = contains([2, 4, 8, 16, 32, 64, 96, 128], var.primary_instance.machine_cpu_count)
-    error_message = "machine_cpu_count must be one of [2, 4, 8, 16, 32, 64, 96, 128]"
+    condition     = contains([1, 2, 4, 8, 16, 32, 64, 96, 128], var.primary_instance.machine_cpu_count)
+    error_message = "machine_cpu_count must be one of [1, 2, 4, 8, 16, 32, 64, 96, 128]"
   }
   validation {
     condition     = can(regex("^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$", var.primary_instance.instance_id))
@@ -185,6 +186,7 @@ variable "read_pool_instance" {
     node_count         = optional(number, 1)
     database_flags     = optional(map(string))
     machine_cpu_count  = optional(number, 2)
+    machine_type       = optional(string)
     ssl_mode           = optional(string)
     require_connectors = optional(bool)
     query_insights_config = optional(object({
@@ -199,8 +201,8 @@ variable "read_pool_instance" {
   nullable = false
   default  = []
   validation {
-    condition     = alltrue([for rp in var.read_pool_instance : contains([2, 4, 8, 16, 32, 64, 96, 128], rp.machine_cpu_count)])
-    error_message = "machine_cpu_count must be one of [2, 4, 8, 16, 32, 64, 96, 128]"
+    condition     = alltrue([for rp in var.read_pool_instance : contains([1, 2, 4, 8, 16, 32, 64, 96, 128], rp.machine_cpu_count)])
+    error_message = "machine_cpu_count must be one of [1, 2, 4, 8, 16, 32, 64, 96, 128]"
   }
 }
 

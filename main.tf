@@ -220,7 +220,8 @@ resource "google_alloydb_instance" "primary" {
   }
 
   machine_config {
-    cpu_count = var.primary_instance.machine_cpu_count
+    cpu_count    = var.primary_instance.machine_cpu_count
+    machine_type = var.primary_instance.machine_type
   }
 
   dynamic "client_connection_config" {
@@ -282,7 +283,8 @@ resource "google_alloydb_instance" "read_pool" {
 
   database_flags = each.value.database_flags
   machine_config {
-    cpu_count = each.value.machine_cpu_count
+    cpu_count    = each.value.machine_cpu_count
+    machine_type = each.value.machine_type
   }
 
   dynamic "client_connection_config" {
