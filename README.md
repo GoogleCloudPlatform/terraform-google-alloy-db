@@ -38,30 +38,50 @@ module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
   version              = "~> 4.0"
 
+  project_id           = <"PROJECT_ID">
   cluster_id           = "alloydb-cluster"
   cluster_location     = "us-central1"
-  project_id           = <"PROJECT_ID">
-  cluster_labels       = {}
-  cluster_display_name = ""
   cluster_initial_user = {
-    user     = "<USER_NAME>",
+    user     = "<USER_NAME>"
+    password = "<PASSWORD>"
+  }
+  network_self_link = "projects/${project_id}/global/networks/${network_name}"
+
+  primary_instance = {
+    instance_id = "primary-instance"
+  }
+}
+```
+
+- Usage of this module for creating a AlloyDB Cluster with the automated backup policy, a primary instance, zonal and regional read replica instances:
+
+```hcl
+module "alloy-db" {
+  source               = "GoogleCloudPlatform/alloy-db/google"
+  version              = "~> 4.0"
+
+  project_id           = <PROJECT_ID>
+  cluster_id           = "alloydb-cluster-with-primary-instance"
+  cluster_location     = "us-central1"
+  cluster_display_name = "cluster-1"
+  cluster_initial_user = {
+    user     = "<USER_NAME>"
     password = "<PASSWORD>"
   }
   network_self_link = "projects/${project_id}/global/networks/${network_name}"
 
   automated_backup_policy = {
     location      = "us-central1"
-    backup_window = "1800s",
-    enabled       = true,
+    backup_window = "1800s"
+    enabled       = true
     weekly_schedule = {
-      days_of_week = ["FRIDAY"],
-      start_times  = ["2:00:00:00", ]
+      days_of_week = ["FRIDAY"]
+      start_times  = ["2:00:00:00"]
     }
-    quantity_based_retention_count = 1,
-    time_based_retention_count     = null,
+    quantity_based_retention_count = 1
     labels = {
       test = "alloydb-cluster"
-    },
+    }
   }
   primary_instance = null
 
@@ -90,10 +110,9 @@ module "alloy-db" {
   automated_backup_policy = null
 
   primary_instance = {
-    instance_id       = "primary-instance",
-    instance_type     = "PRIMARY",
-    machine_cpu_count = 2,
-    database_flags    = {},
+    instance_id       = "primary-instance"
+    instance_type     = "PRIMARY"
+    machine_cpu_count = 2
     display_name      = "alloydb-primary-instance"
   }
 
@@ -101,11 +120,18 @@ module "alloy-db" {
     {
       instance_id        = "cluster-1-rr-1"
       display_name       = "cluster-1-rr-1"
+      node_count         = 1 # automatically zonal
+      require_connectors = false
+      ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    },
+    {
+      instance_id        = "cluster-1-rr-2"
+      display_name       = "cluster-1-rr-2"
+      node_count         = 2 # automatically regional
       require_connectors = false
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   ]
-
 }
 ```
 
@@ -137,7 +163,7 @@ module "alloy-db" {
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | psc\_allowed\_consumer\_projects | List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only. | `list(string)` | `[]` | no |
 | psc\_enabled | Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc\_enabled is set to true, then network\_self\_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect` | `bool` | `false` | no |
-| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id        = string<br>    display_name       = string<br>    node_count         = optional(number, 1)<br>    database_flags     = optional(map(string))<br>    availability_type  = optional(string)<br>    gce_zone           = optional(string)<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip          = optional(bool, false)<br>    enable_outbound_public_ip = optional(bool, false)<br>    cidr_range                = optional(list(string))<br>  }))</pre> | `[]` | no |
+| read\_pool\_instance | List of Read Pool Instances to be created | <pre>list(object({<br>    instance_id        = string<br>    display_name       = string<br>    node_count         = optional(number, 1)<br>    database_flags     = optional(map(string))<br>    machine_cpu_count  = optional(number, 2)<br>    ssl_mode           = optional(string)<br>    require_connectors = optional(bool)<br>    query_insights_config = optional(object({<br>      query_string_length     = optional(number)<br>      record_application_tags = optional(bool)<br>      record_client_address   = optional(bool)<br>      query_plans_per_minute  = optional(number)<br>    }))<br>    enable_public_ip = optional(bool, false)<br>    cidr_range       = optional(list(string))<br>  }))</pre> | `[]` | no |
 | restore\_cluster | restore cluster from a backup source. Only one of restore\_backup\_source or restore\_continuous\_backup\_source should be set | <pre>object({<br>    restore_backup_source = optional(object({<br>      backup_name = string<br>    }))<br>    restore_continuous_backup_source = optional(object({<br>      cluster       = string<br>      point_in_time = string<br>    }))<br>  })</pre> | `null` | no |
 | skip\_await\_major\_version\_upgrade | Set to true to skip awaiting on the major version upgrade of the cluster. Possible values: true, false. Default value: true | `bool` | `true` | no |
 | subscription\_type | The subscription type of cluster. Possible values are: TRIAL, STANDARD | `string` | `"STANDARD"` | no |
