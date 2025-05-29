@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v4.1.0...v5.0.0) (2025-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>6.36:** Allow primary and read pool machine_type.  CPU count can be 1. ([#135](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/135))
+
+### Features
+
+* AlloyDB user management and usability fixes ([#130](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/130)) ([e04b16e](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/e04b16e1dc474debd6d0241b80e0280fe4bda2dc))
+* **TPG>6.36:** Allow primary and read pool machine_type.  CPU count can be 1. ([#135](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/135)) ([454206d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/454206d7bcdba93cbd14dc260107345a7dc13cf9))
+
 ## [4.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v4.0.0...v4.1.0) (2025-05-08)
 
 
