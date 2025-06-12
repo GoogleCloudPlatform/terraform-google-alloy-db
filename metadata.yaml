@@ -139,6 +139,7 @@ spec:
               gce_zone           = optional(string)
               availability_type  = optional(string)
               machine_cpu_count  = optional(number, 2)
+              machine_type       = optional(string)
               ssl_mode           = optional(string)
               require_connectors = optional(bool)
               query_insights_config = optional(object({
@@ -160,9 +161,8 @@ spec:
               display_name       = string
               node_count         = optional(number, 1)
               database_flags     = optional(map(string))
-              availability_type  = optional(string)
-              gce_zone           = optional(string)
               machine_cpu_count  = optional(number, 2)
+              machine_type       = optional(string)
               ssl_mode           = optional(string)
               require_connectors = optional(bool)
               query_insights_config = optional(object({
@@ -171,9 +171,8 @@ spec:
                 record_client_address   = optional(bool)
                 query_plans_per_minute  = optional(number)
               }))
-              enable_public_ip          = optional(bool, false)
-              enable_outbound_public_ip = optional(bool, false)
-              cidr_range                = optional(list(string))
+              enable_public_ip = optional(bool, false)
+              cidr_range       = optional(list(string))
             }))
         defaultValue: []
       - name: primary_cluster_name
