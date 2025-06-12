@@ -65,6 +65,7 @@ docker_test_integration:
 .PHONY: docker_test_lint
 docker_test_lint:
 	docker run --rm -it \
+		-e ENABLE_BPMETADATA=1 \
 		-v $(CURDIR):/workspace \
 		$(REGISTRY_URL)/${DOCKER_IMAGE_DEVELOPER_TOOLS}:${DOCKER_TAG_VERSION_DEVELOPER_TOOLS} \
 		/usr/local/bin/test_lint.sh
@@ -82,9 +83,18 @@ docker_test_lint_gha:
 .PHONY: docker_generate_docs
 docker_generate_docs:
 	docker run --rm -it \
+		-e ENABLE_BPMETADATA=1 \
 		-v $(CURDIR):/workspace \
 		$(REGISTRY_URL)/${DOCKER_IMAGE_DEVELOPER_TOOLS}:${DOCKER_TAG_VERSION_DEVELOPER_TOOLS} \
-		/bin/bash -c 'source /usr/local/bin/task_helper_functions.sh && generate_docs'
+		/bin/bash -c 'source /usr/local/bin/task_helper_functions.sh && generate_docs display'
+
+# Generate metadata
+.PHONY: docker_generate_metadata_w_display
+docker_generate_metadata:
+	docker run --rm -it \
+		-v "$(CURDIR)":/workspace \
+		$(REGISTRY_URL)/${DOCKER_IMAGE_DEVELOPER_TOOLS}:${DOCKER_TAG_VERSION_DEVELOPER_TOOLS} \
+		/bin/bash -c 'source /usr/local/bin/task_helper_functions.sh && generate_metadata display'
 
 # Alias for backwards compatibility
 .PHONY: generate_docs
