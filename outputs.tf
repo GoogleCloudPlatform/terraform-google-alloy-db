@@ -74,3 +74,11 @@ output "replica_instances" {
   description = "Replica instances created"
   value       = resource.google_alloydb_instance.read_pool
 }
+
+output "env_vars" {
+  description = "Exported environment variables"
+  value = {
+    "ALLOYDB_CLUSTER" : google_alloydb_cluster.default.id,
+    "ALLOYDB_PRIMARY_INSTANCE" : google_alloydb_instance.primary.id
+  }
+}
