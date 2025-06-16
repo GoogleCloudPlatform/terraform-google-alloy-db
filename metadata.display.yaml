@@ -69,9 +69,6 @@ spec:
         deletion_policy:
           name: deletion_policy
           title: Deletion Policy
-        location:
-          name: location
-          title: Location
         maintenance_update_policy:
           name: maintenance_update_policy
           title: Maintenance Update Policy
