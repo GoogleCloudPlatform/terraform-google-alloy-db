@@ -75,10 +75,14 @@ output "replica_instances" {
   value       = resource.google_alloydb_instance.read_pool
 }
 
+output "primary_instance_ip" {
+  description = "The IP address of the primary AlloyDB instance"
+  value       = google_alloydb_instance.primary.ip_address
+}
+
 output "env_vars" {
   description = "Exported environment variables"
   value = {
-    "ALLOYDB_CLUSTER" : google_alloydb_cluster.default.id,
-    "ALLOYDB_PRIMARY_INSTANCE" : google_alloydb_instance.primary.id
+    "ALLOYDB_INSTANCE_HOST" : google_alloydb_instance.primary.ip_address
   }
 }
