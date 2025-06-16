@@ -1,0 +1,107 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-alloy-db-display
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  info:
+    title: terraform-google-alloy-db
+    source:
+      repo: https://github.com/GoogleCloudPlatform/terraform-google-alloy-db.git
+      sourceType: git
+  ui:
+    input:
+      variables:
+        allocated_ip_range:
+          name: allocated_ip_range
+          title: Allocated Ip Range
+        automated_backup_policy:
+          name: automated_backup_policy
+          title: Automated Backup Policy
+        cluster_display_name:
+          name: cluster_display_name
+          title: Cluster Display Name
+        cluster_encryption_key_name:
+          name: cluster_encryption_key_name
+          title: Cluster Encryption Key Name
+        cluster_id:
+          name: cluster_id
+          title: Cluster Id
+        cluster_initial_user:
+          name: cluster_initial_user
+          title: Cluster Initial User
+        cluster_labels:
+          name: cluster_labels
+          title: Cluster Labels
+        cluster_location:
+          name: cluster_location
+          title: Cluster Location
+        cluster_type:
+          name: cluster_type
+          title: Cluster Type
+        continuous_backup_enable:
+          name: continuous_backup_enable
+          title: Continuous Backup Enable
+        continuous_backup_encryption_key_name:
+          name: continuous_backup_encryption_key_name
+          title: Continuous Backup Encryption Key Name
+        continuous_backup_recovery_window_days:
+          name: continuous_backup_recovery_window_days
+          title: Continuous Backup Recovery Window Days
+        database_version:
+          name: database_version
+          title: Database Version
+        deletion_policy:
+          name: deletion_policy
+          title: Deletion Policy
+        maintenance_update_policy:
+          name: maintenance_update_policy
+          title: Maintenance Update Policy
+        network_attachment_resource:
+          name: network_attachment_resource
+          title: Network Attachment Resource
+        network_self_link:
+          name: network_self_link
+          title: Network Self Link
+        primary_cluster_name:
+          name: primary_cluster_name
+          title: Primary Cluster Name
+        primary_instance:
+          name: primary_instance
+          title: Primary Instance
+        project_id:
+          name: project_id
+          title: Project Id
+        psc_allowed_consumer_projects:
+          name: psc_allowed_consumer_projects
+          title: Psc Allowed Consumer Projects
+        psc_enabled:
+          name: psc_enabled
+          title: Psc Enabled
+        read_pool_instance:
+          name: read_pool_instance
+          title: Read Pool Instance
+        restore_cluster:
+          name: restore_cluster
+          title: Restore Cluster
+        skip_await_major_version_upgrade:
+          name: skip_await_major_version_upgrade
+          title: Skip Await Major Version Upgrade
+        subscription_type:
+          name: subscription_type
+          title: Subscription Type
