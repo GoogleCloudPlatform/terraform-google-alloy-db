@@ -389,6 +389,9 @@ spec:
         type: string
       - name: env_vars
         description: Exported environment variables
+        type:
+          - object
+          - ALLOYDB_INSTANCE_HOST: string
       - name: primary_instance
         description: Primary instance created
         type:
@@ -493,6 +496,7 @@ spec:
         type: string
       - name: primary_instance_ip
         description: The IP address of the primary AlloyDB instance
+        type: string
       - name: primary_psc_attachment_link
         description: The private service connect (psc) attachment created for primary instance
         type: string
