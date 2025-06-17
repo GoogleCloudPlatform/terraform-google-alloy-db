@@ -42,8 +42,8 @@ module "psc_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 18.0"
 
-  name              = "ci-alloy-db-psc-2-fixed"
-  project_id = "ci-alloy-db-psc-2-fixed"
+  name              = "ci-alloy-db-psc"
+  random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
   billing_account   = var.billing_account
