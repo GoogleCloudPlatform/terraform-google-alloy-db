@@ -175,8 +175,10 @@ module "alloy-db" {
 | cluster | Cluster created |
 | cluster\_id | ID of the Alloy DB Cluster created |
 | cluster\_name | ID of the Alloy DB Cluster created |
+| env\_vars | Exported environment variables |
 | primary\_instance | Primary instance created |
 | primary\_instance\_id | ID of the primary instance created |
+| primary\_instance\_ip | The IP address of the primary AlloyDB instance |
 | primary\_psc\_attachment\_link | The private service connect (psc) attachment created for primary instance |
 | primary\_psc\_dns\_name | The DNS name of the instance for PSC connectivity created for primary instance |
 | read\_instance\_ids | IDs of the read instances created |

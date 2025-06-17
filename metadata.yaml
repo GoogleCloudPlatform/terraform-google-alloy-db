@@ -387,6 +387,8 @@ spec:
       - name: cluster_name
         description: ID of the Alloy DB Cluster created
         type: string
+      - name: env_vars
+        description: Exported environment variables
       - name: primary_instance
         description: Primary instance created
         type:
@@ -489,6 +491,8 @@ spec:
       - name: primary_instance_id
         description: ID of the primary instance created
         type: string
+      - name: primary_instance_ip
+        description: The IP address of the primary AlloyDB instance
       - name: primary_psc_attachment_link
         description: The private service connect (psc) attachment created for primary instance
         type: string
