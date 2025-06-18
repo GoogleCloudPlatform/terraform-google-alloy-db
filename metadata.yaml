@@ -24,7 +24,7 @@ spec:
     source:
       repo: https://github.com/GoogleCloudPlatform/terraform-google-alloy-db.git
       sourceType: git
-    version: 5.0.0
+    version: 5.0.1
     actuationTool:
       flavor: Terraform
       version: ">= 1.3"
@@ -507,7 +507,7 @@ spec:
         description: IDs of the read instances created
         type:
           - list
-          - - string
+          - string
       - name: read_psc_attachment_links
         description: The private service connect (psc) attachment created read replica instances
         type: string
