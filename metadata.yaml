@@ -506,8 +506,8 @@ spec:
       - name: read_instance_ids
         description: IDs of the read instances created
         type:
-          - tuple
-          - - string
+          - list
+          - string
       - name: read_psc_attachment_links
         description: The private service connect (psc) attachment created read replica instances
         type: string
