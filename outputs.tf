@@ -63,6 +63,7 @@ output "cluster_name" {
 output "cluster" {
   description = "Cluster created"
   value       = resource.google_alloydb_cluster.default
+  sensitive   = true
 }
 
 output "primary_instance" {
