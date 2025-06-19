@@ -20,6 +20,7 @@ locals {
     "roles/cloudkms.admin",
     "roles/cloudkms.autokeyAdmin",
     "roles/cloudkms.cryptoKeyEncrypterDecrypter",
+    "roles/compute.admin",
     "roles/dns.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/serviceusage.serviceUsageAdmin",
