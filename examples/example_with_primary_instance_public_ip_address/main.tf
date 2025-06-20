@@ -16,7 +16,7 @@
 
 module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
 
   project_id       = var.project_id

@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.0...v5.0.1) (2025-06-18)
+
+
+### Bug Fixes
+
+* Exposing env variables to be consumed in ADC ([#143](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/143)) ([1db4c26](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/1db4c26da0b1cb1d4bea85c88ba88f82d23e7912))
+* output type fix ([#147](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/147)) ([6825d56](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/6825d56904a5703dd75bd174ea7261f35dbd0eef))
+
 ## [5.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v4.1.0...v5.0.0) (2025-05-29)
 
 
