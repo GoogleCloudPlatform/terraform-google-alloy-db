@@ -61,7 +61,7 @@ module "alloydb_east" {
 -   source  = "GoogleCloudPlatform/alloy-db/google"
 -   version = "~> 2.0"
 -   cluster_id       = "cluster-${var.region_central}-psc"
--   cluster_location = var.region_central
+-   location         = var.region_central
 -   project_id       = var.project_id
 - ...
 - }
@@ -89,7 +89,7 @@ module "alloydb_central" {
 +  primary_cluster_name = module.alloydb_east.cluster_name
 
   cluster_id       = "cluster-1"
-  cluster_location = var.region1
+  location         = var.region1
   project_id       = var.project_id
 
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"

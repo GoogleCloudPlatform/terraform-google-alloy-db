@@ -21,7 +21,7 @@ module "alloydb_east" {
   primary_cluster_name = module.alloydb_central.cluster_name ## Comment this line to promote this cluster as primary cluster
 
   cluster_id       = "cluster-${var.region_east}"
-  cluster_location = var.region_east
+  location         = var.region_east
   project_id       = var.project_id
 
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"

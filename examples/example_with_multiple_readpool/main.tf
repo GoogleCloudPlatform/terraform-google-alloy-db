@@ -24,7 +24,7 @@ module "alloy-db" {
 
   project_id           = var.project_id
   cluster_id           = "alloydb-cluster-all"
-  cluster_location     = "us-central1"
+  location             = "us-central1"
   cluster_labels       = {}
   cluster_display_name = ""
   cluster_initial_user = {

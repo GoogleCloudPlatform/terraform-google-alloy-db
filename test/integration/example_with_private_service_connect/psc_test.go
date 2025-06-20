@@ -39,10 +39,10 @@ func TestPscExample(t *testing.T) {
 		alloydbClusterIdPathList := strings.Split(example.GetStringOutput("cluster_id_central"), "/")
 		alloydbClusterId := alloydbClusterIdPathList[len(alloydbClusterIdPathList)-1]
 
-		cluster_location := region
+		location := region
 		state := "READY"
-		gcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
-		gcOpsPrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--cluster", alloydbClusterId, "--format", "json"})
+		gcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", location, "--format", "json"})
+		gcOpsPrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", location, "--cluster", alloydbClusterId, "--format", "json"})
 
 		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydbClusterId, gcOpsClusterInfo)
 		alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", gcOpsPrimaryInstanceInfo).Array()[0]
@@ -52,9 +52,9 @@ func TestPscExample(t *testing.T) {
 		secondaryAlloydbClusterIdPathList := strings.Split(example.GetStringOutput("cluster_id_east"), "/")
 		secondaryAlloydbClusterId := secondaryAlloydbClusterIdPathList[len(secondaryAlloydbClusterIdPathList)-1]
 
-		secondary_cluster_location := secondaryRegion
-		secondaryGcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_cluster_location, "--format", "json"})
-		secondaryGcOpsPrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_cluster_location, "--cluster", secondaryAlloydbClusterId, "--format", "json"})
+		secondary_location := secondaryRegion
+		secondaryGcOpsClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_location, "--format", "json"})
+		secondaryGcOpsPrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", secondary_location, "--cluster", secondaryAlloydbClusterId, "--format", "json"})
 
 		secondaryAlloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+secondaryAlloydbClusterId, secondaryGcOpsClusterInfo)
 		SecondaryAlloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", secondaryGcOpsPrimaryInstanceInfo).Array()[0]

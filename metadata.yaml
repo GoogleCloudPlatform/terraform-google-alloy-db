@@ -58,7 +58,7 @@ spec:
         description: "The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY"
         varType: string
         defaultValue: PRIMARY
-      - name: cluster_location
+      - name: location
         description: Location where AlloyDb cluster will be deployed
         varType: string
         required: true
@@ -507,7 +507,7 @@ spec:
         description: IDs of the read instances created
         type:
           - list
-          - - string
+          - string
       - name: read_psc_attachment_links
         description: The private service connect (psc) attachment created read replica instances
         type: string
