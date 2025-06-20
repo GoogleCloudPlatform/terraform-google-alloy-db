@@ -19,7 +19,7 @@ module "alloydb_source" {
   version = "~> 5.0"
 
   cluster_id       = "source-cluster-${var.region_central}"
-  cluster_location = var.region_central
+  location         = var.region_central
   project_id       = var.project_id
 
   network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
@@ -49,7 +49,7 @@ module "alloydb_restore_from_backup" {
   version = "~> 5.0"
 
   cluster_id       = "bkup-restored-cluster-${var.region_central}"
-  cluster_location = var.region_central
+  location         = var.region_central
   project_id       = var.project_id
 
   network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"

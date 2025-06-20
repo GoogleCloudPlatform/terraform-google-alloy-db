@@ -38,10 +38,10 @@ func TestExampleWithPrimary(t *testing.T) {
 		// Primary Instance Information
 		alloydb_primary_instance_path := example.GetStringOutput("primary_instance_id")
 
-		cluster_location := "us-central1"
+		location := "us-central1"
 		state := "READY"
-		gcOps_ClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--format", "json"})
-		gcOps_PrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", cluster_location, "--cluster", alloydb_cluster_id, "--format", "json"})
+		gcOps_ClusterInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", location, "--format", "json"})
+		gcOps_PrimaryInstanceInfo := gcloud.WithCommonArgs([]string{"--project", projectId, "--region", location, "--cluster", alloydb_cluster_id, "--format", "json"})
 
 		alloyDBClusterInfo := gcloud.Run(t, "alloydb clusters describe "+alloydb_cluster_id, gcOps_ClusterInfo)
 		alloyDBInstanceInfo := gcloud.Run(t, "alloydb instances list ", gcOps_PrimaryInstanceInfo).Array()[0]
