@@ -33,7 +33,7 @@ variable "cluster_type" {
   default     = "PRIMARY"
 }
 
-variable "cluster_location" {
+variable "location" {
   description = "Location where AlloyDb cluster will be deployed"
   type        = string
   nullable    = false

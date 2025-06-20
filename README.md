@@ -40,7 +40,7 @@ module "alloy-db" {
 
   project_id           = <"PROJECT_ID">
   cluster_id           = "alloydb-cluster"
-  cluster_location     = "us-central1"
+  location             = "us-central1"
   cluster_initial_user = {
     user     = "<USER_NAME>"
     password = "<PASSWORD>"
@@ -62,7 +62,7 @@ module "alloy-db" {
 
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
-  cluster_location     = "us-central1"
+  location             = "us-central1"
   cluster_display_name = "cluster-1"
   cluster_initial_user = {
     user     = "<USER_NAME>"
@@ -98,7 +98,7 @@ module "alloy-db" {
   version              = "~> 4.0"
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
-  cluster_location     = "us-central1"
+  location             = "us-central1"
   cluster_labels       = {}
   cluster_display_name = ""
   cluster_initial_user = {
@@ -148,13 +148,13 @@ module "alloy-db" {
 | cluster\_id | The ID of the alloydb cluster | `string` | n/a | yes |
 | cluster\_initial\_user | Alloy DB Cluster Initial User Credentials | <pre>object({<br>    user     = optional(string),<br>    password = string<br>  })</pre> | `null` | no |
 | cluster\_labels | User-defined labels for the alloydb cluster | `map(string)` | `{}` | no |
-| cluster\_location | Location where AlloyDb cluster will be deployed | `string` | n/a | yes |
 | cluster\_type | The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY | `string` | `"PRIMARY"` | no |
 | continuous\_backup\_enable | Whether continuous backup recovery is enabled. If not set, defaults to true | `bool` | `true` | no |
 | continuous\_backup\_encryption\_key\_name | The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY\_NAME] | `string` | `null` | no |
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
 | database\_version | The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES\_14, POSTGRES\_15 | `string` | `null` | no |
 | deletion\_policy | Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster | `string` | `null` | no |
+| location | Location where AlloyDb cluster will be deployed | `string` | n/a | yes |
 | maintenance\_update\_policy | defines the policy for system updates | <pre>object({<br>    maintenance_windows = object({<br>      day = string<br>      start_time = object({<br>        hours = number<br>      })<br>    })<br>  })</pre> | `null` | no |
 | network\_attachment\_resource | The network attachment resource created in the consumer project to which the PSC interface will be linked. Needed for AllloyDB outbound connectivity. This is of the format: projects/{CONSUMER\_PROJECT}/regions/{REGION}/networkAttachments/{NETWORK\_ATTACHMENT\_NAME}. The network attachment must be in the same region as the instance | `string` | `null` | no |
 | network\_self\_link | Network ID where the AlloyDb cluster will be deployed. If network\_self\_link is set then psc\_enabled should be set to false | `string` | `null` | no |

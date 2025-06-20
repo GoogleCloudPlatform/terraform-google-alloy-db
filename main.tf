@@ -33,7 +33,7 @@ locals {
 
 resource "google_alloydb_cluster" "default" {
   cluster_id                       = var.cluster_id
-  location                         = var.cluster_location
+  location                         = var.location
   display_name                     = var.cluster_display_name
   project                          = var.project_id
   labels                           = var.cluster_labels

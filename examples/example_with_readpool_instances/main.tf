@@ -24,7 +24,7 @@ module "alloy-db" {
 
   project_id       = var.project_id
   cluster_id       = "alloydb-cluster-nrp"
-  cluster_location = "us-central1"
+  location         = "us-central1"
   cluster_initial_user = {
     user     = "alloydb-cluster-full",
     password = "alloydb-cluster-password"

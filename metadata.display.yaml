@@ -48,9 +48,6 @@ spec:
         cluster_labels:
           name: cluster_labels
           title: Cluster Labels
-        cluster_location:
-          name: cluster_location
-          title: Cluster Location
         cluster_type:
           name: cluster_type
           title: Cluster Type
@@ -69,6 +66,9 @@ spec:
         deletion_policy:
           name: deletion_policy
           title: Deletion Policy
+        location:
+          name: location
+          title: Location
         maintenance_update_policy:
           name: maintenance_update_policy
           title: Maintenance Update Policy

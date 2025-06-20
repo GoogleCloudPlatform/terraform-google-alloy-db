@@ -19,7 +19,7 @@ module "alloydb_central" {
   version = "~> 5.0"
 
   cluster_id       = "cluster-${var.region_central}-psc"
-  cluster_location = var.region_central
+  location         = var.region_central
   project_id       = var.project_id
 
   psc_enabled                   = true
