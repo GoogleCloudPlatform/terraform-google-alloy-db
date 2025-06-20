@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.0.0...v6.0.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* Granular permissions ([#146](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/146)) ([1ef6b62](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/1ef6b62dd951466833f87131c8bf5796d35d2f00))
+
 ## [6.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.1...v6.0.0) (2025-06-20)
 
 
