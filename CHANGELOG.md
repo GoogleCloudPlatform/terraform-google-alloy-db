@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.1...v6.0.0) (2025-06-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* Updating cluster_location variable to location for ADC compliance ([#148](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/148))
+
+### Features
+
+* Updating cluster_location variable to location for ADC compliance ([#148](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/148)) ([a7cab02](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/a7cab0254ad4470c36adef70dbb28cca45719370))
+
 ## [5.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.0...v5.0.1) (2025-06-18)
 
 
