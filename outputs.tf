@@ -91,6 +91,6 @@ output "env_vars" {
   description = "Exported environment variables"
   value = {
     "ALLOYDB_INSTANCE_HOST" : google_alloydb_instance.primary.ip_address,
-    "ALLOY_DB_READ_REPLICAS" : jsonencode([for rd, details in google_alloydb_instance.read_pool : details.ip_address])
+    "ALLOYDB_READ_REPLICAS" : jsonencode([for rd, details in google_alloydb_instance.read_pool : details.ip_address])
   }
 }

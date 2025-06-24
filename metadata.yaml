@@ -392,7 +392,7 @@ spec:
         type:
           - object
           - ALLOYDB_INSTANCE_HOST: string
-            ALLOY_DB_READ_REPLICAS: string
+            ALLOYDB_READ_REPLICAS: string
       - name: primary_instance
         description: Primary instance created
         type:
