@@ -80,9 +80,17 @@ output "primary_instance_ip" {
   value       = google_alloydb_instance.primary.ip_address
 }
 
+output "read_instance_ips" {
+  description = "Replica IPs"
+  value = [
+    for rd, details in google_alloydb_instance.read_pool : details.ip_address
+  ]
+}
+
 output "env_vars" {
   description = "Exported environment variables"
   value = {
-    "ALLOYDB_INSTANCE_HOST" : google_alloydb_instance.primary.ip_address
+    "ALLOYDB_INSTANCE_HOST" : google_alloydb_instance.primary.ip_address,
+    "ALLOY_DB_READ_REPLICAS" : jsonencode([for rd, details in google_alloydb_instance.read_pool : details.ip_address])
   }
 }

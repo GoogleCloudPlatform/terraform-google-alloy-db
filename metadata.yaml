@@ -392,6 +392,7 @@ spec:
         type:
           - object
           - ALLOYDB_INSTANCE_HOST: string
+            ALLOY_DB_READ_REPLICAS: string
       - name: primary_instance
         description: Primary instance created
         type:
@@ -505,6 +506,11 @@ spec:
         type: string
       - name: read_instance_ids
         description: IDs of the read instances created
+        type:
+          - list
+          - string
+      - name: read_instance_ips
+        description: Replica IPs
         type:
           - list
           - string
@@ -639,6 +645,7 @@ spec:
       - alloydb.googleapis.com
       - servicedirectory.googleapis.com
       - dns.googleapis.com
+      - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
         version: ">= 6.26, < 7"
