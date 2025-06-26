@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.0.0...v6.1.0) (2025-06-25)
+
+
+### Features
+
+* Exposing IPs of read replicas ([#152](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/152)) ([6fab74b](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/6fab74b79959fd54d35ed4e5f2700069b2a240b4))
+
+
+### Bug Fixes
+
+* Granular permissions ([#146](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/146)) ([1ef6b62](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/1ef6b62dd951466833f87131c8bf5796d35d2f00))
+
 ## [6.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.1...v6.0.0) (2025-06-20)
 
 
