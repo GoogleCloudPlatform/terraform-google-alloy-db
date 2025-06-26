@@ -242,6 +242,15 @@ variable "psc_allowed_consumer_projects" {
   default     = []
 }
 
+variable "psc_auto_connections" {
+  type = list(object({
+    consumer_network = string
+    consumer_project = string
+  }))
+  description = "List of PSC auto connections. Each connection specifies the consumer network and project for automatic PSC endpoint creation."
+  default     = []
+}
+
 variable "deletion_policy" {
   type        = string
   description = "Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster"

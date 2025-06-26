@@ -90,6 +90,9 @@ spec:
         psc_allowed_consumer_projects:
           name: psc_allowed_consumer_projects
           title: Psc Allowed Consumer Projects
+        psc_auto_connections:
+          name: psc_auto_connections
+          title: Psc Auto Connections
         psc_enabled:
           name: psc_enabled
           title: Psc Enabled

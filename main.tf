@@ -216,6 +216,14 @@ resource "google_alloydb_instance" "primary" {
           network_attachment_resource = var.network_attachment_resource
         }
       }
+
+      dynamic "psc_auto_connections" {
+        for_each = var.psc_auto_connections
+        content {
+          consumer_network = psc_auto_connections.value.consumer_network
+          consumer_project = psc_auto_connections.value.consumer_project
+        }
+      }
     }
   }
 
@@ -312,6 +320,14 @@ resource "google_alloydb_instance" "read_pool" {
     for_each = var.psc_enabled ? ["psc_instance_config"] : []
     content {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
+
+      dynamic "psc_auto_connections" {
+        for_each = var.psc_auto_connections
+        content {
+          consumer_network = psc_auto_connections.value.consumer_network
+          consumer_project = psc_auto_connections.value.consumer_project
+        }
+      }
     }
   }
 
