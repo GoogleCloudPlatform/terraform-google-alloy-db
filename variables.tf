@@ -130,7 +130,7 @@ variable "continuous_backup_encryption_key_name" {
 }
 
 variable "primary_instance" {
-  description = "Primary cluster configuration that supports read and write operations."
+  description = "Every cluster has one primary instance, providing a read or write access point to your data."
   type = object({
     instance_id        = string,
     display_name       = optional(string),

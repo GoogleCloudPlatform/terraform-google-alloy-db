@@ -51,7 +51,7 @@ spec:
         varType: string
         required: true
       - name: cluster_id
-        description: The ID of the alloydb cluster
+        description: The ID of the AlloyDB cluster
         varType: string
         required: true
       - name: cluster_type
@@ -59,18 +59,18 @@ spec:
         varType: string
         defaultValue: PRIMARY
       - name: location
-        description: Location where AlloyDb cluster will be deployed
+        description: Location where AlloyDB cluster will be deployed
         varType: string
         required: true
       - name: cluster_labels
-        description: User-defined labels for the alloydb cluster
+        description: User-defined labels for the AlloyDB cluster
         varType: map(string)
         defaultValue: {}
       - name: cluster_display_name
-        description: Human readable display name for the Alloy DB Cluster
+        description: Human readable display name for the AlloyDB Cluster
         varType: string
       - name: cluster_initial_user
-        description: Alloy DB Cluster Initial User Credentials
+        description: AlloyDB Cluster Initial User Credentials
         varType: |-
           object({
               user     = optional(string),
@@ -179,7 +179,7 @@ spec:
         description: Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster
         varType: string
       - name: network_self_link
-        description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false
+        description: Network ID where the AlloyDB cluster will be deployed. If network_self_link is set then psc_enabled should be set to false
         varType: string
       - name: allocated_ip_range
         description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
@@ -382,10 +382,10 @@ spec:
                   upgrade_time: string
             uid: string
       - name: cluster_id
-        description: ID of the Alloy DB Cluster created
+        description: ID of the AlloyDB Cluster created
         type: string
       - name: cluster_name
-        description: ID of the Alloy DB Cluster created
+        description: ID of the AlloyDB Cluster created
         type: string
       - name: env_vars
         description: Exported environment variables
