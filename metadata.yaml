@@ -439,12 +439,25 @@ spec:
             network_config:
               - list
               - - object
-                - authorized_external_networks:
+                - allocated_ip_range_override: string
+                  authorized_external_networks:
                     - list
                     - - object
                       - cidr_range: string
                   enable_outbound_public_ip: bool
                   enable_public_ip: bool
+            observability_config:
+              - list
+              - - object
+                - assistive_experiences_enabled: bool
+                  enabled: bool
+                  max_query_string_length: number
+                  preserve_comments: bool
+                  query_plans_per_minute: number
+                  record_application_tags: bool
+                  track_active_queries: bool
+                  track_wait_event_types: bool
+                  track_wait_events: bool
             outbound_public_ip_addresses:
               - list
               - string
@@ -568,12 +581,25 @@ spec:
                 network_config:
                   - list
                   - - object
-                    - authorized_external_networks:
+                    - allocated_ip_range_override: string
+                      authorized_external_networks:
                         - list
                         - - object
                           - cidr_range: string
                       enable_outbound_public_ip: bool
                       enable_public_ip: bool
+                observability_config:
+                  - list
+                  - - object
+                    - assistive_experiences_enabled: bool
+                      enabled: bool
+                      max_query_string_length: number
+                      preserve_comments: bool
+                      query_plans_per_minute: number
+                      record_application_tags: bool
+                      track_active_queries: bool
+                      track_wait_event_types: bool
+                      track_wait_events: bool
                 outbound_public_ip_addresses:
                   - list
                   - string
@@ -648,4 +674,6 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
+        version: ">= 6.26, < 7"
+      - source: hashicorp/google-beta
         version: ">= 6.26, < 7"

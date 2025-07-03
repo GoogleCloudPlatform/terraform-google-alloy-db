@@ -181,6 +181,8 @@ resource "google_alloydb_cluster" "default" {
 
 
 resource "google_alloydb_instance" "primary" {
+  provider          = google-beta
+
   cluster           = google_alloydb_cluster.default.name
   instance_id       = var.primary_instance.instance_id
   instance_type     = google_alloydb_cluster.default.cluster_type
@@ -257,6 +259,8 @@ resource "google_alloydb_instance" "primary" {
 # * gce_zone
 # * network_config.enable_outbound_public_ip
 resource "google_alloydb_instance" "read_pool" {
+  provider      = google-beta
+
   for_each      = local.read_pool_instance
   cluster       = google_alloydb_cluster.default.name
   instance_id   = each.key
