@@ -24,7 +24,7 @@ spec:
     source:
       repo: https://github.com/GoogleCloudPlatform/terraform-google-alloy-db.git
       sourceType: git
-    version: 6.0.0
+    version: 6.1.0
     actuationTool:
       flavor: Terraform
       version: ">= 1.3"
@@ -400,6 +400,7 @@ spec:
         type:
           - object
           - ALLOYDB_INSTANCE_HOST: string
+            ALLOYDB_READ_REPLICAS: string
       - name: primary_instance
         description: Primary instance created
         type:
@@ -513,6 +514,11 @@ spec:
         type: string
       - name: read_instance_ids
         description: IDs of the read instances created
+        type:
+          - list
+          - string
+      - name: read_instance_ips
+        description: Replica IPs
         type:
           - list
           - string

@@ -183,6 +183,7 @@ module "alloy-db" {
 | primary\_psc\_attachment\_link | The private service connect (psc) attachment created for primary instance |
 | primary\_psc\_dns\_name | The DNS name of the instance for PSC connectivity created for primary instance |
 | read\_instance\_ids | IDs of the read instances created |
+| read\_instance\_ips | Replica IPs |
 | read\_psc\_attachment\_links | The private service connect (psc) attachment created read replica instances |
 | read\_psc\_dns\_names | The DNS names of the instances for PSC connectivity created for replica instances |
 | replica\_instances | Replica instances created |
