@@ -91,7 +91,7 @@ spec:
               name: database_flags
               title: database_flags
               subtext: |
-                Customizable configuration settings that fine-tune database behavior, performance, and features to suit application needs. [Learn more](https://cloud.google.com/alloydb/docs/reference/database-flags)
+                Customizable configuration settings that fine-tune database behavior, performance, and features to suit application needs. Learn more at https://cloud.google.com/alloydb/docs/reference/database-flags
             instance_id:
               name: instance_id
               title: instance_id
