@@ -195,6 +195,14 @@ spec:
         description: List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only.
         varType: list(string)
         defaultValue: []
+      - name: psc_auto_connections
+        description: List of PSC auto connections. Each connection specifies the consumer network and project for automatic PSC endpoint creation.
+        varType: |-
+          list(object({
+              consumer_network = string
+              consumer_project = string
+            }))
+        defaultValue: []
       - name: deletion_policy
         description: Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster
         varType: string
@@ -648,4 +656,4 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 6.26, < 7"
+        version: ">= 6.35, < 7"
