@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.1.0...v7.0.0) (2025-07-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>=6.44:** Adding regex validation to cluster_id and instance_id #157
+* **TPG>6.35:** allow psc auto connections ([#154](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/154))
+
+### Features
+
+* **TPG>=6.44:** Adding regex validation to cluster_id and instance_id [#157](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/157) ([29ed94a](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/29ed94a3ed85f9f2d9e9dcbd93da8530d3ea5f63))
+* **TPG>6.35:** allow psc auto connections ([#154](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/154)) ([09669c1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/09669c1944bc258b17bad5f5e4ea3118e4891887))
+
 ## [6.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.0.0...v6.1.0) (2025-06-25)
 
 
