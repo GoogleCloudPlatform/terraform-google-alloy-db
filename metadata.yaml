@@ -128,7 +128,7 @@ spec:
         description: "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
         varType: string
       - name: primary_instance
-        description: Primary cluster configuration that supports read and write operations.
+        description: Configure primary instance. Every AlloyDB cluster has one primary instance, providing a read or write access point to your data. See https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances for more details.
         varType: |-
           object({
               instance_id        = string,
@@ -447,7 +447,8 @@ spec:
             network_config:
               - list
               - - object
-                - authorized_external_networks:
+                - allocated_ip_range_override: string
+                  authorized_external_networks:
                     - list
                     - - object
                       - cidr_range: string
@@ -576,7 +577,8 @@ spec:
                 network_config:
                   - list
                   - - object
-                    - authorized_external_networks:
+                    - allocated_ip_range_override: string
+                      authorized_external_networks:
                         - list
                         - - object
                           - cidr_range: string
@@ -656,4 +658,4 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 6.35, < 7"
+        version: ">= 6.44, < 7"
