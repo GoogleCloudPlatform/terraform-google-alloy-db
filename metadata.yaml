@@ -439,7 +439,8 @@ spec:
             network_config:
               - list
               - - object
-                - authorized_external_networks:
+                - allocated_ip_range_override: string
+                  authorized_external_networks:
                     - list
                     - - object
                       - cidr_range: string
@@ -568,7 +569,8 @@ spec:
                 network_config:
                   - list
                   - - object
-                    - authorized_external_networks:
+                    - allocated_ip_range_override: string
+                      authorized_external_networks:
                         - list
                         - - object
                           - cidr_range: string
@@ -648,4 +650,4 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 6.26, < 7"
+        version: ">= 6.44, < 7"
