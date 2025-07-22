@@ -129,6 +129,12 @@ variable "continuous_backup_encryption_key_name" {
   default     = null
 }
 
+variable "network_self_link" {
+  description = "Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false. The resource link should point to a VPC network in the same project as the cluster, where the cluster resources are created and accessed via Private IP. Any network used, including the default network (if none is specified), must have VPC peering enabled. Learn more at https://cloud.google.com/alloydb/docs/configure-connectivity"
+  type        = string
+  default     = null
+}
+
 variable "primary_instance" {
   description = "Configure primary instance. Every AlloyDB cluster has one primary instance, providing a read or write access point to your data. See https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances for more details."
   type = object({
@@ -209,12 +215,6 @@ variable "read_pool_instance" {
 variable "primary_cluster_name" {
   type        = string
   description = "Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster"
-  default     = null
-}
-
-variable "network_self_link" {
-  description = "Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false"
-  type        = string
   default     = null
 }
 

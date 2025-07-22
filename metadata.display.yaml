@@ -80,6 +80,9 @@ spec:
         network_self_link:
           name: network_self_link
           title: Network Self Link
+          regexValidation: ^(?:http(?:s)?://.+/)?projects/((?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?)))/global/networks/((?:[a-z](?:[-a-z0-9]*[a-z0-9])?))$
+          validation: Invalid format. Expected a valid Google Cloud network resource name, e.g. projects/{project_id}/global/networks/{network_id}.
+          level: 1
         primary_cluster_name:
           name: primary_cluster_name
           title: Primary Cluster Name
@@ -89,7 +92,7 @@ spec:
           properties:
             database_flags:
               name: database_flags
-              title: database_flags
+              title: Database Flags
               subtext: |
                 Customizable configuration settings that fine-tune database behavior, performance, and features to suit application needs. Learn more at https://cloud.google.com/alloydb/docs/reference/database-flags
             instance_id:

@@ -127,6 +127,9 @@ spec:
       - name: continuous_backup_encryption_key_name
         description: "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
         varType: string
+      - name: network_self_link
+        description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false. The resource link should point to a VPC network in the same project as the cluster, where the cluster resources are created and accessed via Private IP. Any network used, including the default network (if none is specified), must have VPC peering enabled. Learn more at https://cloud.google.com/alloydb/docs/configure-connectivity
+        varType: string
       - name: primary_instance
         description: Configure primary instance. Every AlloyDB cluster has one primary instance, providing a read or write access point to your data. See https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances for more details.
         varType: |-
@@ -177,9 +180,6 @@ spec:
         defaultValue: []
       - name: primary_cluster_name
         description: Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster
-        varType: string
-      - name: network_self_link
-        description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false
         varType: string
       - name: allocated_ip_range
         description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
