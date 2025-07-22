@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v7.0.0...v7.0.1) (2025-07-22)
+
+
+### Bug Fixes
+
+* Updating description for adding VPC peering requirement ([#162](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/162)) ([9a85d33](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/9a85d3347f8930c1248bd31cdde189deaab02c97))
+
 ## [7.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.1.0...v7.0.0) (2025-07-17)
 
 
