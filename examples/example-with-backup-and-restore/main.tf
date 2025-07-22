@@ -16,7 +16,7 @@
 
 module "alloydb_source" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   cluster_id       = "source-cluster-${var.region_central}"
   location         = var.region_central
@@ -46,7 +46,7 @@ resource "google_alloydb_backup" "source" {
 
 module "alloydb_restore_from_backup" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   cluster_id       = "bkup-restored-cluster-${var.region_central}"
   location         = var.region_central
