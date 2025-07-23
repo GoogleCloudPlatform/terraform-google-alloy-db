@@ -20,7 +20,7 @@ provider "google" {
 
 module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 5.0"
+  version = "~> 7.0"
 
   project_id       = var.project_id
   cluster_id       = "alloydb-cluster-nrp"
