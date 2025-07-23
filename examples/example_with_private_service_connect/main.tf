@@ -16,7 +16,7 @@
 
 module "alloydb_central" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 5.0"
+  version = "~> 7.0"
 
   cluster_id       = "cluster-${var.region_central}-psc"
   location         = var.region_central
