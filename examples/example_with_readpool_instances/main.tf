@@ -22,9 +22,9 @@ module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 7.0"
 
-  project_id       = var.project_id
-  cluster_id       = "alloydb-cluster-nrp"
-  location         = "us-central1"
+  project_id = var.project_id
+  cluster_id = "alloydb-cluster-nrp"
+  location   = "us-central1"
   cluster_initial_user = {
     user     = "alloydb-cluster-full",
     password = "alloydb-cluster-password"
