@@ -18,9 +18,9 @@ module "alloydb_source" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 7.0"
 
-  cluster_id       = "source-cluster-${var.region_central}"
-  location         = var.region_central
-  project_id       = var.project_id
+  cluster_id = "source-cluster-${var.region_central}"
+  location   = var.region_central
+  project_id = var.project_id
 
   network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
 
@@ -48,9 +48,9 @@ module "alloydb_restore_from_backup" {
   source  = "GoogleCloudPlatform/alloy-db/google"
   version = "~> 7.0"
 
-  cluster_id       = "bkup-restored-cluster-${var.region_central}"
-  location         = var.region_central
-  project_id       = var.project_id
+  cluster_id = "bkup-restored-cluster-${var.region_central}"
+  location   = var.region_central
+  project_id = var.project_id
 
   network_self_link = "projects/${var.project_id}/global/networks/${var.network_name}"
 

@@ -19,9 +19,9 @@ module "alloy-db" {
   version = "~> 7.0"
 
 
-  project_id       = var.project_id
-  cluster_id       = "alloydb-cluster-with-prim"
-  location         = "us-central1"
+  project_id = var.project_id
+  cluster_id = "alloydb-cluster-with-prim"
+  location   = "us-central1"
 
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
   cluster_encryption_key_name = google_kms_crypto_key.key.id
