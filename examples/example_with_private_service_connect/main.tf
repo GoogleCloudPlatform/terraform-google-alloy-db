@@ -16,11 +16,13 @@
 
 module "alloydb_central" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
-  cluster_id       = "cluster-${var.region_central}-psc"
-  location         = var.region_central
-  project_id       = var.project_id
+  deletion_protection = false
+
+  cluster_id = "cluster-${var.region_central}-psc"
+  location   = var.region_central
+  project_id = var.project_id
 
   psc_enabled                   = true
   psc_allowed_consumer_projects = [var.attachment_project_number]

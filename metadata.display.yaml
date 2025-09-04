@@ -68,6 +68,9 @@ spec:
         deletion_policy:
           name: deletion_policy
           title: Deletion Policy
+        deletion_protection:
+          name: deletion_protection
+          title: Deletion Protection
         location:
           name: location
           title: Location

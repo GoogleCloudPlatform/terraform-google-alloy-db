@@ -41,6 +41,7 @@ resource "google_alloydb_cluster" "default" {
   deletion_policy                  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
   database_version                 = var.database_version
   skip_await_major_version_upgrade = var.skip_await_major_version_upgrade
+  deletion_protection              = var.deletion_protection
 
   subscription_type = var.subscription_type
 

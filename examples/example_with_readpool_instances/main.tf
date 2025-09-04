@@ -20,11 +20,13 @@ provider "google" {
 
 module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
-  project_id       = var.project_id
-  cluster_id       = "alloydb-cluster-nrp"
-  location         = "us-central1"
+  deletion_protection = false
+
+  project_id = var.project_id
+  cluster_id = "alloydb-cluster-nrp"
+  location   = "us-central1"
   cluster_initial_user = {
     user     = "alloydb-cluster-full",
     password = "alloydb-cluster-password"
