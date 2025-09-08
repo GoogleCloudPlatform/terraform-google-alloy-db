@@ -16,13 +16,13 @@ This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+
 
 ## Version
 
-Current version is 2.X. Upgrade guides:
+Current version is 8.X. Upgrade guides:
 
-- [0.1 -> 0.2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v0.2.md)
-- [0.2 -> 1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v1.0.md)
 - [1.X -> 2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v2.0.md)
 - [2.X -> 3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v3.0.md)
 - [3.X -> 4.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v4.0.md)
+- [6.X -> 7.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v7.0.md)
+- [7.X -> 8.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v8.0.md)
 
 ## Usage
 
@@ -36,7 +36,7 @@ Basic usage of this module is as follows:
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 4.0"
+  version              = "~> 8.0"
 
   project_id           = <"PROJECT_ID">
   cluster_id           = "alloydb-cluster"
@@ -58,7 +58,7 @@ module "alloy-db" {
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 4.0"
+  version              = "~> 8.0"
 
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
@@ -95,7 +95,7 @@ module "alloy-db" {
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
-  version              = "~> 4.0"
+  version              = "~> 8.0"
   project_id           = <PROJECT_ID>
   cluster_id           = "alloydb-cluster-with-primary-instance"
   location             = "us-central1"
@@ -154,6 +154,7 @@ module "alloy-db" {
 | continuous\_backup\_recovery\_window\_days | The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35 | `number` | `14` | no |
 | database\_version | The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES\_14, POSTGRES\_15 | `string` | `null` | no |
 | deletion\_policy | Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster | `string` | `null` | no |
+| deletion\_protection | Whether Terraform will be prevented from destroying the cluster. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the cluster will fail. When the field is set to false, deleting the cluster is allowed | `bool` | `true` | no |
 | location | Location where AlloyDb cluster will be deployed | `string` | n/a | yes |
 | maintenance\_update\_policy | defines the policy for system updates | <pre>object({<br>    maintenance_windows = object({<br>      day = string<br>      start_time = object({<br>        hours = number<br>      })<br>    })<br>  })</pre> | `null` | no |
 | network\_attachment\_resource | The network attachment resource created in the consumer project to which the PSC interface will be linked. Needed for AllloyDB outbound connectivity. This is of the format: projects/{CONSUMER\_PROJECT}/regions/{REGION}/networkAttachments/{NETWORK\_ATTACHMENT\_NAME}. The network attachment must be in the same region as the instance | `string` | `null` | no |
@@ -199,7 +200,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v1.3
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v6.26+
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin >= v7.0+
 
 ### Service Account
 

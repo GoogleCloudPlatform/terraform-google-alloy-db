@@ -20,7 +20,9 @@ provider "google" {
 
 module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
+
+  deletion_protection = false
 
   project_id           = var.project_id
   cluster_id           = "alloydb-cluster-all"

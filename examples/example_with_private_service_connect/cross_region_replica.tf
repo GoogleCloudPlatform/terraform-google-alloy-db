@@ -16,13 +16,15 @@
 
 module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
+
+  deletion_protection = false
 
   primary_cluster_name = module.alloydb_central.cluster_name ## Comment this line to promote this cluster as primary cluster
 
-  cluster_id       = "cluster-${var.region_east}-psc"
-  location         = var.region_east
-  project_id       = var.project_id
+  cluster_id = "cluster-${var.region_east}-psc"
+  location   = var.region_east
+  project_id = var.project_id
 
   psc_enabled                   = true
   psc_allowed_consumer_projects = [var.attachment_project_number]

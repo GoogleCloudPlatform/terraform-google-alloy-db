@@ -16,11 +16,13 @@
 
 module "alloydb_central" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 7.0"
-  
-  cluster_id       = "cluster-${var.region_central}"
-  location         = var.region_central
-  project_id       = var.project_id
+  version = "~> 8.0"
+
+  deletion_protection = false
+
+  cluster_id = "cluster-${var.region_central}"
+  location   = var.region_central
+  project_id = var.project_id
 
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
   cluster_encryption_key_name = google_kms_crypto_key.key_region_central.id
