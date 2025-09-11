@@ -1,5 +1,16 @@
 # Changelog
 
+## [8.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v7.0.1...v8.0.0) (2025-09-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>=7.0:** added deletion protection ([#170](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/170))
+
+### Features
+
+* **TPG>=7.0:** added deletion protection ([#170](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/170)) ([47cf0f7](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/47cf0f7ff389baf434ea2f65faa8311308c9c21b))
+
 ## [7.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v7.0.0...v7.0.1) (2025-07-22)
 
 
