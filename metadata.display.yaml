@@ -30,15 +30,59 @@ spec:
         allocated_ip_range:
           name: allocated_ip_range
           title: Allocated Ip Range
+          regexValidation: ^[a-z]([-a-z0-9]*[a-z0-9])?$
+          validation: must start with a lowercase letter, end with a lowercase letter or number, and contain only lowercase letters, numbers, or hyphens
         automated_backup_policy:
           name: automated_backup_policy
           title: Automated Backup Policy
+          properties:
+            backup_window:
+              name: backup_window
+              title: Backup Window
+              regexValidation: "^(([3-9][0-9]{2,}|[1-9][0-9]{3,})(.[0-9]{1,9})?)s$"
+              validation: Must be a duration in seconds (ending with "s"), optionally with up to 9 fractional digits, and at least 300s (5 minutes)
+            weekly_schedule:
+              name: weekly_schedule
+              title: Weekly Schedule
+              properties:
+                days_of_week:
+                  name: days_of_week
+                  title: Days of Week
+                  enumValueLabels:
+                    - label: MONDAY
+                      value: MONDAY
+                    - label: TUESDAY
+                      value: TUESDAY
+                    - label: WEDNESDAY
+                      value: WEDNESDAY
+                    - label: THURSDAY
+                      value: THURSDAY
+                    - label: FRIDAY
+                      value: FRIDAY
+                    - label: SATURDAY
+                      value: SATURDAY
+                    - label: SUNDAY
+                      value: SUNDAY
+            time_based_retention_count:
+              name: time_based_retention_count
+              title: Time Based Retention Count
+              regexValidation: "^([0-9]+(.[0-9]{1,9})?)s$"
+              validation: Must be a duration in seconds (ending with "s"), optionally with up to 9 fractional digits
+            backup_encryption_key_name:
+              name: backup_encryption_key_name
+              title: Backup Encryption Key Name
+              regexValidation: "^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$"
+              validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
         cluster_display_name:
           name: cluster_display_name
           title: Cluster Display Name
+          regexValidation: ^[A-Za-z0-9]([A-Za-z0-9 _-]*[A-Za-z0-9])?$
+          validation: Must begin and end with a letter or number, and may contain letters, numbers, spaces, underscores (_), and hyphens (-)
         cluster_encryption_key_name:
           name: cluster_encryption_key_name
           title: Cluster Encryption Key Name
+          regexValidation: "^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$"
+          validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
         cluster_id:
           name: cluster_id
           title: Cluster Id
@@ -53,30 +97,67 @@ spec:
         cluster_type:
           name: cluster_type
           title: Cluster Type
+          enumValueLabels:
+            - label: PRIMARY
+              value: PRIMARY
+            - label: SECONDARY
+              value: SECONDARY
         continuous_backup_enable:
           name: continuous_backup_enable
           title: Continuous Backup Enable
         continuous_backup_encryption_key_name:
           name: continuous_backup_encryption_key_name
           title: Continuous Backup Encryption Key Name
+          regexValidation: "^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$"
+          validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
         continuous_backup_recovery_window_days:
           name: continuous_backup_recovery_window_days
           title: Continuous Backup Recovery Window Days
         database_version:
           name: database_version
           title: Database Version
+          regexValidation: ^POSTGRES_[0-9]+$
+          validation: Must start with "POSTGRES_" followed by the PostgreSQL major version number (e.g., POSTGRES_14).
         deletion_policy:
           name: deletion_policy
           title: Deletion Policy
         deletion_protection:
           name: deletion_protection
           title: Deletion Protection
+          enumValueLabels:
+            - label: FORCE
+              value: FORCE
+            - label: DEFAULT
+              value: DEFAULT
         location:
           name: location
           title: Location
         maintenance_update_policy:
           name: maintenance_update_policy
           title: Maintenance Update Policy
+          properties:
+            maintenance_windows:
+              name: maintenance_windows
+              title: Maintenance Windows
+              properties:
+                day:
+                  name: day
+                  title: Day
+                  enumValueLabels:
+                    - label: MONDAY
+                      value: MONDAY
+                    - label: TUESDAY
+                      value: TUESDAY
+                    - label: WEDNESDAY
+                      value: WEDNESDAY
+                    - label: THURSDAY
+                      value: THURSDAY
+                    - label: FRIDAY
+                      value: FRIDAY
+                    - label: SATURDAY
+                      value: SATURDAY
+                    - label: SUNDAY
+                      value: SUNDAY
         network_attachment_resource:
           name: network_attachment_resource
           title: Network Attachment Resource
@@ -89,6 +170,8 @@ spec:
         primary_cluster_name:
           name: primary_cluster_name
           title: Primary Cluster Name
+          regexValidation: "^projects/[a-z0-9][-a-z0-9]{4,28}[a-z0-9]/locations/[a-z0-9][-a-z0-9]{0,61}[a-z0-9]/clusters/[a-z]([-a-z0-9]*[a-z0-9])?$"
+          validation: "Must be in the format: projects/<project>/locations/<location>/clusters/<cluster_id>"
         primary_instance:
           name: primary_instance
           title: Primary Instance
@@ -103,15 +186,59 @@ spec:
               title: instance_id
               regexValidation: ^[a-z]([a-z0-9-]{0,61}[a-z0-9])?
               validation: Use lowercase letters, numbers, and hyphens. Must start with a letter. If longer than 1 character, it must end with a letter or number. Maximum length is 63 characters.
+            gce_zone:
+              name: gce_zone
+              title: GCE Zone
+              regexValidation: ^[a-z]+(-[a-z0-9]+)+-[a-z]$
+              validation: Must be a valid Google Cloud zone (e.g., us-central1-a).
+            availability_type:
+              name: availability_type
+              title: Availability Type
+              enumValueLabels:
+                - label: ZONAL
+                  value: ZONAL
+                - label: REGIONAL
+                  value: REGIONAL
+            machine_type:
+              name: machine_type
+              title: Machine Type
+              regexValidation: ^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9]+(?:-[a-z0-9]+)*$
+              validation: Must be a valid AlloyDB machine type (e.g., n2-highmen-8).
+            ssl_mode:
+              name: ssl_mode
+              title: SSL Mode
+              enumValueLabels:
+                - label: ALLOW_UNENCRYPTED_AND_ENCRYPTED
+                  value: ALLOW_UNENCRYPTED_AND_ENCRYPTED
+                - label: ENCRYPTED_ONLY
+                  value: ENCRYPTED_ONLY
+            cidr_range:
+              name: cidr_range
+              title: CIDR Range
+              regexValidation: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])/([0-9]|[1-2][0-9]|3[0-2])$"
+              validation: Must be a valid CIDR range (e.g., 192.168.1.0/24).
         project_id:
           name: project_id
           title: Project Id
         psc_allowed_consumer_projects:
           name: psc_allowed_consumer_projects
           title: Psc Allowed Consumer Projects
+          regexValidation: ^[0-9]{1,12}$
+          validation: Must be a valid Google Cloud project number (e.g., 123456789012).
         psc_auto_connections:
           name: psc_auto_connections
           title: Psc Auto Connections
+          properties:
+            consumer_network:
+              name: consumer_network
+              title: Consumer Network
+              regexValidation: "^(projects/[a-z][a-z0-9-]{4,28}[a-z0-9]/global/networks/[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?|[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?)$"
+              validation: Must be a valid network name or a full resource path.
+            consumer_project:
+              name: consumer_project
+              title: Consumer Project
+              regexValidation: ^[0-9]{1,12}$
+              validation: Must be a valid Google Cloud project number (e.g., 123456789012).
         psc_enabled:
           name: psc_enabled
           title: Psc Enabled
@@ -124,12 +251,50 @@ spec:
               title: instance_id
               regexValidation: ^[a-z]([a-z0-9-]{0,61}[a-z0-9])?
               validation: Use lowercase letters, numbers, and hyphens. Must start with a letter. If longer than 1 character, it must end with a letter or number. Maximum length is 63 characters.
+            machine_type:
+              name: machine_type
+              title: Machine Type
+              regexValidation: ^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9]+(?:-[a-z0-9]+)*$
+              validation: Must be a valid AlloyDB machine type (e.g., n2-highmen-8).
+            ssl_mode:
+              name: ssl_mode
+              title: SSL Mode
+              enumValueLabels:
+                - label: ALLOW_UNENCRYPTED_AND_ENCRYPTED
+                  value: ALLOW_UNENCRYPTED_AND_ENCRYPTED
+                - label: ENCRYPTED_ONLY
+                  value: ENCRYPTED_ONLY
+            cidr_range:
+              name: cidr_range
+              title: CIDR Range
+              regexValidation: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])/([0-9]|[1-2][0-9]|3[0-2])$"
+              validation: Must be a valid CIDR range (e.g., 192.168.1.0/24).
         restore_cluster:
           name: restore_cluster
           title: Restore Cluster
+          properties:
+            restore_continuous_backup_source:
+              name: restore_continuous_backup_source
+              title: Restore Continuous Backup Source
+              properties:
+                cluster:
+                  name: cluster
+                  title: Cluster
+                  regexValidation: "^projects/[a-z0-9][-a-z0-9]{4,28}[a-z0-9]/locations/[a-z0-9][-a-z0-9]{0,62}/clusters/[a-z]([-a-z0-9]{0,61}[a-z0-9])$"
+                  validation: Value must be in the format 'projects/{project}/locations/{location}/clusters/{cluster_id}'
+                point_in_time:
+                  name: point_in_time
+                  title: Point In Time
+                  regexValidation: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:.[0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+                  validation: "Must be a valid timestamp in RFC 3339 format: YYYY-MM-DDThh:mm:ss[.fractional_seconds](Z|±hh:mm)"
         skip_await_major_version_upgrade:
           name: skip_await_major_version_upgrade
           title: Skip Await Major Version Upgrade
         subscription_type:
           name: subscription_type
           title: Subscription Type
+          enumValueLabels:
+            - label: TRIAL
+              value: TRIAL
+            - label: STANDARD
+              value: STANDARD
