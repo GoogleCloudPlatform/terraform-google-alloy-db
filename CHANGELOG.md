@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.0.0...v8.0.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* added missing validations ([#166](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/166)) ([f2a8b50](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/f2a8b5061f92ceb4a49c348fcc6d557b6633a67b))
+
 ## [8.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v7.0.1...v8.0.0) (2025-09-08)
 
 
