@@ -158,6 +158,15 @@ spec:
                       value: SATURDAY
                     - label: SUNDAY
                       value: SUNDAY
+                start_time:
+                  name: start_time
+                  title: Start Time
+                  properties:
+                    hours:
+                      name: hours
+                      title: Hours
+                      min: 0
+                      max: 23
         network_attachment_resource:
           name: network_attachment_resource
           title: Network Attachment Resource
