@@ -33,7 +33,7 @@ variable "cluster_type" {
   default     = "PRIMARY"
 }
 
-variable "cluster_location" {
+variable "location" {
   description = "Location where AlloyDb cluster will be deployed"
   type        = string
   nullable    = false
@@ -129,8 +129,14 @@ variable "continuous_backup_encryption_key_name" {
   default     = null
 }
 
+variable "network_self_link" {
+  description = "Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false. The resource link should point to a VPC network in the same project as the cluster, where the cluster resources are created and accessed via Private IP. Any network used, including the default network (if none is specified), must have VPC peering enabled. Learn more at https://cloud.google.com/alloydb/docs/configure-connectivity"
+  type        = string
+  default     = null
+}
+
 variable "primary_instance" {
-  description = "Primary cluster configuration that supports read and write operations."
+  description = "Configure primary instance. Every AlloyDB cluster has one primary instance, providing a read or write access point to your data. See https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances for more details."
   type = object({
     instance_id        = string,
     display_name       = optional(string),
@@ -140,6 +146,7 @@ variable "primary_instance" {
     gce_zone           = optional(string)
     availability_type  = optional(string)
     machine_cpu_count  = optional(number, 2)
+    machine_type       = optional(string)
     ssl_mode           = optional(string)
     require_connectors = optional(bool)
     query_insights_config = optional(object({
@@ -154,8 +161,8 @@ variable "primary_instance" {
   })
   nullable = false
   validation {
-    condition     = contains([2, 4, 8, 16, 32, 64, 96, 128], var.primary_instance.machine_cpu_count)
-    error_message = "machine_cpu_count must be one of [2, 4, 8, 16, 32, 64, 96, 128]"
+    condition     = contains([1, 2, 4, 8, 16, 32, 64, 96, 128], var.primary_instance.machine_cpu_count)
+    error_message = "machine_cpu_count must be one of [1, 2, 4, 8, 16, 32, 64, 96, 128]"
   }
   validation {
     condition     = can(regex("^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$", var.primary_instance.instance_id))
@@ -185,6 +192,7 @@ variable "read_pool_instance" {
     node_count         = optional(number, 1)
     database_flags     = optional(map(string))
     machine_cpu_count  = optional(number, 2)
+    machine_type       = optional(string)
     ssl_mode           = optional(string)
     require_connectors = optional(bool)
     query_insights_config = optional(object({
@@ -199,20 +207,14 @@ variable "read_pool_instance" {
   nullable = false
   default  = []
   validation {
-    condition     = alltrue([for rp in var.read_pool_instance : contains([2, 4, 8, 16, 32, 64, 96, 128], rp.machine_cpu_count)])
-    error_message = "machine_cpu_count must be one of [2, 4, 8, 16, 32, 64, 96, 128]"
+    condition     = alltrue([for rp in var.read_pool_instance : contains([1, 2, 4, 8, 16, 32, 64, 96, 128], rp.machine_cpu_count)])
+    error_message = "machine_cpu_count must be one of [1, 2, 4, 8, 16, 32, 64, 96, 128]"
   }
 }
 
 variable "primary_cluster_name" {
   type        = string
   description = "Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster"
-  default     = null
-}
-
-variable "network_self_link" {
-  description = "Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false"
-  type        = string
   default     = null
 }
 
@@ -240,6 +242,15 @@ variable "psc_allowed_consumer_projects" {
   default     = []
 }
 
+variable "psc_auto_connections" {
+  type = list(object({
+    consumer_network = string
+    consumer_project = string
+  }))
+  description = "List of PSC auto connections. Each connection specifies the consumer network and project for automatic PSC endpoint creation."
+  default     = []
+}
+
 variable "deletion_policy" {
   type        = string
   description = "Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster"
@@ -264,4 +275,10 @@ variable "restore_cluster" {
     }))
   })
   default = null
+}
+
+variable "deletion_protection" {
+  type        = bool
+  description = "Whether Terraform will be prevented from destroying the cluster. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the cluster will fail. When the field is set to false, deleting the cluster is allowed"
+  default     = true
 }

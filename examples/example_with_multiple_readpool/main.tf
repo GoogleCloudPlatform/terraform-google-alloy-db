@@ -20,11 +20,13 @@ provider "google" {
 
 module "alloy-db" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 4.0"
+  version = "~> 8.0"
+
+  deletion_protection = false
 
   project_id           = var.project_id
   cluster_id           = "alloydb-cluster-all"
-  cluster_location     = "us-central1"
+  location             = "us-central1"
   cluster_labels       = {}
   cluster_display_name = ""
   cluster_initial_user = {

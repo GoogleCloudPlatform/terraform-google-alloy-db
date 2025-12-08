@@ -24,7 +24,7 @@ spec:
     source:
       repo: https://github.com/GoogleCloudPlatform/terraform-google-alloy-db.git
       sourceType: git
-    version: 4.1.0
+    version: 8.0.1
     actuationTool:
       flavor: Terraform
       version: ">= 1.3"
@@ -58,7 +58,7 @@ spec:
         description: "The type of cluster. If not set, defaults to PRIMARY. Default value is PRIMARY. Possible values are: PRIMARY, SECONDARY"
         varType: string
         defaultValue: PRIMARY
-      - name: cluster_location
+      - name: location
         description: Location where AlloyDb cluster will be deployed
         varType: string
         required: true
@@ -127,8 +127,11 @@ spec:
       - name: continuous_backup_encryption_key_name
         description: "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
         varType: string
+      - name: network_self_link
+        description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false. The resource link should point to a VPC network in the same project as the cluster, where the cluster resources are created and accessed via Private IP. Any network used, including the default network (if none is specified), must have VPC peering enabled. Learn more at https://cloud.google.com/alloydb/docs/configure-connectivity
+        varType: string
       - name: primary_instance
-        description: Primary cluster configuration that supports read and write operations.
+        description: Configure primary instance. Every AlloyDB cluster has one primary instance, providing a read or write access point to your data. See https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances for more details.
         varType: |-
           object({
               instance_id        = string,
@@ -139,6 +142,7 @@ spec:
               gce_zone           = optional(string)
               availability_type  = optional(string)
               machine_cpu_count  = optional(number, 2)
+              machine_type       = optional(string)
               ssl_mode           = optional(string)
               require_connectors = optional(bool)
               query_insights_config = optional(object({
@@ -160,9 +164,8 @@ spec:
               display_name       = string
               node_count         = optional(number, 1)
               database_flags     = optional(map(string))
-              availability_type  = optional(string)
-              gce_zone           = optional(string)
               machine_cpu_count  = optional(number, 2)
+              machine_type       = optional(string)
               ssl_mode           = optional(string)
               require_connectors = optional(bool)
               query_insights_config = optional(object({
@@ -171,16 +174,12 @@ spec:
                 record_client_address   = optional(bool)
                 query_plans_per_minute  = optional(number)
               }))
-              enable_public_ip          = optional(bool, false)
-              enable_outbound_public_ip = optional(bool, false)
-              cidr_range                = optional(list(string))
+              enable_public_ip = optional(bool, false)
+              cidr_range       = optional(list(string))
             }))
         defaultValue: []
       - name: primary_cluster_name
         description: Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster
-        varType: string
-      - name: network_self_link
-        description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false
         varType: string
       - name: allocated_ip_range
         description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
@@ -195,6 +194,14 @@ spec:
       - name: psc_allowed_consumer_projects
         description: List of consumer projects that are allowed to create PSC endpoints to service-attachments to this instance. These should be specified as project numbers only.
         varType: list(string)
+        defaultValue: []
+      - name: psc_auto_connections
+        description: List of PSC auto connections. Each connection specifies the consumer network and project for automatic PSC endpoint creation.
+        varType: |-
+          list(object({
+              consumer_network = string
+              consumer_project = string
+            }))
         defaultValue: []
       - name: deletion_policy
         description: Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster
@@ -214,35 +221,435 @@ spec:
                 point_in_time = string
               }))
             })
+      - name: deletion_protection
+        description: Whether Terraform will be prevented from destroying the cluster. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the cluster will fail. When the field is set to false, deleting the cluster is allowed
+        varType: bool
+        defaultValue: true
     outputs:
       - name: cluster
         description: Cluster created
+        type:
+          - object
+          - annotations:
+              - map
+              - string
+            automated_backup_policy:
+              - list
+              - - object
+                - backup_window: string
+                  enabled: bool
+                  encryption_config:
+                    - list
+                    - - object
+                      - kms_key_name: string
+                  labels:
+                    - map
+                    - string
+                  location: string
+                  quantity_based_retention:
+                    - list
+                    - - object
+                      - count: number
+                  time_based_retention:
+                    - list
+                    - - object
+                      - retention_period: string
+                  weekly_schedule:
+                    - list
+                    - - object
+                      - days_of_week:
+                          - list
+                          - string
+                        start_times:
+                          - list
+                          - - object
+                            - hours: number
+                              minutes: number
+                              nanos: number
+                              seconds: number
+            backup_source:
+              - list
+              - - object
+                - backup_name: string
+            cluster_id: string
+            cluster_type: string
+            continuous_backup_config:
+              - list
+              - - object
+                - enabled: bool
+                  encryption_config:
+                    - list
+                    - - object
+                      - kms_key_name: string
+                  recovery_window_days: number
+            continuous_backup_info:
+              - list
+              - - object
+                - earliest_restorable_time: string
+                  enabled_time: string
+                  encryption_info:
+                    - list
+                    - - object
+                      - encryption_type: string
+                        kms_key_versions:
+                          - list
+                          - string
+                  schedule:
+                    - list
+                    - string
+            database_version: string
+            deletion_policy: string
+            display_name: string
+            effective_annotations:
+              - map
+              - string
+            effective_labels:
+              - map
+              - string
+            encryption_config:
+              - list
+              - - object
+                - kms_key_name: string
+            encryption_info:
+              - list
+              - - object
+                - encryption_type: string
+                  kms_key_versions:
+                    - list
+                    - string
+            etag: string
+            id: string
+            initial_user:
+              - list
+              - - object
+                - password: string
+                  user: string
+            labels:
+              - map
+              - string
+            location: string
+            maintenance_update_policy:
+              - list
+              - - object
+                - maintenance_windows:
+                    - list
+                    - - object
+                      - day: string
+                        start_time:
+                          - list
+                          - - object
+                            - hours: number
+                              minutes: number
+                              nanos: number
+                              seconds: number
+            migration_source:
+              - list
+              - - object
+                - host_port: string
+                  reference_id: string
+                  source_type: string
+            name: string
+            network_config:
+              - list
+              - - object
+                - allocated_ip_range: string
+                  network: string
+            project: string
+            psc_config:
+              - list
+              - - object
+                - psc_enabled: bool
+                  service_owned_project_number: number
+            reconciling: bool
+            restore_backup_source:
+              - list
+              - - object
+                - backup_name: string
+            restore_continuous_backup_source:
+              - list
+              - - object
+                - cluster: string
+                  point_in_time: string
+            secondary_config:
+              - list
+              - - object
+                - primary_cluster_name: string
+            skip_await_major_version_upgrade: bool
+            state: string
+            subscription_type: string
+            terraform_labels:
+              - map
+              - string
+            timeouts:
+              - object
+              - create: string
+                delete: string
+                update: string
+            trial_metadata:
+              - list
+              - - object
+                - end_time: string
+                  grace_end_time: string
+                  start_time: string
+                  upgrade_time: string
+            uid: string
       - name: cluster_id
         description: ID of the Alloy DB Cluster created
+        type: string
       - name: cluster_name
         description: ID of the Alloy DB Cluster created
+        type: string
+      - name: env_vars
+        description: Exported environment variables
+        type:
+          - object
+          - ALLOYDB_INSTANCE_HOST: string
+            ALLOYDB_READ_REPLICAS: string
       - name: primary_instance
         description: Primary instance created
+        type:
+          - object
+          - activation_policy: string
+            annotations:
+              - map
+              - string
+            availability_type: string
+            client_connection_config:
+              - list
+              - - object
+                - require_connectors: bool
+                  ssl_config:
+                    - list
+                    - - object
+                      - ssl_mode: string
+            cluster: string
+            create_time: string
+            database_flags:
+              - map
+              - string
+            display_name: string
+            effective_annotations:
+              - map
+              - string
+            effective_labels:
+              - map
+              - string
+            gce_zone: string
+            id: string
+            instance_id: string
+            instance_type: string
+            ip_address: string
+            labels:
+              - map
+              - string
+            machine_config:
+              - list
+              - - object
+                - cpu_count: number
+                  machine_type: string
+            name: string
+            network_config:
+              - list
+              - - object
+                - allocated_ip_range_override: string
+                  authorized_external_networks:
+                    - list
+                    - - object
+                      - cidr_range: string
+                  enable_outbound_public_ip: bool
+                  enable_public_ip: bool
+            outbound_public_ip_addresses:
+              - list
+              - string
+            psc_instance_config:
+              - list
+              - - object
+                - allowed_consumer_projects:
+                    - list
+                    - string
+                  psc_auto_connections:
+                    - list
+                    - - object
+                      - consumer_network: string
+                        consumer_network_status: string
+                        consumer_project: string
+                        ip_address: string
+                        status: string
+                  psc_dns_name: string
+                  psc_interface_configs:
+                    - list
+                    - - object
+                      - network_attachment_resource: string
+                  service_attachment_link: string
+            public_ip_address: string
+            query_insights_config:
+              - list
+              - - object
+                - query_plans_per_minute: number
+                  query_string_length: number
+                  record_application_tags: bool
+                  record_client_address: bool
+            read_pool_config:
+              - list
+              - - object
+                - node_count: number
+            reconciling: bool
+            state: string
+            terraform_labels:
+              - map
+              - string
+            timeouts:
+              - object
+              - create: string
+                delete: string
+                update: string
+            uid: string
+            update_time: string
       - name: primary_instance_id
         description: ID of the primary instance created
+        type: string
+      - name: primary_instance_ip
+        description: The IP address of the primary AlloyDB instance
+        type: string
       - name: primary_psc_attachment_link
         description: The private service connect (psc) attachment created for primary instance
+        type: string
       - name: primary_psc_dns_name
         description: The DNS name of the instance for PSC connectivity created for primary instance
+        type: string
       - name: read_instance_ids
         description: IDs of the read instances created
+        type:
+          - list
+          - string
+      - name: read_instance_ips
+        description: Replica IPs
+        type:
+          - list
+          - string
       - name: read_psc_attachment_links
         description: The private service connect (psc) attachment created read replica instances
+        type: string
       - name: read_psc_dns_names
         description: The DNS names of the instances for PSC connectivity created for replica instances
+        type: string
       - name: replica_instances
         description: Replica instances created
+        type:
+          - object
+          - readpool-instance-1:
+              - object
+              - activation_policy: string
+                annotations:
+                  - map
+                  - string
+                availability_type: string
+                client_connection_config:
+                  - list
+                  - - object
+                    - require_connectors: bool
+                      ssl_config:
+                        - list
+                        - - object
+                          - ssl_mode: string
+                cluster: string
+                create_time: string
+                database_flags:
+                  - map
+                  - string
+                display_name: string
+                effective_annotations:
+                  - map
+                  - string
+                effective_labels:
+                  - map
+                  - string
+                gce_zone: string
+                id: string
+                instance_id: string
+                instance_type: string
+                ip_address: string
+                labels:
+                  - map
+                  - string
+                machine_config:
+                  - list
+                  - - object
+                    - cpu_count: number
+                      machine_type: string
+                name: string
+                network_config:
+                  - list
+                  - - object
+                    - allocated_ip_range_override: string
+                      authorized_external_networks:
+                        - list
+                        - - object
+                          - cidr_range: string
+                      enable_outbound_public_ip: bool
+                      enable_public_ip: bool
+                outbound_public_ip_addresses:
+                  - list
+                  - string
+                psc_instance_config:
+                  - list
+                  - - object
+                    - allowed_consumer_projects:
+                        - list
+                        - string
+                      psc_auto_connections:
+                        - list
+                        - - object
+                          - consumer_network: string
+                            consumer_network_status: string
+                            consumer_project: string
+                            ip_address: string
+                            status: string
+                      psc_dns_name: string
+                      psc_interface_configs:
+                        - list
+                        - - object
+                          - network_attachment_resource: string
+                      service_attachment_link: string
+                public_ip_address: string
+                query_insights_config:
+                  - list
+                  - - object
+                    - query_plans_per_minute: number
+                      query_string_length: number
+                      record_application_tags: bool
+                      record_client_address: bool
+                read_pool_config:
+                  - list
+                  - - object
+                    - node_count: number
+                reconciling: bool
+                state: string
+                terraform_labels:
+                  - map
+                  - string
+                timeouts:
+                  - object
+                  - create: string
+                    delete: string
+                    update: string
+                uid: string
+                update_time: string
   requirements:
     roles:
       - level: Project
         roles:
-          - roles/owner
           - roles/alloydb.admin
+          - roles/cloudkms.admin
+          - roles/cloudkms.autokeyAdmin
+          - roles/cloudkms.cryptoKeyEncrypterDecrypter
+          - roles/compute.admin
+          - roles/dns.admin
+          - roles/resourcemanager.projectIamAdmin
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/servicedirectory.editor
+          - roles/servicenetworking.networksAdmin
+          - roles/storage.admin
     services:
       - cloudresourcemanager.googleapis.com
       - storage-api.googleapis.com
@@ -252,6 +659,7 @@ spec:
       - alloydb.googleapis.com
       - servicedirectory.googleapis.com
       - dns.googleapis.com
+      - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 6.26, < 7"
+        version: ">= 7.0, < 8"

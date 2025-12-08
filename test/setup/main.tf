@@ -35,6 +35,7 @@ module "project" {
     "alloydb.googleapis.com",
     "servicedirectory.googleapis.com",
     "dns.googleapis.com",
+    "compute.googleapis.com"
   ]
 }
 

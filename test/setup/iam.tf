@@ -16,8 +16,17 @@
 
 locals {
   int_required_roles = [
-    "roles/owner",
-    "roles/alloydb.admin"
+    "roles/alloydb.admin",
+    "roles/cloudkms.admin",
+    "roles/cloudkms.autokeyAdmin",
+    "roles/cloudkms.cryptoKeyEncrypterDecrypter",
+    "roles/compute.admin",
+    "roles/dns.admin",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/serviceusage.serviceUsageAdmin",
+    "roles/servicedirectory.editor",
+    "roles/servicenetworking.networksAdmin",
+    "roles/storage.admin"
   ]
 }
 

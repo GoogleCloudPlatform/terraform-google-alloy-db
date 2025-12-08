@@ -33,7 +33,7 @@ locals {
 
 resource "google_alloydb_cluster" "default" {
   cluster_id                       = var.cluster_id
-  location                         = var.cluster_location
+  location                         = var.location
   display_name                     = var.cluster_display_name
   project                          = var.project_id
   labels                           = var.cluster_labels
@@ -41,6 +41,7 @@ resource "google_alloydb_cluster" "default" {
   deletion_policy                  = local.is_secondary_cluster ? "FORCE" : var.deletion_policy
   database_version                 = var.database_version
   skip_await_major_version_upgrade = var.skip_await_major_version_upgrade
+  deletion_protection              = var.deletion_protection
 
   subscription_type = var.subscription_type
 
@@ -216,11 +217,20 @@ resource "google_alloydb_instance" "primary" {
           network_attachment_resource = var.network_attachment_resource
         }
       }
+
+      dynamic "psc_auto_connections" {
+        for_each = var.psc_auto_connections
+        content {
+          consumer_network = psc_auto_connections.value.consumer_network
+          consumer_project = psc_auto_connections.value.consumer_project
+        }
+      }
     }
   }
 
   machine_config {
-    cpu_count = var.primary_instance.machine_cpu_count
+    cpu_count    = var.primary_instance.machine_cpu_count
+    machine_type = var.primary_instance.machine_type
   }
 
   dynamic "client_connection_config" {
@@ -282,7 +292,8 @@ resource "google_alloydb_instance" "read_pool" {
 
   database_flags = each.value.database_flags
   machine_config {
-    cpu_count = each.value.machine_cpu_count
+    cpu_count    = each.value.machine_cpu_count
+    machine_type = each.value.machine_type
   }
 
   dynamic "client_connection_config" {
@@ -310,6 +321,14 @@ resource "google_alloydb_instance" "read_pool" {
     for_each = var.psc_enabled ? ["psc_instance_config"] : []
     content {
       allowed_consumer_projects = var.psc_allowed_consumer_projects
+
+      dynamic "psc_auto_connections" {
+        for_each = var.psc_auto_connections
+        content {
+          consumer_network = psc_auto_connections.value.consumer_network
+          consumer_project = psc_auto_connections.value.consumer_project
+        }
+      }
     }
   }
 

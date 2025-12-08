@@ -1,5 +1,86 @@
 # Changelog
 
+## [8.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.0.0...v8.0.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* added missing validations ([#166](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/166)) ([f2a8b50](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/f2a8b5061f92ceb4a49c348fcc6d557b6633a67b))
+
+## [8.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v7.0.1...v8.0.0) (2025-09-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>=7.0:** added deletion protection ([#170](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/170))
+
+### Features
+
+* **TPG>=7.0:** added deletion protection ([#170](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/170)) ([47cf0f7](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/47cf0f7ff389baf434ea2f65faa8311308c9c21b))
+
+## [7.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v7.0.0...v7.0.1) (2025-07-22)
+
+
+### Bug Fixes
+
+* Updating description for adding VPC peering requirement ([#162](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/162)) ([9a85d33](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/9a85d3347f8930c1248bd31cdde189deaab02c97))
+
+## [7.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.1.0...v7.0.0) (2025-07-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>=6.44:** Adding regex validation to cluster_id and instance_id #157
+* **TPG>6.35:** allow psc auto connections ([#154](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/154))
+
+### Features
+
+* **TPG>=6.44:** Adding regex validation to cluster_id and instance_id [#157](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/157) ([29ed94a](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/29ed94a3ed85f9f2d9e9dcbd93da8530d3ea5f63))
+* **TPG>6.35:** allow psc auto connections ([#154](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/154)) ([09669c1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/09669c1944bc258b17bad5f5e4ea3118e4891887))
+
+## [6.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v6.0.0...v6.1.0) (2025-06-25)
+
+
+### Features
+
+* Exposing IPs of read replicas ([#152](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/152)) ([6fab74b](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/6fab74b79959fd54d35ed4e5f2700069b2a240b4))
+
+
+### Bug Fixes
+
+* Granular permissions ([#146](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/146)) ([1ef6b62](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/1ef6b62dd951466833f87131c8bf5796d35d2f00))
+
+## [6.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.1...v6.0.0) (2025-06-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* Updating cluster_location variable to location for ADC compliance ([#148](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/148))
+
+### Features
+
+* Updating cluster_location variable to location for ADC compliance ([#148](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/148)) ([a7cab02](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/a7cab0254ad4470c36adef70dbb28cca45719370))
+
+## [5.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v5.0.0...v5.0.1) (2025-06-18)
+
+
+### Bug Fixes
+
+* Exposing env variables to be consumed in ADC ([#143](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/143)) ([1db4c26](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/1db4c26da0b1cb1d4bea85c88ba88f82d23e7912))
+* output type fix ([#147](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/147)) ([6825d56](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/6825d56904a5703dd75bd174ea7261f35dbd0eef))
+
+## [5.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v4.1.0...v5.0.0) (2025-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>6.36:** Allow primary and read pool machine_type.  CPU count can be 1. ([#135](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/135))
+
+### Features
+
+* AlloyDB user management and usability fixes ([#130](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/130)) ([e04b16e](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/e04b16e1dc474debd6d0241b80e0280fe4bda2dc))
+* **TPG>6.36:** Allow primary and read pool machine_type.  CPU count can be 1. ([#135](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/135)) ([454206d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/454206d7bcdba93cbd14dc260107345a7dc13cf9))
+
 ## [4.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v4.0.0...v4.1.0) (2025-05-08)
 
 
