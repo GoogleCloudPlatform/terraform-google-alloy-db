@@ -31,6 +31,25 @@ locals {
   is_secondary_cluster = var.primary_cluster_name != null
 }
 
+resource "random_password" "user-password" {
+  keepers = {
+    name = google_alloydb_cluster.default.name
+  }
+  min_lower   = 1
+  min_numeric = 1
+  min_upper   = 1
+  length      = 32
+  special     = false
+  min_special = 0
+  depends_on  = [null_resource.module_depends_on, google_alloydb_instance.primary]
+
+  lifecycle {
+    ignore_changes = [
+      min_lower, min_upper, min_numeric, special, min_special, length
+    ]
+  }
+}
+
 resource "google_alloydb_cluster" "default" {
   cluster_id                       = var.cluster_id
   location                         = var.location
@@ -144,7 +163,7 @@ resource "google_alloydb_cluster" "default" {
     for_each = var.cluster_initial_user == null ? [] : ["cluster_initial_user"]
     content {
       user     = var.cluster_initial_user.user
-      password = var.cluster_initial_user.password
+      password = random_password.user-password.result
     }
   }
 

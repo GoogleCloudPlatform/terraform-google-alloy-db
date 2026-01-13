@@ -94,3 +94,9 @@ output "env_vars" {
     "ALLOYDB_READ_REPLICAS" : jsonencode([for rd, details in google_alloydb_instance.read_pool : details.ip_address])
   }
 }
+
+output "generated_user_password" {
+  description = "The auto generated default user password if not input password was provided"
+  value       = random_password.user-password.result
+  sensitive   = true
+}
