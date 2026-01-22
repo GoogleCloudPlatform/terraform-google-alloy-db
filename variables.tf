@@ -158,6 +158,11 @@ variable "primary_instance" {
     enable_public_ip          = optional(bool, false)
     enable_outbound_public_ip = optional(bool, false)
     cidr_range                = optional(list(string))
+    connection_pool_config = optional(object({
+      enabled      = optional(bool)
+      pooler_count = optional(number)
+      flags        = optional(map(string))
+    }))
   })
   nullable = false
   validation {
@@ -203,6 +208,11 @@ variable "read_pool_instance" {
     }))
     enable_public_ip = optional(bool, false)
     cidr_range       = optional(list(string))
+    connection_pool_config = optional(object({
+      enabled      = optional(bool)
+      pooler_count = optional(number)
+      flags        = optional(map(string))
+    }))
   }))
   nullable = false
   default  = []
