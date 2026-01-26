@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -154,6 +154,11 @@ spec:
               enable_public_ip          = optional(bool, false)
               enable_outbound_public_ip = optional(bool, false)
               cidr_range                = optional(list(string))
+              connection_pool_config = optional(object({
+                enabled      = optional(bool)
+                pooler_count = optional(number)
+                flags        = optional(map(string))
+              }))
             })
         required: true
       - name: read_pool_instance
@@ -176,6 +181,11 @@ spec:
               }))
               enable_public_ip = optional(bool, false)
               cidr_range       = optional(list(string))
+              connection_pool_config = optional(object({
+                enabled      = optional(bool)
+                pooler_count = optional(number)
+                flags        = optional(map(string))
+              }))
             }))
         defaultValue: []
       - name: primary_cluster_name
