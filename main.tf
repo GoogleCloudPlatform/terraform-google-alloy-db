@@ -255,6 +255,16 @@ resource "google_alloydb_instance" "primary" {
     }
   }
 
+
+  dynamic "connection_pool_config" {
+    for_each = lookup(var.primary_instance, "connection_pool_config", null) != null ? ["connection_pool_config"] : []
+    content {
+      enabled      = try(var.primary_instance.connection_pool_config.value.enabled, null)
+      pooler_count = try(var.primary_instance.connection_pool_config.value.pooler_count, null)
+      flags        = try(var.primary_instance.connection_pool_config.value.flags, null)
+    }
+  }
+
   lifecycle {
     ignore_changes = [instance_type]
   }
@@ -329,6 +339,15 @@ resource "google_alloydb_instance" "read_pool" {
           consumer_project = psc_auto_connections.value.consumer_project
         }
       }
+    }
+  }
+
+  dynamic "connection_pool_config" {
+    for_each = lookup(each.value, "connection_pool_config", null) != null ? ["connection_pool_config"] : []
+    content {
+      enabled      = try(each.value.connection_pool_config.value.enabled, null)
+      pooler_count = try(each.value.connection_pool_config.value.pooler_count, null)
+      flags        = try(each.value.connection_pool_config.value.flags, null)
     }
   }
 

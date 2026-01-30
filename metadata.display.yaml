@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,11 +36,21 @@ spec:
           name: automated_backup_policy
           title: Automated Backup Policy
           properties:
+            backup_encryption_key_name:
+              name: backup_encryption_key_name
+              title: Backup Encryption Key Name
+              regexValidation: ^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$
+              validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
             backup_window:
               name: backup_window
               title: Backup Window
-              regexValidation: "^(([3-9][0-9]{2,}|[1-9][0-9]{3,})(.[0-9]{1,9})?)s$"
+              regexValidation: ^(([3-9][0-9]{2,}|[1-9][0-9]{3,})(.[0-9]{1,9})?)s$
               validation: Must be a duration in seconds (ending with "s"), optionally with up to 9 fractional digits, and at least 300s (5 minutes)
+            time_based_retention_count:
+              name: time_based_retention_count
+              title: Time Based Retention Count
+              regexValidation: ^([0-9]+(.[0-9]{1,9})?)s$
+              validation: Must be a duration in seconds (ending with "s"), optionally with up to 9 fractional digits
             weekly_schedule:
               name: weekly_schedule
               title: Weekly Schedule
@@ -63,16 +73,6 @@ spec:
                       value: SATURDAY
                     - label: SUNDAY
                       value: SUNDAY
-            time_based_retention_count:
-              name: time_based_retention_count
-              title: Time Based Retention Count
-              regexValidation: "^([0-9]+(.[0-9]{1,9})?)s$"
-              validation: Must be a duration in seconds (ending with "s"), optionally with up to 9 fractional digits
-            backup_encryption_key_name:
-              name: backup_encryption_key_name
-              title: Backup Encryption Key Name
-              regexValidation: "^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$"
-              validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
         cluster_display_name:
           name: cluster_display_name
           title: Cluster Display Name
@@ -81,7 +81,7 @@ spec:
         cluster_encryption_key_name:
           name: cluster_encryption_key_name
           title: Cluster Encryption Key Name
-          regexValidation: "^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$"
+          regexValidation: ^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$
           validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
         cluster_id:
           name: cluster_id
@@ -108,7 +108,7 @@ spec:
         continuous_backup_encryption_key_name:
           name: continuous_backup_encryption_key_name
           title: Continuous Backup Encryption Key Name
-          regexValidation: "^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$"
+          regexValidation: ^projects/[a-z0-9-]+/locations/[a-z0-9-]+/keyRings/[a-z0-9-]+/cryptoKeys/[a-z0-9-]+$
           validation: Must be a valid Cloud KMS key resource name in the format:projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
         continuous_backup_recovery_window_days:
           name: continuous_backup_recovery_window_days
@@ -165,7 +165,6 @@ spec:
                     hours:
                       name: hours
                       title: Hours
-                      min: 0
                       max: 23
         network_attachment_resource:
           name: network_attachment_resource
@@ -179,27 +178,12 @@ spec:
         primary_cluster_name:
           name: primary_cluster_name
           title: Primary Cluster Name
-          regexValidation: "^projects/[a-z0-9][-a-z0-9]{4,28}[a-z0-9]/locations/[a-z0-9][-a-z0-9]{0,61}[a-z0-9]/clusters/[a-z]([-a-z0-9]*[a-z0-9])?$"
+          regexValidation: ^projects/[a-z0-9][-a-z0-9]{4,28}[a-z0-9]/locations/[a-z0-9][-a-z0-9]{0,61}[a-z0-9]/clusters/[a-z]([-a-z0-9]*[a-z0-9])?$
           validation: "Must be in the format: projects/<project>/locations/<location>/clusters/<cluster_id>"
         primary_instance:
           name: primary_instance
           title: Primary Instance
           properties:
-            database_flags:
-              name: database_flags
-              title: Database Flags
-              subtext: |
-                Customizable configuration settings that fine-tune database behavior, performance, and features to suit application needs. Learn more at https://cloud.google.com/alloydb/docs/reference/database-flags
-            instance_id:
-              name: instance_id
-              title: instance_id
-              regexValidation: ^[a-z]([a-z0-9-]{0,61}[a-z0-9])?
-              validation: Use lowercase letters, numbers, and hyphens. Must start with a letter. If longer than 1 character, it must end with a letter or number. Maximum length is 63 characters.
-            gce_zone:
-              name: gce_zone
-              title: GCE Zone
-              regexValidation: ^[a-z]+(-[a-z0-9]+)+-[a-z]$
-              validation: Must be a valid Google Cloud zone (e.g., us-central1-a).
             availability_type:
               name: availability_type
               title: Availability Type
@@ -208,6 +192,26 @@ spec:
                   value: ZONAL
                 - label: REGIONAL
                   value: REGIONAL
+            cidr_range:
+              name: cidr_range
+              title: CIDR Range
+              regexValidation: ^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])/([0-9]|[1-2][0-9]|3[0-2])$
+              validation: Must be a valid CIDR range (e.g., 192.168.1.0/24).
+            database_flags:
+              name: database_flags
+              title: Database Flags
+              subtext: |
+                Customizable configuration settings that fine-tune database behavior, performance, and features to suit application needs. Learn more at https://cloud.google.com/alloydb/docs/reference/database-flags
+            gce_zone:
+              name: gce_zone
+              title: GCE Zone
+              regexValidation: ^[a-z]+(-[a-z0-9]+)+-[a-z]$
+              validation: Must be a valid Google Cloud zone (e.g., us-central1-a).
+            instance_id:
+              name: instance_id
+              title: instance_id
+              regexValidation: ^[a-z]([a-z0-9-]{0,61}[a-z0-9])?
+              validation: Use lowercase letters, numbers, and hyphens. Must start with a letter. If longer than 1 character, it must end with a letter or number. Maximum length is 63 characters.
             machine_type:
               name: machine_type
               title: Machine Type
@@ -221,11 +225,6 @@ spec:
                   value: ALLOW_UNENCRYPTED_AND_ENCRYPTED
                 - label: ENCRYPTED_ONLY
                   value: ENCRYPTED_ONLY
-            cidr_range:
-              name: cidr_range
-              title: CIDR Range
-              regexValidation: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])/([0-9]|[1-2][0-9]|3[0-2])$"
-              validation: Must be a valid CIDR range (e.g., 192.168.1.0/24).
         project_id:
           name: project_id
           title: Project Id
@@ -241,7 +240,7 @@ spec:
             consumer_network:
               name: consumer_network
               title: Consumer Network
-              regexValidation: "^(projects/[a-z][a-z0-9-]{4,28}[a-z0-9]/global/networks/[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?|[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?)$"
+              regexValidation: ^(projects/[a-z][a-z0-9-]{4,28}[a-z0-9]/global/networks/[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?|[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?)$
               validation: Must be a valid network name or a full resource path.
             consumer_project:
               name: consumer_project
@@ -255,6 +254,11 @@ spec:
           name: read_pool_instance
           title: Read Pool Instance
           properties:
+            cidr_range:
+              name: cidr_range
+              title: CIDR Range
+              regexValidation: ^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])/([0-9]|[1-2][0-9]|3[0-2])$
+              validation: Must be a valid CIDR range (e.g., 192.168.1.0/24).
             instance_id:
               name: instance_id
               title: instance_id
@@ -273,11 +277,6 @@ spec:
                   value: ALLOW_UNENCRYPTED_AND_ENCRYPTED
                 - label: ENCRYPTED_ONLY
                   value: ENCRYPTED_ONLY
-            cidr_range:
-              name: cidr_range
-              title: CIDR Range
-              regexValidation: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])/([0-9]|[1-2][0-9]|3[0-2])$"
-              validation: Must be a valid CIDR range (e.g., 192.168.1.0/24).
         restore_cluster:
           name: restore_cluster
           title: Restore Cluster
@@ -289,12 +288,12 @@ spec:
                 cluster:
                   name: cluster
                   title: Cluster
-                  regexValidation: "^projects/[a-z0-9][-a-z0-9]{4,28}[a-z0-9]/locations/[a-z0-9][-a-z0-9]{0,62}/clusters/[a-z]([-a-z0-9]{0,61}[a-z0-9])$"
+                  regexValidation: ^projects/[a-z0-9][-a-z0-9]{4,28}[a-z0-9]/locations/[a-z0-9][-a-z0-9]{0,62}/clusters/[a-z]([-a-z0-9]{0,61}[a-z0-9])$
                   validation: Value must be in the format 'projects/{project}/locations/{location}/clusters/{cluster_id}'
                 point_in_time:
                   name: point_in_time
                   title: Point In Time
-                  regexValidation: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:.[0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+                  regexValidation: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:.[0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$
                   validation: "Must be a valid timestamp in RFC 3339 format: YYYY-MM-DDThh:mm:ss[.fractional_seconds](Z|±hh:mm)"
         skip_await_major_version_upgrade:
           name: skip_await_major_version_upgrade
