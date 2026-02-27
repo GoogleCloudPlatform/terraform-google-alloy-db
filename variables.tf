@@ -78,6 +78,14 @@ variable "cluster_encryption_key_name" {
   default     = null
 }
 
+variable "dataplex_config" {
+  description = "Configuration for Dataplex integration. The `enabled` flag controls the integration of AlloyDB PG resources (like databases, schemas, and tables) with Dataplex. See https://docs.cloud.google.com/alloydb/docs/dataplex-catalog-integration for more details."
+  type = object({
+    enabled = bool
+  })
+  default = null
+}
+
 variable "automated_backup_policy" {
   description = "The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days"
   type = object({

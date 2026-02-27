@@ -125,6 +125,13 @@ resource "google_alloydb_cluster" "default" {
 
   }
 
+  dynamic "dataplex_config" {
+    for_each = var.dataplex_config != null ? [var.dataplex_config] : []
+    content {
+      enabled = dataplex_config.value.enabled
+    }
+  }
+
   dynamic "maintenance_update_policy" {
     for_each = var.maintenance_update_policy != null ? [var.maintenance_update_policy] : []
     content {

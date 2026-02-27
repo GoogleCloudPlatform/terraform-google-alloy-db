@@ -118,6 +118,13 @@ spec:
           title: Database Version
           regexValidation: ^POSTGRES_[0-9]+$
           validation: Must start with "POSTGRES_" followed by the PostgreSQL major version number (e.g., POSTGRES_14).
+        dataplex_config:
+          name: dataplex_config
+          title: Dataplex Config
+          properties:
+            enabled:
+              name: enabled
+              title: Enabled
         deletion_policy:
           name: deletion_policy
           title: Deletion Policy
