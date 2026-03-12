@@ -36,6 +36,10 @@ module "alloydb_central" {
     }
   }
 
+  connection_pool_config = {
+    enabled = true
+  }
+
   automated_backup_policy = {
     location      = var.region_central
     backup_window = "1800s"
