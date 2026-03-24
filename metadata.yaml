@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -87,6 +87,12 @@ spec:
       - name: cluster_encryption_key_name
         description: "The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
         varType: string
+      - name: dataplex_config
+        description: Configuration for Dataplex integration. The `enabled` flag controls the integration of AlloyDB PG resources (like databases, schemas, and tables) with Dataplex. See https://docs.cloud.google.com/alloydb/docs/dataplex-catalog-integration for more details.
+        varType: |-
+          object({
+              enabled = bool
+            })
       - name: automated_backup_policy
         description: The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days
         varType: |-
@@ -298,6 +304,10 @@ spec:
                     - list
                     - string
             database_version: string
+            dataplex_config:
+              - list
+              - - object
+                - enabled: bool
             deletion_policy: string
             display_name: string
             effective_annotations:
@@ -662,4 +672,4 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 7.0, < 8"
+        version: ">= 7.23, < 8"
