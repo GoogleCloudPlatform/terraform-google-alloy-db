@@ -671,5 +671,5 @@ spec:
       - dns.googleapis.com
       - compute.googleapis.com
     providerVersions:
-      source: hashicorp/google
-      version: ">= 7.23, < 8"
+      - source: hashicorp/google
+        version: ">= 7.23, < 8"
