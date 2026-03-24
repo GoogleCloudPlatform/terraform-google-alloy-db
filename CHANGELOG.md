@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.0.2...v8.1.0) (2026-03-24)
+
+
+### Features
+
+* add dataplex config ([#182](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/182)) ([ee0dc9b](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/ee0dc9b7573f6fa4920b4e590850e05d5f9bdc28))
+
 ## [8.0.2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.0.1...v8.0.2) (2026-01-12)
 
 
