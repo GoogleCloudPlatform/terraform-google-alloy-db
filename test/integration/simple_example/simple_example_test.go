@@ -62,6 +62,7 @@ func TestSimpleExample(t *testing.T) {
 		// check for Cluster
 		assert.Equal(alloydbClusterIdPath, alloyDBClusterInfo.Get("name").String(), "Has to be same Cluster path")
 		assert.True(alloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to True")
+		assert.True(alloyDBClusterInfo.Get("dataplexConfig.enabled").Bool(), "dataplexConfig.enabled is set to True")
 		assert.Equal("10", alloyDBClusterInfo.Get("continuousBackupConfig.recoveryWindowDays").String(), "continuousBackupConfig.recoveryWindowDays has expected value 10")
 		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("continuousBackupConfig.encryptionConfig.kmsKeyName").String(), "continuous Backup Encryption key name match")
 		assert.Equal(kmsKeyName, alloyDBClusterInfo.Get("encryptionConfig.kmsKeyName").String(), "Cluster Encryption key name match")
@@ -74,7 +75,7 @@ func TestSimpleExample(t *testing.T) {
 
 		// check for Secondary Cluster
 		assert.Equal(secondaryAlloydbClusterIdPath, secondaryAlloyDBClusterInfo.Get("name").String(), "Has to be same secondary Cluster path")
-		assert.True(secondaryAlloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to False")
+		assert.True(secondaryAlloyDBClusterInfo.Get("continuousBackupConfig.enabled").Bool(), "continuous Backup.enabled is set to True")
 		assert.Equal(secondarykmsKeyName, secondaryAlloyDBClusterInfo.Get("encryptionConfig.kmsKeyName").String(), "Cluster Encryption key name match for secondary cluster")
 		assert.Equal("SECONDARY", secondaryAlloyDBClusterInfo.Get("clusterType").String(), "Cluster type match")
 

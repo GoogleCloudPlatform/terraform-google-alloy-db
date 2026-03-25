@@ -36,6 +36,10 @@ module "alloydb_central" {
     }
   }
 
+  dataplex_config = {
+    enabled = true
+  }
+
   automated_backup_policy = {
     location      = var.region_central
     backup_window = "1800s"
