@@ -93,6 +93,8 @@ spec:
           object({
               enabled = bool
             })
+        defaultValue:
+          enabled: true
       - name: automated_backup_policy
         description: The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days
         varType: |-

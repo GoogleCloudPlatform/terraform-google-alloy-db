@@ -48,6 +48,7 @@ func TestExampleWithPrimary(t *testing.T) {
 
 		// check for Cluster
 		assert.Equal(alloydb_cluster_id_path, alloyDBClusterInfo.Get("name").String(), "Has to be same Cluster path")
+		assert.False(alloyDBClusterInfo.Get("dataplexConfig.enabled").Bool(), "dataplexConfig.enabled is set to False")
 
 		// Check for Primary Instance
 		assert.Equal(alloydb_primary_instance_path, alloyDBInstanceInfo.Get("name").String(), "Has to be same Primary Instance Path")

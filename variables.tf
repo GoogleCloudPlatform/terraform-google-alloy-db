@@ -83,7 +83,9 @@ variable "dataplex_config" {
   type = object({
     enabled = bool
   })
-  default = null
+  default = {
+    enabled = true
+  }
 }
 
 variable "automated_backup_policy" {

@@ -27,6 +27,10 @@ module "alloy-db" {
   network_self_link           = "projects/${var.project_id}/global/networks/${var.network_name}"
   cluster_encryption_key_name = google_kms_crypto_key.key.id
 
+  dataplex_config = {
+    enabled = false
+  }
+
   primary_instance = {
     instance_id       = "primary-instance"
     instance_type     = "PRIMARY"
