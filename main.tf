@@ -262,6 +262,14 @@ resource "google_alloydb_instance" "primary" {
     }
   }
 
+  dynamic "connection_pool_config" {
+    for_each = lookup(var.primary_instance, "connection_pool_config", null) != null ? [var.primary_instance.connection_pool_config] : []
+    content {
+      enabled = connection_pool_config.value.enabled
+      flags   = connection_pool_config.value.flags
+    }
+  }
+
   lifecycle {
     ignore_changes = [instance_type]
   }
@@ -321,6 +329,14 @@ resource "google_alloydb_instance" "read_pool" {
       record_application_tags = try(each.value.query_insights_config.record_application_tags, null)
       record_client_address   = try(each.value.query_insights_config.record_client_address, null)
       query_plans_per_minute  = try(each.value.query_insights_config.query_plans_per_minute, null)
+    }
+  }
+
+  dynamic "connection_pool_config" {
+    for_each = lookup(each.value, "connection_pool_config", null) != null ? [each.value.connection_pool_config] : []
+    content {
+      enabled = connection_pool_config.value.enabled
+      flags   = connection_pool_config.value.flags
     }
   }
 
