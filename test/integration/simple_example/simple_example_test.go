@@ -71,6 +71,7 @@ func TestSimpleExample(t *testing.T) {
 
 		// Check for Primary Instance
 		assert.Equal(state, alloyDBInstanceInfo.Get("state").String())
+		assert.True(alloyDBInstanceInfo.Get("connectionPoolConfig.enabled").Bool(), "Primary instance connection pool is enabled")
 
 		// check for Secondary Cluster
 		assert.Equal(secondaryAlloydbClusterIdPath, secondaryAlloyDBClusterInfo.Get("name").String(), "Has to be same secondary Cluster path")

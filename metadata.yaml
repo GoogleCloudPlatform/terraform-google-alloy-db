@@ -160,6 +160,10 @@ spec:
               enable_public_ip          = optional(bool, false)
               enable_outbound_public_ip = optional(bool, false)
               cidr_range                = optional(list(string))
+              connection_pool_config = optional(object({
+                enabled = bool
+                flags   = optional(map(string), {})
+              }))
             })
         required: true
       - name: read_pool_instance
@@ -182,6 +186,10 @@ spec:
               }))
               enable_public_ip = optional(bool, false)
               cidr_range       = optional(list(string))
+              connection_pool_config = optional(object({
+                enabled = bool
+                flags   = optional(map(string), {})
+              }))
             }))
         defaultValue: []
       - name: primary_cluster_name
@@ -672,4 +680,4 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 7.23, < 8"
+        version: ">= 7.14, < 8"

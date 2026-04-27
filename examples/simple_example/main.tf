@@ -58,6 +58,12 @@ module "alloydb_central" {
     instance_id        = "cluster-${var.region_central}-instance1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    connection_pool_config = {
+      enabled = true
+      flags = {
+        pool_mode = "transaction"
+      }
+    }
   }
 
   read_pool_instance = [
@@ -66,6 +72,9 @@ module "alloydb_central" {
       display_name       = "cluster-${var.region_central}-r1"
       require_connectors = false
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+      connection_pool_config = {
+        enabled = true
+      }
     }
   ]
 
