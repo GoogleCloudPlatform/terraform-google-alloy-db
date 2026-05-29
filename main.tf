@@ -48,7 +48,7 @@ resource "google_alloydb_cluster" "default" {
   dynamic "network_config" {
     for_each = var.network_self_link == null ? [] : ["network_config"]
     content {
-      network            = var.network_self_link
+      network            = replace(var.network_self_link, "https://www.googleapis.com/compute/v1/", "")
       allocated_ip_range = var.allocated_ip_range
     }
   }
