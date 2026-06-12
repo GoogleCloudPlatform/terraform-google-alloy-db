@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.1.0...v8.2.0) (2026-04-27)
+
+
+### Features
+
+* add connection_pool_config support for primary and read pool instances ([#188](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/188)) ([9086d1f](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/9086d1fcec9e21915e0422b87167831509e33396))
+
 ## [8.1.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.0.2...v8.1.0) (2026-03-24)
 
 
