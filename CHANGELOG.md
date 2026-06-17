@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.2.0...v8.3.0) (2026-06-17)
+
+
+### Features
+
+* Add missing VPC connection for Alloydb ([#190](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/190)) ([92b5099](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/92b50992a4264126bc3f17d7c55720efcddec613))
+
 ## [8.2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.1.0...v8.2.0) (2026-04-27)
 
 
