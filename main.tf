@@ -271,7 +271,7 @@ resource "google_alloydb_instance" "primary" {
   }
 
   lifecycle {
-    ignore_changes = [instance_type]
+    ignore_changes = [instance_type, gce_zone]
   }
 }
 
