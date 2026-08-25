@@ -170,6 +170,11 @@ spec:
                 enabled = bool
                 flags   = optional(map(string), {})
               }))
+              timeouts = optional(object({
+                create = optional(string)
+                update = optional(string)
+                delete = optional(string)
+              }))
             })
         required: true
       - name: read_pool_instance
@@ -195,6 +200,11 @@ spec:
               connection_pool_config = optional(object({
                 enabled = bool
                 flags   = optional(map(string), {})
+              }))
+              timeouts = optional(object({
+                create = optional(string)
+                update = optional(string)
+                delete = optional(string)
               }))
             }))
         defaultValue: []
@@ -245,6 +255,14 @@ spec:
         description: Whether Terraform will be prevented from destroying the cluster. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the cluster will fail. When the field is set to false, deleting the cluster is allowed
         varType: bool
         defaultValue: true
+      - name: cluster_timeouts
+        description: "(Optional) Timeout configuration for the AlloyDB cluster"
+        varType: |-
+          object({
+              create = optional(string)
+              update = optional(string)
+              delete = optional(string)
+            })
     outputs:
       - name: cluster
         description: Cluster created

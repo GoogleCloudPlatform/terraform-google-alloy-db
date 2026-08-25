@@ -185,6 +185,15 @@ resource "google_alloydb_cluster" "default" {
     }
   }
 
+  dynamic "timeouts" {
+    for_each = var.cluster_timeouts != null ? [var.cluster_timeouts] : []
+    content {
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
+    }
+  }
+
 }
 
 
@@ -270,6 +279,15 @@ resource "google_alloydb_instance" "primary" {
     }
   }
 
+  dynamic "timeouts" {
+    for_each = lookup(var.primary_instance, "timeouts", null) != null ? [var.primary_instance.timeouts] : (var.cluster_timeouts != null ? [var.cluster_timeouts] : [])
+    content {
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
+    }
+  }
+
   lifecycle {
     ignore_changes = [instance_type]
   }
@@ -352,6 +370,15 @@ resource "google_alloydb_instance" "read_pool" {
           consumer_project = psc_auto_connections.value.consumer_project
         }
       }
+    }
+  }
+
+  dynamic "timeouts" {
+    for_each = lookup(each.value, "timeouts", null) != null ? [each.value.timeouts] : (var.cluster_timeouts != null ? [var.cluster_timeouts] : [])
+    content {
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 
