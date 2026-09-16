@@ -170,6 +170,11 @@ variable "primary_instance" {
       enabled = bool
       flags   = optional(map(string), {})
     }))
+    timeouts = optional(object({
+      create = optional(string)
+      update = optional(string)
+      delete = optional(string)
+    }))
   })
   nullable = false
   validation {
@@ -218,6 +223,11 @@ variable "read_pool_instance" {
     connection_pool_config = optional(object({
       enabled = bool
       flags   = optional(map(string), {})
+    }))
+    timeouts = optional(object({
+      create = optional(string)
+      update = optional(string)
+      delete = optional(string)
     }))
   }))
   nullable = false
@@ -297,4 +307,14 @@ variable "deletion_protection" {
   type        = bool
   description = "Whether Terraform will be prevented from destroying the cluster. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the cluster will fail. When the field is set to false, deleting the cluster is allowed"
   default     = true
+}
+
+variable "cluster_timeouts" {
+  description = "(Optional) Timeout configuration for the AlloyDB cluster"
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
 }
