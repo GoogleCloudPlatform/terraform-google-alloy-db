@@ -137,11 +137,11 @@ spec:
         description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false. The resource link should point to a VPC network in the same project as the cluster, where the cluster resources are created and accessed via Private IP. Any network used, including the default network (if none is specified), must have VPC peering enabled. Learn more at https://cloud.google.com/alloydb/docs/configure-connectivity
         varType: string
         connections:
-        - source:
-            source: github.com/terraform-google-modules/terraform-google-network
-            version: ">= v18.1.0"
-          spec:
-            outputExpr: network_self_link
+          - source:
+              source: github.com/terraform-google-modules/terraform-google-network
+              version: ">= v18.1.0"
+            spec:
+              outputExpr: network_self_link
       - name: primary_instance
         description: Configure primary instance. Every AlloyDB cluster has one primary instance, providing a read or write access point to your data. See https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances for more details.
         varType: |-
@@ -177,7 +177,7 @@ spec:
         varType: |-
           list(object({
               instance_id        = string
-              display_name       = string
+              display_name       = optional(string)
               node_count         = optional(number, 1)
               database_flags     = optional(map(string))
               machine_cpu_count  = optional(number, 2)
@@ -205,7 +205,7 @@ spec:
         description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
         varType: string
       - name: database_version
-        description: "The database engine major version. This is an optional field and it's populated at the Cluster creation time. This field cannot be changed after cluster creation. Possible valus: POSTGRES_14, POSTGRES_15"
+        description: "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17"
         varType: string
       - name: psc_enabled
         description: Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect`
@@ -686,4 +686,4 @@ spec:
       - compute.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 7.14, < 8"
+        version: ">= 7.23, < 9"
