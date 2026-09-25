@@ -16,13 +16,14 @@ This module is meant for use with Terraform 1.3+ and tested using Terraform 1.3+
 
 ## Version
 
-Current version is 8.X. Upgrade guides:
+Current version is 9.X. Upgrade guides:
 
 - [1.X -> 2.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v2.0.md)
 - [2.X -> 3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v3.0.md)
 - [3.X -> 4.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v4.0.md)
 - [6.X -> 7.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v7.0.md)
 - [7.X -> 8.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v8.0.md)
+- [8.X -> 9.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/blob/main/docs/upgrading_to_v9.0.md)
 
 ## Usage
 
