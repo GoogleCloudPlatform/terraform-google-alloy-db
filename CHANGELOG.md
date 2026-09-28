@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.4.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.3.0...v8.4.0) (2026-09-10)
+
+
+### Features
+
+* **deps:** Update Terraform google to v8 ([#197](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/197)) ([eb06a04](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/eb06a0413dcf0cd10a9481e4c4fd9d7458bb0901))
+
 ## [8.3.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.2.0...v8.3.0) (2026-06-17)
 
 
