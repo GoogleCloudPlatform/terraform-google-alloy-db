@@ -153,7 +153,7 @@ spec:
               annotations        = optional(map(string))
               gce_zone           = optional(string)
               availability_type  = optional(string)
-              machine_cpu_count  = optional(number, 2)
+              machine_cpu_count  = optional(number)
               machine_type       = optional(string)
               ssl_mode           = optional(string)
               require_connectors = optional(bool)
@@ -180,7 +180,7 @@ spec:
               display_name       = optional(string)
               node_count         = optional(number, 1)
               database_flags     = optional(map(string))
-              machine_cpu_count  = optional(number, 2)
+              machine_cpu_count  = optional(number)
               machine_type       = optional(string)
               ssl_mode           = optional(string)
               require_connectors = optional(bool)
@@ -205,7 +205,7 @@ spec:
         description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
         varType: string
       - name: database_version
-        description: "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17"
+        description: "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17, POSTGRES_18"
         varType: string
       - name: psc_enabled
         description: Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect`

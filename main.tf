@@ -239,7 +239,7 @@ resource "google_alloydb_instance" "primary" {
   }
 
   machine_config {
-    cpu_count    = var.primary_instance.machine_cpu_count
+    cpu_count    = var.primary_instance.machine_cpu_count != null ? var.primary_instance.machine_cpu_count : (var.primary_instance.machine_type == null ? 2 : null)
     machine_type = var.primary_instance.machine_type
   }
 
@@ -311,7 +311,7 @@ resource "google_alloydb_instance" "read_pool" {
 
   database_flags = each.value.database_flags
   machine_config {
-    cpu_count    = each.value.machine_cpu_count
+    cpu_count    = each.value.machine_cpu_count != null ? each.value.machine_cpu_count : (each.value.machine_type == null ? 2 : null)
     machine_type = each.value.machine_type
   }
 

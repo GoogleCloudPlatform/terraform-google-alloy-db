@@ -35,6 +35,7 @@ variable "cluster_type" {
     condition     = contains(["PRIMARY", "SECONDARY"], var.cluster_type)
     error_message = "cluster_type must be one of [PRIMARY, SECONDARY]."
   }
+  nullable = false
 }
 
 variable "location" {
@@ -79,6 +80,7 @@ variable "subscription_type" {
     condition     = contains(["STANDARD", "TRIAL"], var.subscription_type)
     error_message = "subscription_type must be one of [STANDARD, TRIAL]."
   }
+  nullable = false
 }
 
 variable "cluster_encryption_key_name" {
@@ -187,7 +189,7 @@ variable "primary_instance" {
     annotations        = optional(map(string))
     gce_zone           = optional(string)
     availability_type  = optional(string)
-    machine_cpu_count  = optional(number, 2)
+    machine_cpu_count  = optional(number)
     machine_type       = optional(string)
     ssl_mode           = optional(string)
     require_connectors = optional(bool)
@@ -241,7 +243,7 @@ variable "read_pool_instance" {
     display_name       = optional(string)
     node_count         = optional(number, 1)
     database_flags     = optional(map(string))
-    machine_cpu_count  = optional(number, 2)
+    machine_cpu_count  = optional(number)
     machine_type       = optional(string)
     ssl_mode           = optional(string)
     require_connectors = optional(bool)
@@ -306,11 +308,11 @@ variable "allocated_ip_range" {
 
 variable "database_version" {
   type        = string
-  description = "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17"
+  description = "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17, POSTGRES_18"
   default     = null
   validation {
-    condition     = var.database_version == null || contains(["POSTGRES_14", "POSTGRES_15", "POSTGRES_16", "POSTGRES_17"], var.database_version)
-    error_message = "database_version must be one of [POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17]."
+    condition     = var.database_version == null || contains(["POSTGRES_14", "POSTGRES_15", "POSTGRES_16", "POSTGRES_17", "POSTGRES_18"], var.database_version)
+    error_message = "database_version must be one of [POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17, POSTGRES_18]."
   }
 }
 
