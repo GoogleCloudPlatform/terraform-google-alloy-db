@@ -33,6 +33,8 @@ Current version is 8.X. Upgrade guides:
 
 Basic usage of this module is as follows:
 
+Advanced Query Insights currently requires the `hashicorp/google-beta` provider. This module uses that provider for its AlloyDB instance resources. When migrating existing module-managed instances from `hashicorp/google`, Terraform state migration may be required.
+
 ```hcl
 module "alloy-db" {
   source               = "GoogleCloudPlatform/alloy-db/google"
@@ -46,6 +48,19 @@ module "alloy-db" {
     password = "<PASSWORD>"
   }
   network_self_link = "projects/${project_id}/global/networks/${network_name}"
+
+  advanced_query_insights_config = {
+    enabled                       = true
+    preserve_comments             = true
+    track_wait_events             = true
+    track_wait_event_types        = true
+    max_query_string_length       = 10240
+    record_application_tags       = true
+    query_plans_per_minute        = 5
+    track_active_queries          = true
+    track_client_address          = false
+    assistive_experiences_enabled = true
+  }
 
   primary_instance = {
     instance_id = "primary-instance"
@@ -141,6 +156,7 @@ module "alloy-db" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| advanced\_query\_insights\_config | Configuration for Advanced Query Insights. When set, this configuration is applied to the primary and read pool instances. | <pre>object({<br>    enabled                       = bool<br>    preserve_comments             = optional(bool, true)<br>    track_wait_events             = optional(bool, true)<br>    track_wait_event_types        = optional(bool, true)<br>    max_query_string_length       = optional(number, 10240)<br>    record_application_tags       = optional(bool, true)<br>    query_plans_per_minute        = optional(number, 5)<br>    track_active_queries          = optional(bool, true)<br>    track_client_address          = optional(bool, false)<br>    assistive_experiences_enabled = optional(bool)<br>  })</pre> | `null` | no |
 | allocated\_ip\_range | The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range | `string` | `null` | no |
 | automated\_backup\_policy | The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days | <pre>object({<br>    location      = optional(string)<br>    backup_window = optional(string)<br>    enabled       = optional(bool)<br><br>    weekly_schedule = optional(object({<br>      days_of_week = optional(list(string))<br>      start_times  = list(string)<br>    })),<br><br>    quantity_based_retention_count = optional(number)<br>    time_based_retention_count     = optional(string)<br>    labels                         = optional(map(string))<br>    backup_encryption_key_name     = optional(string)<br>  })</pre> | `null` | no |
 | cluster\_display\_name | Human readable display name for the Alloy DB Cluster | `string` | `null` | no |

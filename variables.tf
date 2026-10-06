@@ -228,6 +228,23 @@ variable "read_pool_instance" {
   }
 }
 
+variable "advanced_query_insights_config" {
+  description = "Configuration for Advanced Query Insights. When set, this configuration is applied to the primary and read pool instances."
+  type = object({
+    enabled                       = bool
+    preserve_comments             = optional(bool, true)
+    track_wait_events             = optional(bool, true)
+    track_wait_event_types        = optional(bool, true)
+    max_query_string_length       = optional(number, 10240)
+    record_application_tags       = optional(bool, true)
+    query_plans_per_minute        = optional(number, 5)
+    track_active_queries          = optional(bool, true)
+    track_client_address          = optional(bool, false)
+    assistive_experiences_enabled = optional(bool)
+  })
+  default = null
+}
+
 variable "primary_cluster_name" {
   type        = string
   description = "Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster"

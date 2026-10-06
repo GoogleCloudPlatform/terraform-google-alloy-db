@@ -189,6 +189,7 @@ resource "google_alloydb_cluster" "default" {
 
 
 resource "google_alloydb_instance" "primary" {
+  provider          = google-beta
   cluster           = google_alloydb_cluster.default.name
   instance_id       = var.primary_instance.instance_id
   instance_type     = google_alloydb_cluster.default.cluster_type
@@ -262,6 +263,23 @@ resource "google_alloydb_instance" "primary" {
     }
   }
 
+  dynamic "observability_config" {
+    for_each = var.advanced_query_insights_config != null ? [var.advanced_query_insights_config] : []
+
+    content {
+      enabled                       = observability_config.value.enabled
+      preserve_comments             = observability_config.value.preserve_comments
+      track_wait_events             = observability_config.value.track_wait_events
+      track_wait_event_types        = observability_config.value.track_wait_event_types
+      max_query_string_length       = observability_config.value.max_query_string_length
+      record_application_tags       = observability_config.value.record_application_tags
+      query_plans_per_minute        = observability_config.value.query_plans_per_minute
+      track_active_queries          = observability_config.value.track_active_queries
+      track_client_address          = observability_config.value.track_client_address
+      assistive_experiences_enabled = observability_config.value.assistive_experiences_enabled
+    }
+  }
+
   dynamic "connection_pool_config" {
     for_each = lookup(var.primary_instance, "connection_pool_config", null) != null ? [var.primary_instance.connection_pool_config] : []
     content {
@@ -281,6 +299,7 @@ resource "google_alloydb_instance" "primary" {
 # * gce_zone
 # * network_config.enable_outbound_public_ip
 resource "google_alloydb_instance" "read_pool" {
+  provider      = google-beta
   for_each      = local.read_pool_instance
   cluster       = google_alloydb_cluster.default.name
   instance_id   = each.key
@@ -329,6 +348,23 @@ resource "google_alloydb_instance" "read_pool" {
       record_application_tags = try(each.value.query_insights_config.record_application_tags, null)
       record_client_address   = try(each.value.query_insights_config.record_client_address, null)
       query_plans_per_minute  = try(each.value.query_insights_config.query_plans_per_minute, null)
+    }
+  }
+
+  dynamic "observability_config" {
+    for_each = var.advanced_query_insights_config != null ? [var.advanced_query_insights_config] : []
+
+    content {
+      enabled                       = observability_config.value.enabled
+      preserve_comments             = observability_config.value.preserve_comments
+      track_wait_events             = observability_config.value.track_wait_events
+      track_wait_event_types        = observability_config.value.track_wait_event_types
+      max_query_string_length       = observability_config.value.max_query_string_length
+      record_application_tags       = observability_config.value.record_application_tags
+      query_plans_per_minute        = observability_config.value.query_plans_per_minute
+      track_active_queries          = observability_config.value.track_active_queries
+      track_client_address          = observability_config.value.track_client_address
+      assistive_experiences_enabled = observability_config.value.assistive_experiences_enabled
     }
   }
 
