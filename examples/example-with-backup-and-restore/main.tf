@@ -30,6 +30,7 @@ module "alloydb_source" {
     instance_id        = "source-cluster-${var.region_central}-instance1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    machine_cpu_count  = 2
   }
 
   depends_on = [
@@ -67,6 +68,7 @@ module "alloydb_restore_from_backup" {
     instance_id        = "bkup-restored-cluster-${var.region_central}-instance1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    machine_cpu_count  = 2
   }
 
   depends_on = [
