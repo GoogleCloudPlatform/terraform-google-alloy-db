@@ -41,7 +41,7 @@ module "alloydb_source" {
 resource "google_alloydb_backup" "source" {
   project      = var.project_id
   backup_id    = "alloydb-backup"
-  location     = "us-central1"
+  location     = var.region_central
   cluster_name = module.alloydb_source.cluster_name
 
   depends_on = [module.alloydb_source]
