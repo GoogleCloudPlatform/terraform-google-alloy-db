@@ -1,5 +1,16 @@
 # Changelog
 
+## [9.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.4.0...v9.0.0) (2026-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* variable validations and missing display name ([#200](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/200))
+
+### Bug Fixes
+
+* variable validations and missing display name ([#200](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/200)) ([8dc0b3d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/8dc0b3dc21bf1599c158c43437b19104df487750))
+
 ## [8.4.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.3.0...v8.4.0) (2026-09-10)
 
 
