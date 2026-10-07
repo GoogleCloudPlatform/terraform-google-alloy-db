@@ -69,21 +69,24 @@ resource "google_alloydb_cluster" "default" {
       labels        = automated_backup_policy.value.labels
 
 
-      weekly_schedule {
-        days_of_week = automated_backup_policy.value.weekly_schedule.days_of_week
-        dynamic "start_times" {
-          for_each = { for i, time in automated_backup_policy.value.weekly_schedule.start_times : i => {
-            hours   = tonumber(split(":", time)[0])
-            minutes = tonumber(split(":", time)[1])
-            seconds = tonumber(split(":", time)[2])
-            nanos   = tonumber(split(":", time)[3])
+      dynamic "weekly_schedule" {
+        for_each = automated_backup_policy.value.weekly_schedule == null ? [] : [automated_backup_policy.value.weekly_schedule]
+        content {
+          days_of_week = weekly_schedule.value.days_of_week
+          dynamic "start_times" {
+            for_each = { for i, time in weekly_schedule.value.start_times : i => {
+              hours   = tonumber(split(":", time)[0])
+              minutes = tonumber(split(":", time)[1])
+              seconds = tonumber(split(":", time)[2])
+              nanos   = tonumber(split(":", time)[3])
+              }
             }
-          }
-          content {
-            hours   = start_times.value.hours
-            minutes = start_times.value.minutes
-            seconds = start_times.value.seconds
-            nanos   = start_times.value.nanos
+            content {
+              hours   = start_times.value.hours
+              minutes = start_times.value.minutes
+              seconds = start_times.value.seconds
+              nanos   = start_times.value.nanos
+            }
           }
         }
       }
@@ -148,7 +151,7 @@ resource "google_alloydb_cluster" "default" {
   }
 
   dynamic "initial_user" {
-    for_each = var.cluster_initial_user == null ? [] : ["cluster_initial_user"]
+    for_each = nonsensitive(var.cluster_initial_user == null) ? [] : ["cluster_initial_user"]
     content {
       user     = var.cluster_initial_user.user
       password = var.cluster_initial_user.password
@@ -236,7 +239,7 @@ resource "google_alloydb_instance" "primary" {
   }
 
   machine_config {
-    cpu_count    = var.primary_instance.machine_cpu_count
+    cpu_count    = var.primary_instance.machine_cpu_count != null ? var.primary_instance.machine_cpu_count : (var.primary_instance.machine_type == null ? 2 : null)
     machine_type = var.primary_instance.machine_type
   }
 
@@ -285,6 +288,7 @@ resource "google_alloydb_instance" "read_pool" {
   cluster       = google_alloydb_cluster.default.name
   instance_id   = each.key
   instance_type = "READ_POOL"
+  display_name  = each.value.display_name
   labels        = var.primary_instance.labels
   annotations   = var.primary_instance.annotations
 
@@ -307,7 +311,7 @@ resource "google_alloydb_instance" "read_pool" {
 
   database_flags = each.value.database_flags
   machine_config {
-    cpu_count    = each.value.machine_cpu_count
+    cpu_count    = each.value.machine_cpu_count != null ? each.value.machine_cpu_count : (each.value.machine_type == null ? 2 : null)
     machine_type = each.value.machine_type
   }
 
