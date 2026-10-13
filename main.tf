@@ -188,6 +188,10 @@ resource "google_alloydb_cluster" "default" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [restore_continuous_backup_source, restore_backup_source]
+  }
+
 }
 
 
