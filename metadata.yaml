@@ -69,6 +69,7 @@ spec:
       - name: cluster_display_name
         description: Human readable display name for the Alloy DB Cluster
         varType: string
+        defaultValue: null
       - name: cluster_initial_user
         description: Alloy DB Cluster Initial User Credentials
         varType: |-
@@ -76,6 +77,7 @@ spec:
               user     = optional(string),
               password = string
             })
+        defaultValue: null
       - name: skip_await_major_version_upgrade
         description: "Set to true to skip awaiting on the major version upgrade of the cluster. Possible values: true, false. Default value: true"
         varType: bool
@@ -87,12 +89,14 @@ spec:
       - name: cluster_encryption_key_name
         description: "The fully-qualified resource name of the KMS key for cluster encryption. Each Cloud KMS key is regionalized and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
         varType: string
+        defaultValue: null
       - name: dataplex_config
         description: Configuration for Dataplex integration. The `enabled` flag controls the integration of AlloyDB PG resources (like databases, schemas, and tables) with Dataplex. See https://docs.cloud.google.com/alloydb/docs/dataplex-catalog-integration for more details.
         varType: |-
           object({
               enabled = bool
             })
+        defaultValue: null
       - name: automated_backup_policy
         description: The automated backup policy for this cluster. If no policy is provided then the default policy will be used. The default policy takes one backup a day, has a backup window of 1 hour, and retains backups for 14 days
         varType: |-
@@ -111,6 +115,7 @@ spec:
               labels                         = optional(map(string))
               backup_encryption_key_name     = optional(string)
             })
+        defaultValue: null
       - name: continuous_backup_enable
         description: Whether continuous backup recovery is enabled. If not set, defaults to true
         varType: bool
@@ -130,12 +135,15 @@ spec:
                 })
               })
             })
+        defaultValue: null
       - name: continuous_backup_encryption_key_name
         description: "The fully-qualified resource name of the KMS key. Cloud KMS key should be in same region as Cluster and has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]"
         varType: string
+        defaultValue: null
       - name: network_self_link
         description: Network ID where the AlloyDb cluster will be deployed. If network_self_link is set then psc_enabled should be set to false. The resource link should point to a VPC network in the same project as the cluster, where the cluster resources are created and accessed via Private IP. Any network used, including the default network (if none is specified), must have VPC peering enabled. Learn more at https://cloud.google.com/alloydb/docs/configure-connectivity
         varType: string
+        defaultValue: null
         connections:
           - source:
               source: github.com/terraform-google-modules/terraform-google-network
@@ -201,12 +209,15 @@ spec:
       - name: primary_cluster_name
         description: Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster
         varType: string
+        defaultValue: null
       - name: allocated_ip_range
         description: "The name of the allocated IP range for the private IP AlloyDB cluster. For example: google-managed-services-default. If set, the instance IPs for this cluster will be created in the allocated range"
         varType: string
+        defaultValue: null
       - name: database_version
         description: "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17, POSTGRES_18"
         varType: string
+        defaultValue: null
       - name: psc_enabled
         description: Create an instance that allows connections from Private Service Connect endpoints to the instance. If psc_enabled is set to true, then network_self_link should be set to null, and you must create additional network resources detailed under `examples/example_with_private_service_connect`
         varType: bool
@@ -226,9 +237,11 @@ spec:
       - name: deletion_policy
         description: Policy to determine if the cluster should be deleted forcefully. Deleting a cluster forcefully, deletes the cluster and all its associated instances within the cluster
         varType: string
+        defaultValue: null
       - name: network_attachment_resource
         description: "The network attachment resource created in the consumer project to which the PSC interface will be linked. Needed for AllloyDB outbound connectivity. This is of the format: projects/{CONSUMER_PROJECT}/regions/{REGION}/networkAttachments/{NETWORK_ATTACHMENT_NAME}. The network attachment must be in the same region as the instance"
         varType: string
+        defaultValue: null
       - name: restore_cluster
         description: restore cluster from a backup source. Only one of restore_backup_source or restore_continuous_backup_source should be set
         varType: |-
@@ -241,6 +254,7 @@ spec:
                 point_in_time = string
               }))
             })
+        defaultValue: null
       - name: deletion_protection
         description: Whether Terraform will be prevented from destroying the cluster. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the cluster will fail. When the field is set to false, deleting the cluster is allowed
         varType: bool
