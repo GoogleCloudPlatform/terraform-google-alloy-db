@@ -57,6 +57,7 @@ module "alloydb_central" {
   primary_instance = {
     instance_id        = "cluster-${var.region_central}-instance1",
     require_connectors = false
+    machine_cpu_count  = 2
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     connection_pool_config = {
       enabled = true
@@ -71,6 +72,7 @@ module "alloydb_central" {
       instance_id        = "cluster-${var.region_central}-r1"
       display_name       = "cluster-${var.region_central}-r1"
       require_connectors = false
+      machine_cpu_count  = 2
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
       connection_pool_config = {
         enabled = true

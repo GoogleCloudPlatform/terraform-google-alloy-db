@@ -34,6 +34,8 @@ module "alloydb_east" {
   primary_instance = {
     instance_id = "cluster-${var.region_east}-instance1-psc",
 
+    machine_cpu_count = 2
+
     client_connection_config = {
       require_connectors = false
       ssl_config         = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"

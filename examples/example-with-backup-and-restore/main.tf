@@ -30,6 +30,7 @@ module "alloydb_source" {
     instance_id        = "source-cluster-${var.region_central}-instance1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    machine_cpu_count  = 2
   }
 
   depends_on = [
@@ -40,7 +41,7 @@ module "alloydb_source" {
 resource "google_alloydb_backup" "source" {
   project      = var.project_id
   backup_id    = "alloydb-backup"
-  location     = "us-central1"
+  location     = var.region_central
   cluster_name = module.alloydb_source.cluster_name
 
   depends_on = [module.alloydb_source]
@@ -67,6 +68,7 @@ module "alloydb_restore_from_backup" {
     instance_id        = "bkup-restored-cluster-${var.region_central}-instance1",
     require_connectors = false
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+    machine_cpu_count  = 2
   }
 
   depends_on = [

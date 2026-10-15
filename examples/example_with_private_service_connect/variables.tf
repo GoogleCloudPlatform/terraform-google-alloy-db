@@ -30,7 +30,7 @@ variable "attachment_project_number" {
 }
 
 variable "region_central" {
-  default     = "us-central1"
+  default     = "us-south1"
   description = "The region for cluster in central us"
   type        = string
 }

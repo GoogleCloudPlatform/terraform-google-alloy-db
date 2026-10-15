@@ -51,6 +51,7 @@ module "alloydb_central" {
   primary_instance = {
     instance_id        = "cluster-${var.region_central}-instance1-psc",
     require_connectors = false
+    machine_cpu_count  = 2
     ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     database_flags = {
       "alloydb.enable_pgaudit"     = "on"
@@ -69,6 +70,7 @@ module "alloydb_central" {
       instance_id        = "cluster-${var.region_central}-r1-psc"
       display_name       = "cluster-${var.region_central}-r1-psc"
       require_connectors = false
+      machine_cpu_count  = 2
       ssl_mode           = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
   ]
