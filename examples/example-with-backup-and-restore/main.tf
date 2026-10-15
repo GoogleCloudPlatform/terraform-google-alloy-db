@@ -16,7 +16,7 @@
 
 module "alloydb_source" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 8.0"
+  version = "~> 9.0"
 
   deletion_protection = false
 
@@ -49,7 +49,7 @@ resource "google_alloydb_backup" "source" {
 
 module "alloydb_restore_from_backup" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 8.0"
+  version = "~> 9.0"
 
   deletion_protection = false
 
