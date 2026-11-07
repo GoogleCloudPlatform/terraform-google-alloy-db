@@ -1,5 +1,23 @@
 # Changelog
 
+## [9.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v9.0.0...v9.0.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* populate null defaultValue in alloydb blueprint metadata ([#201](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/201)) ([638c71c](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/638c71c104b5c64f6672dcefd877aed7e1e4ea56))
+
+## [9.0.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.4.0...v9.0.0) (2026-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* variable validations and missing display name ([#200](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/200))
+
+### Bug Fixes
+
+* variable validations and missing display name ([#200](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/200)) ([8dc0b3d](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/8dc0b3dc21bf1599c158c43437b19104df487750))
+
 ## [8.4.0](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v8.3.0...v8.4.0) (2026-09-10)
 
 

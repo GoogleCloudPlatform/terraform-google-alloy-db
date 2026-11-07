@@ -28,6 +28,6 @@ terraform {
   }
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-alloy-db/v8.4.0"
+    module_name = "blueprints/terraform/terraform-google-alloy-db/v9.0.1"
   }
 }

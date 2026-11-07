@@ -24,7 +24,7 @@ terraform destroy
 |------|-------------|------|---------|:--------:|
 | network\_name | The ID of the network in which to provision resources. | `string` | `"adb-bkup-rest"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| region\_central | The region for cluster in central us | `string` | `"us-central1"` | no |
+| region\_central | The region for cluster in central us | `string` | `"us-south1"` | no |
 
 ## Outputs
 

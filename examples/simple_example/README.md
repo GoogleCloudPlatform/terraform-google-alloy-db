@@ -24,7 +24,7 @@ terraform destroy
 |------|-------------|------|---------|:--------:|
 | network\_name | The ID of the network in which to provision resources. | `string` | `"simple-adb"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| region\_central | The region for cluster in central us | `string` | `"us-central1"` | no |
+| region\_central | The region for cluster in central us | `string` | `"us-south1"` | no |
 | region\_east | The region for cluster in east us | `string` | `"us-east1"` | no |
 
 ## Outputs
@@ -54,7 +54,7 @@ There are two clusters deployed in this example. `cluster-us-central1` is the pr
 ```diff
 module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 8.4"
+  version = "~> 9.0"
 
   ## Comment this out in order to promote cluster as primary cluster
 -  primary_cluster_name = module.alloydb_central.cluster_name

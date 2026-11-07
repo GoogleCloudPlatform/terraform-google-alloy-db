@@ -47,7 +47,7 @@ There are two clusters deployed in this example. `cluster east` is the primary c
 ```diff
 module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 8.4"
+  version = "~> 9.0"
 
   ## Comment this out in order to promote cluster as primary cluster
 -  primary_cluster_name = module.alloydb_central.cluster_name
@@ -111,7 +111,7 @@ module "alloydb_central" {
 | attachment\_project\_id | The ID of the project in which attachment will be provisioned | `string` | n/a | yes |
 | attachment\_project\_number | The project number in which attachment will be provisioned | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| region\_central | The region for cluster in central us | `string` | `"us-central1"` | no |
+| region\_central | The region for cluster in central us | `string` | `"us-south1"` | no |
 | region\_east | The region for cluster in east us | `string` | `"us-east1"` | no |
 
 ## Outputs
