@@ -294,6 +294,40 @@ variable "read_pool_instance" {
   }
 }
 
+variable "advanced_query_insights_config" {
+  description = "Configuration for Advanced Query Insights. When set, this configuration is applied to the primary and read pool instances. Not supported on secondary clusters."
+  type = object({
+    enabled                       = bool
+    preserve_comments             = optional(bool)
+    track_wait_events             = optional(bool)
+    max_query_string_length       = optional(number)
+    record_application_tags       = optional(bool)
+    query_plans_per_minute        = optional(number)
+    track_active_queries          = optional(bool)
+    track_client_address          = optional(bool)
+    assistive_experiences_enabled = optional(bool)
+  })
+  default = null
+
+  validation {
+    condition = var.advanced_query_insights_config == null || var.advanced_query_insights_config.max_query_string_length == null ? true : (
+      floor(var.advanced_query_insights_config.max_query_string_length) == var.advanced_query_insights_config.max_query_string_length &&
+      var.advanced_query_insights_config.max_query_string_length >= 1024 &&
+      var.advanced_query_insights_config.max_query_string_length <= 100000
+    )
+    error_message = "max_query_string_length must be a whole number between 1024 and 100000."
+  }
+
+  validation {
+    condition = var.advanced_query_insights_config == null || var.advanced_query_insights_config.query_plans_per_minute == null ? true : (
+      floor(var.advanced_query_insights_config.query_plans_per_minute) == var.advanced_query_insights_config.query_plans_per_minute &&
+      var.advanced_query_insights_config.query_plans_per_minute >= 0 &&
+      var.advanced_query_insights_config.query_plans_per_minute <= 200
+    )
+    error_message = "query_plans_per_minute must be a whole number between 0 and 200."
+  }
+}
+
 variable "primary_cluster_name" {
   type        = string
   description = "Primary cluster name. Required for creating cross region secondary cluster. Not needed for primary cluster"

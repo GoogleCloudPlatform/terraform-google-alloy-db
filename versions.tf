@@ -19,11 +19,19 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 7.23, < 9"
+      version = ">= 7.29, < 9"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 7.29, < 9"
     }
   }
 
   provider_meta "google" {
+    module_name = "blueprints/terraform/terraform-google-alloy-db/v9.0.1"
+  }
+
+  provider_meta "google-beta" {
     module_name = "blueprints/terraform/terraform-google-alloy-db/v9.0.1"
   }
 }
