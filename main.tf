@@ -267,19 +267,18 @@ resource "google_alloydb_instance" "primary" {
   }
 
   dynamic "observability_config" {
-    for_each = var.advanced_query_insights_config != null ? [var.advanced_query_insights_config] : []
+    for_each = var.advanced_query_insights_config != null && !local.is_secondary_cluster && var.cluster_type != "SECONDARY" ? [var.advanced_query_insights_config] : []
 
     content {
       enabled                       = observability_config.value.enabled
-      preserve_comments             = observability_config.value.preserve_comments
-      track_wait_events             = observability_config.value.track_wait_events
-      track_wait_event_types        = observability_config.value.track_wait_event_types
-      max_query_string_length       = observability_config.value.max_query_string_length
-      record_application_tags       = observability_config.value.record_application_tags
-      query_plans_per_minute        = observability_config.value.query_plans_per_minute
-      track_active_queries          = observability_config.value.track_active_queries
-      track_client_address          = observability_config.value.track_client_address
-      assistive_experiences_enabled = observability_config.value.assistive_experiences_enabled
+      preserve_comments             = observability_config.value.enabled ? observability_config.value.preserve_comments : null
+      track_wait_events             = observability_config.value.enabled ? observability_config.value.track_wait_events : null
+      max_query_string_length       = observability_config.value.enabled ? observability_config.value.max_query_string_length : null
+      record_application_tags       = observability_config.value.enabled ? observability_config.value.record_application_tags : null
+      query_plans_per_minute        = observability_config.value.enabled ? observability_config.value.query_plans_per_minute : null
+      track_active_queries          = observability_config.value.enabled ? observability_config.value.track_active_queries : null
+      track_client_address          = observability_config.value.enabled ? observability_config.value.track_client_address : null
+      assistive_experiences_enabled = observability_config.value.enabled ? observability_config.value.assistive_experiences_enabled : null
     }
   }
 
@@ -356,19 +355,18 @@ resource "google_alloydb_instance" "read_pool" {
   }
 
   dynamic "observability_config" {
-    for_each = var.advanced_query_insights_config != null ? [var.advanced_query_insights_config] : []
+    for_each = var.advanced_query_insights_config != null && !local.is_secondary_cluster && var.cluster_type != "SECONDARY" ? [var.advanced_query_insights_config] : []
 
     content {
       enabled                       = observability_config.value.enabled
-      preserve_comments             = observability_config.value.preserve_comments
-      track_wait_events             = observability_config.value.track_wait_events
-      track_wait_event_types        = observability_config.value.track_wait_event_types
-      max_query_string_length       = observability_config.value.max_query_string_length
-      record_application_tags       = observability_config.value.record_application_tags
-      query_plans_per_minute        = observability_config.value.query_plans_per_minute
-      track_active_queries          = observability_config.value.track_active_queries
-      track_client_address          = observability_config.value.track_client_address
-      assistive_experiences_enabled = observability_config.value.assistive_experiences_enabled
+      preserve_comments             = observability_config.value.enabled ? observability_config.value.preserve_comments : null
+      track_wait_events             = observability_config.value.enabled ? observability_config.value.track_wait_events : null
+      max_query_string_length       = observability_config.value.enabled ? observability_config.value.max_query_string_length : null
+      record_application_tags       = observability_config.value.enabled ? observability_config.value.record_application_tags : null
+      query_plans_per_minute        = observability_config.value.enabled ? observability_config.value.query_plans_per_minute : null
+      track_active_queries          = observability_config.value.enabled ? observability_config.value.track_active_queries : null
+      track_client_address          = observability_config.value.enabled ? observability_config.value.track_client_address : null
+      assistive_experiences_enabled = observability_config.value.enabled ? observability_config.value.assistive_experiences_enabled : null
     }
   }
 
