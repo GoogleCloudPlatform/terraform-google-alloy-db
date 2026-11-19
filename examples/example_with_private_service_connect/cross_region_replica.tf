@@ -16,7 +16,7 @@
 
 module "alloydb_east" {
   source  = "GoogleCloudPlatform/alloy-db/google"
-  version = "~> 8.0"
+  version = "~> 9.0"
 
   deletion_protection = false
 
