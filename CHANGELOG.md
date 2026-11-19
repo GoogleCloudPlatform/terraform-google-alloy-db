@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.0.2](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v9.0.1...v9.0.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* make variable validations pass for null inputs on Terraform &lt; 1.12 ([#215](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/issues/215)) ([bb52f84](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/commit/bb52f84c65d6852bd6937840cb51ead3ca9b34ac))
+
 ## [9.0.1](https://github.com/GoogleCloudPlatform/terraform-google-alloy-db/compare/v9.0.0...v9.0.1) (2026-10-15)
 
 
