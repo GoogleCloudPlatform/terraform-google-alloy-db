@@ -27,6 +27,9 @@ spec:
   ui:
     input:
       variables:
+        advanced_query_insights_config:
+          name: advanced_query_insights_config
+          title: Advanced Query Insights Config
         allocated_ip_range:
           name: allocated_ip_range
           title: Allocated Ip Range
