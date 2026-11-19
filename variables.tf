@@ -116,7 +116,7 @@ variable "automated_backup_policy" {
   })
   default = null
   validation {
-    condition = var.automated_backup_policy == null || try(var.automated_backup_policy.weekly_schedule, null) == null || alltrue([
+    condition = var.automated_backup_policy == null || try(var.automated_backup_policy.weekly_schedule, null) == null ? true : alltrue([
       for t in var.automated_backup_policy.weekly_schedule.start_times : can(regex("^\\d{1,2}:\\d{1,2}:\\d{1,2}:\\d+$", t))
     ])
     error_message = "Each entry in automated_backup_policy.weekly_schedule.start_times must be formatted as 'HH:MM:SS:NANOS' (e.g. '02:00:00:0')."
@@ -141,7 +141,7 @@ variable "continuous_backup_recovery_window_days" {
   description = "The numbers of days that are eligible to restore from using PITR (point-in-time-recovery). Defaults to 14 days. The value must be between 1 and 35"
   default     = 14
   validation {
-    condition     = var.continuous_backup_recovery_window_days == null || (var.continuous_backup_recovery_window_days >= 1 && var.continuous_backup_recovery_window_days <= 35)
+    condition     = var.continuous_backup_recovery_window_days == null ? true : (var.continuous_backup_recovery_window_days >= 1 && var.continuous_backup_recovery_window_days <= 35)
     error_message = "continuous_backup_recovery_window_days must be between 1 and 35."
   }
 }
@@ -158,7 +158,7 @@ variable "maintenance_update_policy" {
   })
   default = null
   validation {
-    condition = var.maintenance_update_policy == null || (
+    condition = var.maintenance_update_policy == null ? true : (
       contains(["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"], var.maintenance_update_policy.maintenance_windows.day) &&
       var.maintenance_update_policy.maintenance_windows.start_time.hours >= 0 &&
       var.maintenance_update_policy.maintenance_windows.start_time.hours <= 23
@@ -217,21 +217,21 @@ variable "primary_instance" {
     error_message = "Primary Instance ID should satisfy the following pattern ^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$"
   }
   validation {
-    condition = var.primary_instance.query_insights_config == null || (
+    condition = var.primary_instance.query_insights_config == null ? true : (
       coalesce(var.primary_instance.query_insights_config.query_string_length, 1024) >= 256 &&
       coalesce(var.primary_instance.query_insights_config.query_string_length, 1024) <= 4500
     )
     error_message = "Query string length must be between 256 and 4500. The default value is 1024."
   }
   validation {
-    condition = var.primary_instance.query_insights_config == null || (
+    condition = var.primary_instance.query_insights_config == null ? true : (
       coalesce(var.primary_instance.query_insights_config.query_plans_per_minute, 5) >= 0 &&
       coalesce(var.primary_instance.query_insights_config.query_plans_per_minute, 5) <= 20
     )
     error_message = "Query plans per minute must be between 0 and 20. The default value is 5."
   }
   validation {
-    condition     = var.primary_instance.availability_type == null || contains(["REGIONAL", "ZONAL"], var.primary_instance.availability_type)
+    condition     = var.primary_instance.availability_type == null ? true : contains(["REGIONAL", "ZONAL"], var.primary_instance.availability_type)
     error_message = "primary_instance.availability_type must be one of [REGIONAL, ZONAL]."
   }
 }
@@ -276,7 +276,7 @@ variable "read_pool_instance" {
   }
   validation {
     condition = alltrue([
-      for rp in var.read_pool_instance : rp.query_insights_config == null || (
+      for rp in var.read_pool_instance : rp.query_insights_config == null ? true : (
         coalesce(rp.query_insights_config.query_string_length, 1024) >= 256 &&
         coalesce(rp.query_insights_config.query_string_length, 1024) <= 4500
       )
@@ -285,7 +285,7 @@ variable "read_pool_instance" {
   }
   validation {
     condition = alltrue([
-      for rp in var.read_pool_instance : rp.query_insights_config == null || (
+      for rp in var.read_pool_instance : rp.query_insights_config == null ? true : (
         coalesce(rp.query_insights_config.query_plans_per_minute, 5) >= 0 &&
         coalesce(rp.query_insights_config.query_plans_per_minute, 5) <= 20
       )
@@ -311,7 +311,7 @@ variable "database_version" {
   description = "The database engine major version. This is an optional field and it's populated at the Cluster creation time. Possible values: POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17, POSTGRES_18"
   default     = null
   validation {
-    condition     = var.database_version == null || contains(["POSTGRES_14", "POSTGRES_15", "POSTGRES_16", "POSTGRES_17", "POSTGRES_18"], var.database_version)
+    condition     = var.database_version == null ? true : contains(["POSTGRES_14", "POSTGRES_15", "POSTGRES_16", "POSTGRES_17", "POSTGRES_18"], var.database_version)
     error_message = "database_version must be one of [POSTGRES_14, POSTGRES_15, POSTGRES_16, POSTGRES_17, POSTGRES_18]."
   }
 }
@@ -362,7 +362,7 @@ variable "restore_cluster" {
   })
   default = null
   validation {
-    condition     = var.restore_cluster == null || ((var.restore_cluster.restore_backup_source != null) != (var.restore_cluster.restore_continuous_backup_source != null))
+    condition     = var.restore_cluster == null ? true : ((var.restore_cluster.restore_backup_source != null) != (var.restore_cluster.restore_continuous_backup_source != null))
     error_message = "Exactly one of restore_backup_source or restore_continuous_backup_source must be set when restore_cluster is specified."
   }
 }
